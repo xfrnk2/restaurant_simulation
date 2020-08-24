@@ -12,7 +12,7 @@
 .idea/**/usage.statistics.xml
 .idea/**/dictionaries
 .idea/**/shelf
-.idea/**/misc
+.idea/**/misc.xml
 
 src/.idea/**/workspace.xml
 src/.idea/**/tasks.xml
