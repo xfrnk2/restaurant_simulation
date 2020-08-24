@@ -76,6 +76,27 @@ class Restaurant:
                 group.append(q.pop(0))
         return result
 
+    def customer_entrance(self, customer: Customer):
+
+        food_num = randrange(1, 5)
+        food_eating_time = self.__food_eating_time[food_num]
+        food_cooking_time = self.__food_cooking_time[food_num]
+        customer.set_attribute((food_num, food_eating_time, food_cooking_time))
+
+
+        table_num = self.__table_manager.set_customer(customer)
+        customer_number = customer.get_customer_number()
+        time_until_being_allocated_to_cook = self.get_time_until_being_allocated_to_cook()
+
+        customer.set_total_time(time_until_being_allocated_to_cook + customer.get_food_cooking_time() + customer.get_food_eating_time())
+
+
+        print(f"{customer_number}번 손님이 {table_num}번 테이블에 앉습니다.")
+        print(f"{customer_number}번 손님이 {food_num}번 요리"
+              f" ({self.__food_name[food_num]})를 주문합니다.")
+
+        self.__kitchen.get_order_from_new_customer(customer, table_num)
+
     def run(self):
 
         elapsed_time = 0
