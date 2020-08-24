@@ -1,3 +1,10 @@
+from random import randrange
+from customer import Customer
+from table import TableManager
+from kitchen import Kitchen
+from bill import BillManager
+import sys
+
 class Restaurant:
 
     def __init__(self, customer_visiting_period : int):
@@ -5,6 +12,18 @@ class Restaurant:
         cash_desk_num = 1
         cooks_num = 3
         table_quantity = 20
+
+        self.__visiting_period = customer_visiting_period
+        self.__table_manager = TableManager(table_quantity)
+        self.__kitchen = Kitchen(cooks_num)
+        self.__bill_manager = BillManager(billing_period, cash_desk_num)
+
+        self.__number_of_customers = 0
+        self.__waiting_customers = []
+
+        self.__food_name = {1: "스테이크", 2: "스파게티", 3: "마카로니", 4: "그라탱"}
+        self.__food_eating_time = {1: 30, 2: 20, 3: 15, 4: 10}
+        self.__food_cooking_time = {1: 30, 2: 20, 3: 10, 4: 15}
 
     def run(self):
 
