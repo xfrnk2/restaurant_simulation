@@ -21,6 +21,8 @@ class Customer(RestaurantObject):
         self.__total_time = 0
         self.__remaining_time_by_new_table = 0
 
+        self.__is_bill_waiting: bool = False
+        self.__is_billing: bool = False
 
     def get_elapsed_waiting_time(self)-> int:
         return self.__elapsed_waiting_time
