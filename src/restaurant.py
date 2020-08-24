@@ -121,4 +121,11 @@ class Restaurant:
 
             self.waiting_update()
 
+            if elapsed_time % self.__visiting_period == 0:
+                new_customer = self.customer_visiting(elapsed_time)
+
+                if self.__table_manager.is_table_full():
+                    pass
+
+            
             self.__kitchen.start_cooking_update()
