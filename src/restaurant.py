@@ -97,6 +97,9 @@ class Restaurant:
 
         self.__kitchen.get_order_from_new_customer(customer, table_num)
 
+    def is_possible_to_wait(self, customer: Customer):
+        pass
+
     def run(self):
 
         elapsed_time = 0
@@ -125,7 +128,14 @@ class Restaurant:
                 new_customer = self.customer_visiting(elapsed_time)
 
                 if self.__table_manager.is_table_full():
-                    pass
+                    if self.is_possible_to_wait(new_customer):
+                        self.receive_customer(new_customer)
+                    else:
+                        print(f"손님이 기다릴 수 없어 돌아갑니다.\n현재 대기 시간 {new_customer.get_elapsed_waiting_time()}분 / 대기 가능 시간 "
+                              f"{new_customer.get_remaining_time_by_new_table()}분")
 
-            
+                else:
+                    self.customer_entrance(new_customer)
+
+
             self.__kitchen.start_cooking_update()
