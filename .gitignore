@@ -1,4 +1,4 @@
-﻿
+
 # Created by https://www.toptal.com/developers/gitignore/api/windows,python,pycharm+iml
 # Edit at https://www.toptal.com/developers/gitignore?templates=windows,python,pycharm+iml
 
@@ -254,3 +254,4 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.toptal.com/developers/gitignore/api/windows,python,pycharm+iml
+src/.idea/misc.xml
