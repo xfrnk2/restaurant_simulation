@@ -97,8 +97,34 @@ class Restaurant:
 
         self.__kitchen.get_order_from_new_customer(customer, table_num)
 
-    def is_possible_to_wait(self, customer: Customer):
-        pass
+    def is_possible_to_wait(self, new_customer: Customer)-> bool:
+
+        n = 0
+        lower_time_group = []
+        higher_time_group = []
+
+        for table in self.__table_manager.get_table_queue():
+            remaining_time = table.get_total_time() - (table.get_elapsed_waited_time_for_food() + table.get_elapsed_eating_time())
+
+            if remaining_time < new_customer.get_maximum_waiting_time():
+                n += 1
+                lower_time_group.append(remaining_time)
+            else:
+                higher_time_group.append(remaining_time)
+
+        if self.__waiting_customers:
+            if len(self.__waiting_customers) < n:
+                new_customer.set_remaining_time_by_new_table(sorted(lower_time_group)[len(self.__waiting_customers)])
+                return True
+
+        else:
+            if 1 <= n:
+                new_customer.set_remaining_time_by_new_table(min(lower_time_group))
+                return True
+
+        applicable_index = sorted(higher_time_group)[len(self.__waiting_customers) - n]
+        new_customer.set_remaining_time_by_new_table(applicable_index)
+        return False
 
     def run(self):
 
