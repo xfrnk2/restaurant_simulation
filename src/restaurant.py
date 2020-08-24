@@ -59,6 +59,22 @@ class Restaurant:
 
             self.pop_waiting_queue(customer_count)
 
+    def get_time_until_being_allocated_to_cook(self)-> int:
+        result = 0
+        q = self.__kitchen.get_order_queue()
+        if q:
+            q = [self.__food_cooking_time[order[0]] for order in q]
+            group = self.__kitchen.get_cooks_current_cooking_time()
+            q.append(0)
+
+            while q:
+                group.sort()
+                target = group.pop(0)
+                result += target
+                group = [i - target for i in group]
+
+                group.append(q.pop(0))
+        return result
 
     def run(self):
 
@@ -67,3 +83,20 @@ class Restaurant:
         while elapsed_time < 720:
 
             elapsed_time += 1
+
+
+            table_target_customer_queue = self.__table_manager.update()
+            for customer in table_target_customer_queue:
+                self.__bill_manager.receive_customer(customer)
+
+            self.__bill_manager.update()
+
+            if self.__table_manager.is_exist():
+                finished_order_queue = self.__kitchen.update()
+
+                if finished_order_queue:
+                    for order in finished_order_queue:
+                        self.__table_manager.getting_food(order)
+
+            self.waiting_update()
+
