@@ -100,3 +100,4 @@ class Restaurant:
 
             self.waiting_update()
 
+            self.__kitchen.start_cooking_update()
