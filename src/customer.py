@@ -3,7 +3,7 @@ from random import randrange
 
 class Customer(RestaurantObject):
 
-    def __init__(self, number ,arrival_time):
+    def __init__(self, number: int ,arrival_time: int):
 
         self.__arrival_time = arrival_time
         self.__maximum_waiting_time = randrange(15, 41)
@@ -59,6 +59,7 @@ class Customer(RestaurantObject):
 
     def update(self):
         self.__elapsed_eating_time += 1
+
         if self.__elapsed_eating_time == self.__food_eating_time:
             return True
         return False

@@ -10,7 +10,7 @@ class Cook(RestaurantObject):
         self.__table_number = 0
         self.__is_cooking = False
 
-    def set_request(self, request):
+    def set_request(self, request: tuple):
         self.__table_number, self.__customer_number, self.__food_number, self.__cooking_time = request
         self.__is_cooking= not self.__is_cooking
 
@@ -30,6 +30,7 @@ class Cook(RestaurantObject):
         return self.__cooking_time
 
     def update(self)-> bool:
+
         if self.__is_cooking:
             self.__cooking_time -= 1
             if self.__cooking_time == 0:

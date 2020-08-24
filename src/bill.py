@@ -13,11 +13,14 @@ class CashDesk(RestaurantObject):
         self.__customer_number = customer.get_request()[0]
 
     def update(self):
+
         if self.__is_working:
             self.__elapsed_billing_time += 1
+
             if self.__billing_time <= self.__elapsed_billing_time:
                 self.change_cash_desk_status()
                 return True
+
         return False
 
     def is_working(self):
@@ -40,13 +43,16 @@ class BillManager(RestaurantObject):
         self.__cash_desk_object = CashDesk(waiting_time)
 
     def receive_customer(self, customer: Customer):
+
         if not customer.get_is_billing() and not customer.get_is_bill_waiting():
             print(f"{customer.get_customer_number()}번 손님이 계산대 앞에 줄을 섭니다." )
 
             customer.change_is_bill_waiting_status()
             self.__bill_waiting_queue.append(customer)
 
+
     def update(self):
+
         if self.__cash_desk_object.update():
             print(f"{self.__cash_desk_object.get_customer_info()}번 손님이 계산을 마치고 레스토랑을 떠났습니다.")
 

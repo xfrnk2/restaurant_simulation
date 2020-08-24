@@ -3,11 +3,11 @@ from customer import Customer
 from table import TableManager
 from kitchen import Kitchen
 from bill import BillManager
-import sys
 
 class Restaurant:
 
     def __init__(self, customer_visiting_period : int):
+
         billing_period = 5
         cash_desk_num = 1
         cooks_num = 3
@@ -25,15 +25,19 @@ class Restaurant:
         self.__food_eating_time = {1: 30, 2: 20, 3: 15, 4: 10}
         self.__food_cooking_time = {1: 30, 2: 20, 3: 10, 4: 15}
 
+
     def customer_visiting(self, elapsed_time: int):
+
         self.__number_of_customers += 1
         new_customer = Customer(self.__number_of_customers, elapsed_time)
 
         print(f"{self.__number_of_customers}번째 손님이 시각 {elapsed_time} 분에 레스토랑에 도착했습니다.")
         return new_customer
 
+
     def receive_customer(self, customer: Customer):
         self.__waiting_customers.append(customer)
+
 
     def pop_waiting_queue(self, pop_count: int):
 
@@ -42,6 +46,7 @@ class Restaurant:
                 self.__waiting_customers.pop(0)
 
     def waiting_update(self):
+
         if self.__waiting_customers:
             customer_count = 0
 
@@ -59,7 +64,9 @@ class Restaurant:
 
             self.pop_waiting_queue(customer_count)
 
+
     def get_time_until_being_allocated_to_cook(self)-> int:
+
         result = 0
         q = self.__kitchen.get_order_queue()
         if q:
@@ -75,6 +82,7 @@ class Restaurant:
 
                 group.append(q.pop(0))
         return result
+
 
     def customer_entrance(self, customer: Customer):
 
@@ -96,6 +104,7 @@ class Restaurant:
               f" ({self.__food_name[food_num]})를 주문합니다.")
 
         self.__kitchen.get_order_from_new_customer(customer, table_num)
+
 
     def is_possible_to_wait(self, new_customer: Customer)-> bool:
 
@@ -126,6 +135,7 @@ class Restaurant:
         new_customer.set_remaining_time_by_new_table(applicable_index)
         return False
 
+
     def run(self):
 
         elapsed_time = 0
@@ -133,9 +143,8 @@ class Restaurant:
         while elapsed_time < 720:
 
             elapsed_time += 1
-
-
             table_target_customer_queue = self.__table_manager.update()
+
             for customer in table_target_customer_queue:
                 self.__bill_manager.receive_customer(customer)
 
@@ -162,6 +171,5 @@ class Restaurant:
 
                 else:
                     self.customer_entrance(new_customer)
-
 
             self.__kitchen.start_cooking_update()

@@ -24,13 +24,18 @@ class Kitchen(RestaurantObject):
     def get_cooks_current_cooking_time(self)-> list:
         return [cook.get_left_cooking_time() for cook in self.__cooks]
 
+
     def get_order_from_new_customer(self, customer: Customer, table_number : int):
+
         customer_num, customer_food_num = customer.get_request()
         info = customer_food_num, customer_num, table_number
         self.__order_queue.append(info)
 
+
     def start_cooking_update(self):
+
         if self.__order_queue and not self.all_the_cooks_cooking():
+
             for cook in self.__cooks:
                 if self.__order_queue:
                     if not cook.is_cooking():
@@ -38,6 +43,7 @@ class Kitchen(RestaurantObject):
                         cook.set_request((table_number, customer_num, customer_food_num, self.__food_cooking_time[customer_food_num]))
                 else:
                     break
+
 
     def update(self)-> list:
 
