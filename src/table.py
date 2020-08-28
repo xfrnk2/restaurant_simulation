@@ -61,8 +61,8 @@ class TableManager(RestaurantObject):
 
                 else:
 
-                    if not self.__table_queue[num].get_is_billing() and \
-                         not self.__table_queue[num].get_is_bill_waiting():
+                    if not self.__table_queue[num].is_billing() and \
+                         not self.__table_queue[num].is_bill_waiting():
                         self.__table_queue[num].food_waiting_update()
 
         return target_customer_queue

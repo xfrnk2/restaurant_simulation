@@ -45,8 +45,8 @@ class BillManager(RestaurantObject):
 
     def receive_customer(self, customer: Customer):
 
-        if not customer.get_is_billing() and \
-             not customer.get_is_bill_waiting():
+        if not customer.is_billing() and \
+             not customer.is_bill_waiting():
             print(f"{customer.get_customer_number()}번 손님이 계산대 앞에 줄을 섭니다.")
 
             customer.change_is_bill_waiting_status()
