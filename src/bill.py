@@ -44,13 +44,13 @@ class BillManager(RestaurantObject):
         self.__cash_desk_object = CashDesk(waiting_time)
 
     def receive_customer(self, customer: Customer):
+        invalid = customer.is_billing() or customer.is_bill_waiting()
+        if invalid:
+            return
 
-        if not customer.is_billing() and \
-             not customer.is_bill_waiting():
-            print(f"{customer.get_customer_number()}번 손님이 계산대 앞에 줄을 섭니다.")
-
-            customer.change_is_bill_waiting_status()
-            self.__bill_waiting_queue.append(customer)
+        print(f"{customer.get_customer_number()}번 손님이 계산대 앞에 줄을 섭니다.")
+        customer.change_is_bill_waiting_status()
+        self.__bill_waiting_queue.append(customer)
 
     def update(self):
 
