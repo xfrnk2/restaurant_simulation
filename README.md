@@ -4,4 +4,4 @@
 Python 3.7+
 
 #### starting simulation
-Please execute src/main.py
+python src/main.py
