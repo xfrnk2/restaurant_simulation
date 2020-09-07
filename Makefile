@@ -50,7 +50,7 @@ clean-test:
 lint:
 	$(OsConf)
 	$(VENV)
-	flake8 src tests
+	flake8 src
 
 test:	
 	$(OsConf)
