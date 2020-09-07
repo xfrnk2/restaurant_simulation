@@ -55,8 +55,8 @@ class BillManager(RestaurantObject):
     def update(self):
 
         if self.__cash_desk_object.update():
-            print(f"{self.__cash_desk_object.get_customer_info()}번 손님이 \
-             계산을 마치고 레스토랑을 떠났습니다.")
+            print(f"{self.__cash_desk_object.get_customer_info()}번 손님이 "
+                  f"계산을 마치고 레스토랑을 떠났습니다.")
 
         if self.__bill_waiting_queue and \
            not self.__cash_desk_object.is_working():

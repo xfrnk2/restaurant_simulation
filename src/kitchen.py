@@ -1,6 +1,15 @@
+from dataclasses import dataclass
 from restaurant_object import RestaurantObject
 from customer import Customer
 from cook import Cook
+
+
+@dataclass(frozen=True)
+class CookingRequest:
+    table_num: int
+    customer_num: int
+    food_num: int
+    cooking_time: int
 
 
 class Kitchen(RestaurantObject):
@@ -32,6 +41,10 @@ class Kitchen(RestaurantObject):
         info = customer_food_num, customer_num, table_number
         self.__order_queue.append(info)
 
+
+
+
+
     def start_cooking_update(self):
 
         if self.__order_queue and not self.all_the_cooks_cooking():
@@ -41,10 +54,13 @@ class Kitchen(RestaurantObject):
                     if not cook.is_cooking():
                         customer_food_num, customer_num, \
                             table_number = self.__order_queue.pop(0)
-                        cook.set_request(
-                            (table_number,
-                             customer_num, customer_food_num,
-                             self.__food_cooking_time[customer_food_num]))
+                        request = CookingRequest(table_num=table_number, customer_num=customer_num, food_num=customer_food_num, cooking_time=self.__food_cooking_time[customer_food_num])
+                        cook.set_request(request)
+                        """
+                        (table_number,
+                         customer_num, customer_food_num,
+                         self.__food_cooking_time[customer_food_num])
+                         """
                 else:
                     break
 

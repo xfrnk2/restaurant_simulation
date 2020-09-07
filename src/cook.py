@@ -1,5 +1,5 @@
 from restaurant_object import RestaurantObject
-
+from dataclasses import dataclass
 
 class Cook(RestaurantObject):
 
@@ -10,9 +10,10 @@ class Cook(RestaurantObject):
         self.__table_number = 0
         self.__is_cooking = False
 
-    def set_request(self, request: tuple):
-        self.__table_number, self.__customer_number, \
-             self.__food_number, self.__cooking_time = request
+    def set_request(self, request: dataclass):
+        self.__table_number, self.__customer_number, self.__food_number, self.__cooking_time =\
+        request.table_num, request.customer_num,  request.food_num, request.cooking_time
+
 
         self.__is_cooking = not self.__is_cooking
 
