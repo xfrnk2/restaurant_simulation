@@ -4,7 +4,7 @@ from customer import Customer
 from cook import Cook
 
 
-@dataclass(frozen=True)
+@dataclass()
 class CookingRequest:
     table_num: int
     customer_num: int
@@ -26,8 +26,8 @@ class Kitchen(RestaurantObject):
         return self.__order_queue
 
     def all_the_cooks_cooking(self) -> bool:
-        return all(cook.is_cooking() for cook in self.__cooks)
-
+        # return all(cook.is_cooking() for cook in self.__cooks)
+        return all(cook.is_cooking for cook in self.__cooks)
     def get_food_cooking_time(self, num) -> int:
         return self.__food_cooking_time[num]
 
@@ -51,7 +51,7 @@ class Kitchen(RestaurantObject):
 
             for cook in self.__cooks:
                 if self.__order_queue:
-                    if not cook.is_cooking():
+                    if not cook.is_cooking:
                         customer_food_num, customer_num, \
                             table_number = self.__order_queue.pop(0)
                         request = CookingRequest(table_num=table_number, customer_num=customer_num, food_num=customer_food_num, cooking_time=self.__food_cooking_time[customer_food_num])
