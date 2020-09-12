@@ -95,9 +95,10 @@ class Restaurant:
         customer_number = customer.get_customer_number()
         until_being_allocated = self.get_time_until_being_allocated_to_cook()
 
-        customer.set_total_time(until_being_allocated +
-                                customer.get_food_cooking_time() +
-                                customer.get_food_eating_time())
+
+        total_time = until_being_allocated + customer.get_food_cooking_time() + customer.get_food_eating_time()
+        customer.set_total_time(total_time)
+
 
         print(f"{customer_number}번 손님이 {table_num}번 테이블에 앉습니다.")
         print(f"{customer_number}번 손님이 {food_num}번 요리"
@@ -124,10 +125,7 @@ class Restaurant:
 
         if self.__waiting_customers:
             if len(self.__waiting_customers) < n:
-                new_customer.\
-                    set_remaining_time_by_new_table(
-                        sorted(lower_time_group)
-                        [len(self.__waiting_customers)])
+                new_customer.set_remaining_time_by_new_table(sorted(lower_time_group)[len(self.__waiting_customers)])
                 return True
 
         else:
