@@ -46,6 +46,10 @@ class BillManager(RestaurantObject):
     def receive_customer(self, customer: Customer):
         invalid = customer.is_billing() or customer.is_bill_waiting()
         if invalid:
+            if customer.is_billing():
+                customer.change_is_billing_status()
+            if customer.is_bill_waiting():
+                customer.change_is_bill_waiting_status()
             return
 
         print(f"{customer.get_customer_number()}번 손님이 계산대 앞에 줄을 섭니다.")
