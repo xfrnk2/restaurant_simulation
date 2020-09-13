@@ -25,12 +25,6 @@ class Kitchen(RestaurantObject):
     def get_order_queue(self):
         return self.__order_queue
 
-    def all_the_cooks_cooking(self) -> bool:
-        # return all(cook.is_cooking() for cook in self.__cooks)
-        return all(cook.is_cooking for cook in self.__cooks)
-    def get_food_cooking_time(self, num) -> int:
-        return self.__food_cooking_time[num]
-
     def get_cooks_current_cooking_time(self) -> list:
         return [cook.get_left_cooking_time() for cook in self.__cooks]
 
@@ -47,22 +41,12 @@ class Kitchen(RestaurantObject):
 
     def start_cooking_update(self):
 
-        if self.__order_queue and not self.all_the_cooks_cooking():
-
             for cook in self.__cooks:
-                if self.__order_queue:
-                    if not cook.is_cooking:
-                        customer_food_num, customer_num, \
-                            table_number = self.__order_queue.pop(0)
-                        request = CookingRequest(table_num=table_number, customer_num=customer_num, food_num=customer_food_num, cooking_time=self.__food_cooking_time[customer_food_num])
-                        cook.set_request(request)
-                        """
-                        (table_number,
-                         customer_num, customer_food_num,
-                         self.__food_cooking_time[customer_food_num])
-                         """
-                else:
+                if not self.__order_queue:
                     break
+                if not cook.is_cooking:
+                        customer_food_num, customer_num, table_number = self.__order_queue.pop(0)
+                        cook.set_request(CookingRequest(table_num=table_number, customer_num=customer_num, food_num=customer_food_num, cooking_time=self.__food_cooking_time[customer_food_num]))
 
     def update(self) -> list:
 
