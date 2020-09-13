@@ -54,8 +54,7 @@ class Restaurant:
 
             for customer in self.__waiting_customers:
 
-                if customer.get_elapsed_waiting_time() < \
-                   customer.get_remaining_time_by_new_table():
+                if customer.get_elapsed_waiting_time() < customer.get_remaining_time_by_new_table():
                     break
 
                 if customer.get_elapsed_waiting_time() == \
