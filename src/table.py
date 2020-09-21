@@ -1,11 +1,11 @@
 from restaurant_object import RestaurantObject
 from customer import Customer
-
+from dataclasses import dataclass
 
 class TableManager(RestaurantObject):
 
     def __init__(self, table_amount: int):
-        self.__table_queue = [0] * (table_amount)
+        self.__table_queue = [0] * table_amount
 
     def get_table_queue(self):
         return self.__table_queue
@@ -20,16 +20,14 @@ class TableManager(RestaurantObject):
                 self.__table_queue[table_number] = customer
                 return table_number
 
-    def getting_food(self, info: tuple):
+    def getting_food(self, info: dataclass):
 
-        table_number, customer_number, food_number = info
+        if isinstance(self.__table_queue[info.table_num], Customer) and \
+                self.__table_queue[info.table_num]. \
+                get_request() == (info.customer_num, info.food_num):
 
-        if isinstance(self.__table_queue[table_number], Customer) and \
-                self.__table_queue[table_number]. \
-                get_request() == (customer_number, food_number):
-
-            print(f"{customer_number}번 손님이 식사를 시작합니다.")
-            self.__table_queue[table_number].change_status_is_eating()
+            print(f"{info.customer_num}번 손님이 식사를 시작합니다.")
+            self.__table_queue[info.table_num].change_status_is_eating()
 
     def is_table_full(self) -> bool:
         return all(self.__table_queue)
@@ -49,8 +47,8 @@ class TableManager(RestaurantObject):
 
                     if self.__table_queue[num].update():
                         c_num = self.__table_queue[num].get_customer_number()
-                        print(f"{num}번 테이블에 앉아있는 "
-                              f"{c_num}번 손님")
+                        print(f'{num}번 테이블에 앉아있는 '
+                              f'{c_num}번 손님')
                         target_customer = self.__table_queue[num]
                         self.__table_queue[num] = 0
 
