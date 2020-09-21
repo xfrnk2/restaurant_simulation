@@ -1,4 +1,5 @@
-from abc import *
+from abc import ABC, abstractmethod
+
 
 class RestaurantObject(ABC):
 

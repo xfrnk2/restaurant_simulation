@@ -1,9 +1,10 @@
 from restaurant_object import RestaurantObject
 from random import randrange
 
+
 class Customer(RestaurantObject):
 
-    def __init__(self, number: int ,arrival_time: int):
+    def __init__(self, number: int, arrival_time: int):
 
         self.__arrival_time = arrival_time
         self.__maximum_waiting_time = randrange(15, 41)
@@ -24,7 +25,7 @@ class Customer(RestaurantObject):
         self.__is_bill_waiting: bool = False
         self.__is_billing: bool = False
 
-    def get_elapsed_waiting_time(self)-> int:
+    def get_elapsed_waiting_time(self) -> int:
         return self.__elapsed_waiting_time
 
     def get_food_cooking_time(self):
@@ -36,11 +37,12 @@ class Customer(RestaurantObject):
     def get_elapsed_eating_time(self):
         return self.__elapsed_eating_time
 
-    def get_customer_number(self)-> int:
+    def get_customer_number(self) -> int:
         return self.__customer_number
 
     def set_attribute(self, customer_info: tuple):
-        self.__food_num, self.__food_eating_time, self.__food_cooking_time = customer_info
+        self.__food_num, self.__food_eating_time, \
+             self.__food_cooking_time = customer_info
 
     def get_request(self) -> tuple:
         return self.__customer_number, self.__food_num
@@ -48,10 +50,10 @@ class Customer(RestaurantObject):
     def get_total_required_time(self):
         return self.__food_cooking_time + self.__food_eating_time
 
-    def get_maximum_waiting_time(self)-> int:
+    def get_maximum_waiting_time(self) -> int:
         return self.__maximum_waiting_time
 
-    def get_order(self)-> tuple:
+    def get_order(self) -> tuple:
         return self.__customer_number, self.__food_num
 
     def get_is_eating(self) -> bool:
@@ -88,10 +90,10 @@ class Customer(RestaurantObject):
     def get_elapsed_waited_time_for_food(self):
         return self.__waited_time_for_food
 
-    def get_is_billing(self) -> bool:
+    def is_billing(self) -> bool:
         return self.__is_billing
 
-    def get_is_bill_waiting(self) -> bool:
+    def is_bill_waiting(self) -> bool:
         return self.__is_bill_waiting
 
     def change_is_bill_waiting_status(self):
