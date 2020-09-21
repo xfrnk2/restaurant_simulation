@@ -54,7 +54,14 @@ class Restaurant:
 
             for customer in self.__waiting_customers:
 
-  
+                can_entrance = customer.get_remaining_time_by_new_table() <= customer.get_elapsed_waiting_time()
+
+                if not can_entrance:
+                    break
+
+                if can_entrance and not self.__table_manager.is_table_full():
+                    self.customer_entrance(customer)
+                    customer_count += 1
 
             self.pop_waiting_queue(customer_count)
 
