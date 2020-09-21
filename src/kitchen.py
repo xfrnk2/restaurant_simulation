@@ -55,10 +55,9 @@ class Kitchen(RestaurantObject):
         for cook in self.__cooks:
             if cook.update():
                 info = cook.get_order_info()
-                table_num, customer_num, food_num = info
 
-                print(f"{customer_num}번 손님의 {food_num}번"
-                      f"요리({self.__food_name[food_num]}) 조리가 끝났습니다.")
+                print(f"{info.customer_num}번 손님의 {info.food_num}번"
+                      f"요리({self.__food_name[info.food_num]}) 조리가 끝났습니다.")
 
                 cook.reset_status()
 
