@@ -12,8 +12,8 @@ class Cook(RestaurantObject):
         self.__info = food_info
         self.__is_cooking = not self.__is_cooking
 
-    def get_order_info(self) -> dataclass:
-        return self.__info
+    def get_order_info(self) -> tuple:
+        return self.__info.table_num, self.__info.customer_num, self.__info.food_num
 
     def reset_status(self):
         self.__info.items = 0, 0, 0, 0
