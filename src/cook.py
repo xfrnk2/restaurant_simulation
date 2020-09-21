@@ -6,10 +6,12 @@ class Cook(RestaurantObject):
     def __init__(self):
         self.__info = None
         self.__is_cooking = False
+        self.__cooking_time = 0
 
     def set_request(self, request: dataclass):
         food_info = request
         self.__info = food_info
+        self.__cooking_time = food_info.cooking_time
         self.__is_cooking = not self.__is_cooking
 
     def get_order_info(self) -> tuple:
@@ -28,9 +30,8 @@ class Cook(RestaurantObject):
     def update(self) -> bool:
 
         if self.__is_cooking:
-            self.__info.cooking_time -= 1
-            if self.__info.cooking_time == 0:
+            self.__cooking_time -= 1
+            if self.__cooking_time == 0:
                 self.__is_cooking = not self.__is_cooking
                 return True
         return False
- 
