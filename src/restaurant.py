@@ -96,7 +96,7 @@ class Restaurant:
 
 
         total_time = until_being_allocated + customer.get_food_cooking_time() + customer.get_food_eating_time()
-        customer.set_total_time(total_time)
+        customer.total_time = total_time
 
 
         print(f"{customer_number}번 손님이 {table_num}번 테이블에 앉습니다.")
@@ -112,7 +112,7 @@ class Restaurant:
         higher_time_group = []
 
         for table in self.__table_manager.get_table_queue():
-            remaining_time = table.get_total_time() - \
+            remaining_time = table.total_time - \
                             (table.get_elapsed_waited_time_for_food() +
                              table.get_elapsed_eating_time())
 

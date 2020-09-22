@@ -53,9 +53,6 @@ class Customer(RestaurantObject):
     def get_maximum_waiting_time(self) -> int:
         return self.__maximum_waiting_time
 
-    def get_order(self) -> tuple:
-        return self.__customer_number, self.__food_num
-
     def get_is_eating(self) -> bool:
         return self.__is_eating
 
@@ -81,11 +78,13 @@ class Customer(RestaurantObject):
     def get_remaining_time_by_new_table(self):
         return self.__remaining_time_by_new_table
 
-    def set_total_time(self, value):
-        self.__total_time = value
-
-    def get_total_time(self):
+    @property
+    def total_time(self):
         return self.__total_time
+
+    @total_time.setter
+    def total_time(self, value: int):
+        self.__total_time = value
 
     def get_elapsed_waited_time_for_food(self):
         return self.__waited_time_for_food
