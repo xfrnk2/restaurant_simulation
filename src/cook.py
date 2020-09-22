@@ -1,7 +1,6 @@
-from restaurant_object import RestaurantObject
 from dataclasses import dataclass
 
-class Cook(RestaurantObject):
+class Cook:
 
     def __init__(self, request: dataclass):
         self.__info = request

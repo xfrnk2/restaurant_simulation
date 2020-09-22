@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from restaurant_object import RestaurantObject
 from customer import Customer
 from cook import Cook
 
@@ -12,7 +11,7 @@ class CookingRequest:
     cooking_time: int
 
 
-class Kitchen(RestaurantObject):
+class Kitchen:
 
     def __init__(self, cook_num: int):
 

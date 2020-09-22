@@ -1,8 +1,7 @@
-from restaurant_object import RestaurantObject
 from customer import Customer
 
 
-class CashDesk(RestaurantObject):
+class CashDesk:
 
     def __init__(self, billing_time: int):
         self.__customer_number = None
@@ -35,7 +34,7 @@ class CashDesk(RestaurantObject):
         return self.__customer_number
 
 
-class BillManager(RestaurantObject):
+class BillManager:
 
     def __init__(self, waiting_time, cash_desk_num):
 

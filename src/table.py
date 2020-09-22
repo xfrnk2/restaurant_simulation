@@ -1,8 +1,7 @@
-from restaurant_object import RestaurantObject
 from customer import Customer
 from dataclasses import dataclass
 
-class TableManager(RestaurantObject):
+class TableManager:
 
     def __init__(self, table_amount: int):
         self.__table_queue = [0] * table_amount

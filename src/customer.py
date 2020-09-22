@@ -1,8 +1,7 @@
-from restaurant_object import RestaurantObject
 from random import randrange
 
 
-class Customer(RestaurantObject):
+class Customer:
 
     def __init__(self, number: int, arrival_time: int):
 
