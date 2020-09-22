@@ -35,25 +35,19 @@ class Kitchen:
         self.__order_queue.append(info)
 
     def start_cooking_update(self):
-            while self.__order_queue and len(self.__cooks) < self.__cook_number:
-                customer_food_num, customer_num, table_number = self.__order_queue.pop(0)
-                self.__cooks.append(Cook(CookingRequest(table_num=table_number, customer_num=customer_num, food_num=customer_food_num,
-                                   cooking_time=self.__food_cooking_time[customer_food_num])))
+        while self.__order_queue and len(self.__cooks) < self.__cook_number:
+            customer_food_num, customer_num, table_number = self.__order_queue.pop(0)
+            self.__cooks.append(Cook(CookingRequest(table_num=table_number, customer_num=customer_num, food_num=customer_food_num,
+                               cooking_time=self.__food_cooking_time[customer_food_num])))
 
     def update(self) -> list:
-        finished_order_queue = []
+        finished = []
+        cooks = [cook if not cook.update() else finished.append(cook.get_order_info()) for cook in self.__cooks]
+        self.__cooks = list(filter(None, cooks))
 
-        if self.__cooks:
-            cooks = []
-            updating = [cook if cook.update() else cooks.append(cook) for cook in self.__cooks]
-            targets = list(filter(None, updating))
+        if finished:
+            for info in finished:
+                print(f"{info.customer_num}번 손님의 {info.food_num}번"
+                      f"요리({self.__food_name[info.food_num]}) 조리가 끝났습니다.")
 
-            if targets:
-                for cook in targets:
-                    info = cook.get_order_info()
-                    print(f"{info.customer_num}번 손님의 {info.food_num}번"
-                          f"요리({self.__food_name[info.food_num]}) 조리가 끝났습니다.")
-                    finished_order_queue.append(info)
-
-                self.__cooks = cooks
-        return finished_order_queue
+        return finished
