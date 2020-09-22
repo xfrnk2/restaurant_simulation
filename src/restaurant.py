@@ -74,7 +74,7 @@ class Restaurant:
             group = self.__kitchen.get_cooks_current_cooking_time()
             q.append(0)
 
-            while q:
+            while q and group:
                 group.sort()
                 target = group.pop(0)
                 result += target
