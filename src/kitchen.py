@@ -35,18 +35,15 @@ class Kitchen(RestaurantObject):
         info = customer_food_num, customer_num, table_number
         self.__order_queue.append(info)
 
-
-
-
-
     def start_cooking_update(self):
 
-            for cook in self.__cooks:
-                if not self.__order_queue:
-                    break
-                if not cook.is_cooking:
-                        customer_food_num, customer_num, table_number = self.__order_queue.pop(0)
-                        cook.set_request(CookingRequest(table_num=table_number, customer_num=customer_num, food_num=customer_food_num, cooking_time=self.__food_cooking_time[customer_food_num]))
+        for cook in self.__cooks:
+            if not self.__order_queue:
+                break
+            if not cook.is_cooking:
+                customer_food_num, customer_num, table_number = self.__order_queue.pop(0)
+                cook.set_request(CookingRequest(table_num=table_number, customer_num=customer_num,
+                                                food_num=customer_food_num, cooking_time=self.__food_cooking_time[customer_food_num]))
 
     def update(self) -> list:
 
