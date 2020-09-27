@@ -17,6 +17,4 @@ class Cook:
     def update(self) -> bool:
 
         self.__cooking_time -= 1
-        if self.__cooking_time == 0:
-            return True
-        return False
+        return self.__cooking_time <= 0
