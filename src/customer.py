@@ -57,14 +57,14 @@ class Customer:
         return self.__is_eating
 
     def update(self):
-        self.__elapsed_eating_time += 1
+        if self.__is_eating:
+            self.__elapsed_eating_time += 1
 
-        if self.__elapsed_eating_time == self.__food_eating_time:
-            return True
+            if self.__elapsed_eating_time == self.__food_eating_time:
+                return True
+        else:
+            self.__waited_time_for_food += 1
         return False
-
-    def food_waiting_update(self):
-        self.__waited_time_for_food += 1
 
     def waiting_update(self):
         self.__elapsed_waiting_time += 1
