@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 
+
 class Cook:
 
     def __init__(self, request: dataclass):

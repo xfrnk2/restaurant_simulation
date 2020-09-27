@@ -1,6 +1,7 @@
 from customer import Customer
 from dataclasses import dataclass
 
+
 class TableManager:
 
     def __init__(self, table_amount: int):

@@ -38,7 +38,7 @@ class Kitchen:
         while self.__order_queue and len(self.__cooks) < self.__cook_number:
             customer_food_num, customer_num, table_number = self.__order_queue.pop(0)
             self.__cooks.append(Cook(CookingRequest(table_num=table_number, customer_num=customer_num, food_num=customer_food_num,
-                               cooking_time=self.__food_cooking_time[customer_food_num])))
+                                cooking_time=self.__food_cooking_time[customer_food_num])))
 
     def update(self) -> list:
         finished = []
