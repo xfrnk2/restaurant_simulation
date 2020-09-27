@@ -54,10 +54,10 @@ class Restaurant:
 
             for customer in self.__waiting_customers:
 
-                time_satisfied = customer.get_remaining_time_by_new_table() <= customer.get_elapsed_waiting_time()
-                invalid = not time_satisfied or self.__table_manager.is_table_full()
+                waitable = customer.get_elapsed_waiting_time() < customer.get_remaining_time_by_new_table()
+                acceptable = waitable and self.__table_manager.is_acceptable()
 
-                if invalid:
+                if not acceptable:
                     break
                 self.customer_entrance(customer)
                 customer_count += 1
@@ -161,7 +161,10 @@ class Restaurant:
             if elapsed_time % self.__visiting_period == 0:
                 customer = self.customer_visiting(elapsed_time)
 
-                if self.__table_manager.is_table_full():
+                if self.__table_manager.is_acceptable():
+                    self.customer_entrance(customer)
+
+                else:
                     if self.is_possible_to_wait(customer):
                         self.receive_customer(customer)
                     else:
@@ -169,8 +172,5 @@ class Restaurant:
                               f"{customer.get_elapsed_waiting_time()}분"
                               f" / 대기 가능 시간 "
                               f"{customer.get_remaining_time_by_new_table()}분")
-
-                else:
-                    self.customer_entrance(customer)
 
             self.__kitchen.start_cooking_update()

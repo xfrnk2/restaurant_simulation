@@ -29,8 +29,8 @@ class TableManager:
             print(f"{order.customer_num}번 손님이 식사를 시작합니다.")
             self.__table_queue[order.table_num].change_status_is_eating()
 
-    def is_table_full(self) -> bool:
-        return all(self.__table_queue)
+    def is_acceptable(self) -> bool:
+        return not all(self.__table_queue)
 
     def get_table_left(self) -> int:
         return len(list(filter(lambda x: x == 0, self.__table_queue)))

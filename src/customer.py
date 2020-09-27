@@ -46,9 +46,6 @@ class Customer:
     def get_request(self) -> tuple:
         return self.__customer_number, self.__food_num
 
-    def get_total_required_time(self):
-        return self.__food_cooking_time + self.__food_eating_time
-
     def get_maximum_waiting_time(self) -> int:
         return self.__maximum_waiting_time
 
