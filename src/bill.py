@@ -43,9 +43,6 @@ class BillManager:
         self.__cash_desk = CashDesk(waiting_time)
 
     def receive_customer(self, customer: Customer):
-        invalid = customer.is_billing() or customer.is_bill_waiting()
-        # TODO-아예 valid한 상태만 있다면 전체적인 구조 개선이 필요합니다.
-        assert not invalid, "초기 상태에서는 invalid 할 수 없습니다."
 
         print(f"{customer.get_customer_number()}번 손님이 계산대 앞에 줄을 섭니다.")
         customer.change_is_bill_waiting_status()

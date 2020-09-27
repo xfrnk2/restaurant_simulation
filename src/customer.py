@@ -52,7 +52,8 @@ class Customer:
     def get_maximum_waiting_time(self) -> int:
         return self.__maximum_waiting_time
 
-    def get_is_eating(self) -> bool:
+    @property
+    def is_eating(self) -> bool:
         return self.__is_eating
 
     def update(self):
