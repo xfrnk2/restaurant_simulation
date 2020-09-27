@@ -43,7 +43,7 @@ class Kitchen:
 
     def update(self) -> list:
         finished = []
-        cooks = [cook if not cook.update() else finished.append(cook.get_order_info()) for cook in self.__cooks]
+        cooks = [cook if not cook.update() else finished.append(cook.order_info) for cook in self.__cooks]
         self.__cooks = list(filter(None, cooks))
 
         if finished:

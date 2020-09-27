@@ -7,7 +7,8 @@ class Cook:
         self.__info = request
         self.__cooking_time = request.cooking_time
 
-    def get_order_info(self) -> dataclass:
+    @property
+    def order_info(self) -> dataclass:
         return self.__info
 
     def get_left_cooking_time(self) -> int:
