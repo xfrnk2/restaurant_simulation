@@ -20,14 +20,14 @@ class TableManager:
                 self.__table_queue[table_number] = customer
                 return table_number
 
-    def getting_food(self, info: dataclass):
+    def getting_food(self, order: dataclass):
 
-        if isinstance(self.__table_queue[info.table_num], Customer) and \
-                self.__table_queue[info.table_num]. \
-                get_request() == (info.customer_num, info.food_num):
+        if isinstance(self.__table_queue[order.table_num], Customer) and \
+                self.__table_queue[order.table_num]. \
+                get_request() == (order.customer_num, order.food_num):
 
-            print(f"{info.customer_num}번 손님이 식사를 시작합니다.")
-            self.__table_queue[info.table_num].change_status_is_eating()
+            print(f"{order.customer_num}번 손님이 식사를 시작합니다.")
+            self.__table_queue[order.table_num].change_status_is_eating()
 
     def is_table_full(self) -> bool:
         return all(self.__table_queue)
