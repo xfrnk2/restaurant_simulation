@@ -48,7 +48,7 @@ class BillManager:
         customer.change_is_bill_waiting_status()
         self.__bill_waiting_queue.append(customer)
 
-    def process_billing(self,count: int = 1):
+    def process_billing(self, count: int = 1):
         for _ in range(count):
             target = self.__bill_waiting_queue.pop(0)
             target.change_is_billing_status()

@@ -43,7 +43,6 @@ class TableManager:
 
             if isinstance(self.__table_queue[num], Customer):
 
-
                 if self.__table_queue[num].update():
 
                     target_customer = self.__table_queue[num]
