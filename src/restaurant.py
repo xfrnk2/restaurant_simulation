@@ -94,10 +94,8 @@ class Restaurant:
         customer_number = customer.get_customer_number()
         until_being_allocated = self.get_time_until_being_allocated_to_cook()
 
-
         total_time = until_being_allocated + customer.get_food_cooking_time() + customer.get_food_eating_time()
         customer.set_total_time(total_time)
-
 
         print(f"{customer_number}번 손님이 {table_num}번 테이블에 앉습니다.")
         print(f"{customer_number}번 손님이 {food_num}번 요리"

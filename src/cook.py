@@ -1,5 +1,6 @@
 from restaurant_object import RestaurantObject
-from dataclasses import dataclass, replace
+from dataclasses import dataclass
+
 
 class Cook(RestaurantObject):
 
