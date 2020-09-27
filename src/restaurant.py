@@ -68,19 +68,19 @@ class Restaurant:
     def get_time_until_being_allocated_to_cook(self) -> int:
 
         result = 0
-        q = self.__kitchen.get_order_queue()
-        if q:
-            q = [self.__food_cooking_time[order[0]] for order in q]
-            group = self.__kitchen.get_cooks_current_cooking_time()
-            q.append(0)
+        queue = self.__kitchen.get_order_queue()
+        if queue:
+            queue = [self.__food_cooking_time[order[0]] for order in queue]
+            remaining_cooking_times = self.__kitchen.get_cooks_current_cooking_time()
+            queue.append(0)
 
-            while q and group:
-                group.sort()
-                target = group.pop(0)
+            while queue and remaining_cooking_times:
+                remaining_cooking_times.sort()
+                target = remaining_cooking_times.pop(0)
                 result += target
-                group = [i - target for i in group]
+                remaining_cooking_times = [i - target for i in remaining_cooking_times]
 
-                group.append(q.pop(0))
+                remaining_cooking_times.append(queue.pop(0))
         return result
 
     def customer_entrance(self, customer: Customer):
