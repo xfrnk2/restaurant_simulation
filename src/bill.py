@@ -51,16 +51,19 @@ class BillManager:
         customer.change_is_bill_waiting_status()
         self.__bill_waiting_queue.append(customer)
 
+    def process_billing(self,count: int = 1):
+        for _ in range(count):
+            target = self.__bill_waiting_queue.pop(0)
+            target.change_is_billing_status()
+            target.change_is_bill_waiting_status()
+            self.__cash_desk.receive_customer(target)
+            self.__cash_desk.change_cash_desk_status()
+
     def update(self):
 
         if not self.__cash_desk.update():
             print(f"{self.__cash_desk.get_customer_info()}번 손님이 "
                   f"계산을 마치고 레스토랑을 떠났습니다.")
 
-        if self.__bill_waiting_queue and \
-           not self.__cash_desk.is_working():
-            target = self.__bill_waiting_queue.pop(0)
-            target.change_is_billing_status()
-            target.change_is_bill_waiting_status()
-            self.__cash_desk.receive_customer(target)
-            self.__cash_desk.change_cash_desk_status()
+        if self.__bill_waiting_queue and not self.__cash_desk.is_working():
+            self.process_billing()
