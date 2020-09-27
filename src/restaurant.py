@@ -68,7 +68,7 @@ class Restaurant:
     def get_time_until_being_allocated_to_cook(self) -> int:
 
         result = 0
-        queue = self.__kitchen.get_order_queue()
+        queue = self.__kitchen.order_queue
         if queue:
             queue = [self.__food_cooking_time[order[0]] for order in queue]
             remaining_cooking_times = self.__kitchen.get_cooks_current_cooking_time()

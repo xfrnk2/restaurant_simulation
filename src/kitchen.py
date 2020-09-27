@@ -5,10 +5,10 @@ from cook import Cook
 
 @dataclass()
 class CookingRequest:
-    table_num: int
-    customer_num: int
-    food_num: int
-    cooking_time: int
+    table_num: int = 0
+    customer_num: int = 0
+    food_num: int = 0
+    cooking_time: int = 0
 
 
 class Kitchen:
@@ -21,7 +21,8 @@ class Kitchen:
         self.__food_name = {1: "스테이크", 2: "스파게티", 3: "마카로니", 4: "그라탱"}
         self.__order_queue = []
 
-    def get_order_queue(self):
+    @property
+    def order_queue(self):
         return self.__order_queue
 
     def get_cooks_current_cooking_time(self) -> list:
