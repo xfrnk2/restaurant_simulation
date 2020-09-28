@@ -50,18 +50,22 @@ class Customer:
         return self.__maximum_waiting_time
 
     @property
+    def customer_number(self) -> int:
+        return self.__customer_number
+
+    @property
     def is_eating(self) -> bool:
         return self.__is_eating
+
+    @property
+    def check_eating_status(self)-> bool:
+        return self.__elapsed_eating_time == self.__food_eating_time
 
     def update(self):
         if self.__is_eating:
             self.__elapsed_eating_time += 1
-
-            if self.__elapsed_eating_time == self.__food_eating_time:
-                return True
         else:
             self.__waited_time_for_food += 1
-        return False
 
     def waiting_update(self):
         self.__elapsed_waiting_time += 1
