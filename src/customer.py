@@ -7,8 +7,6 @@ class Customer:
     def __init__(self, number: int, arrival_time: int):
 
         self.__arrival_time = arrival_time
-        self.__maximum_waiting_time = randrange(15, 41)
-
         self.__customer_number = number
         self.__food_num = 0
         self.__info: dataclass = None
@@ -45,9 +43,6 @@ class Customer:
     @property
     def number(self) -> int:
         return self.__customer_number
-
-    def get_maximum_waiting_time(self) -> int:
-        return self.__maximum_waiting_time
 
     @property
     def customer_number(self) -> int:

@@ -118,7 +118,7 @@ class Restaurant:
                             (customer.elapsed_waited_time_for_food +
                              customer.elapsed_eating_time)
 
-            if remaining_time < new_customer.get_maximum_waiting_time():
+            if remaining_time < randrange(15, 41):
                 n += 1
                 lower_time_group.append(remaining_time)
             else:
