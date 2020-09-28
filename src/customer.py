@@ -1,4 +1,5 @@
 from random import randrange
+from dataclasses import dataclass
 
 
 class Customer:
@@ -10,41 +11,40 @@ class Customer:
 
         self.__customer_number = number
         self.__food_num = 0
-        self.__food_eating_time = 0
-        self.__food_cooking_time = 0
+        self.__info: dataclass = None
 
         self.__is_eating: bool = False
         self.__elapsed_waiting_time = 0
         self.__waited_time_for_food = 0
         self.__elapsed_eating_time = 0
 
-        self.__total_time = 0
         self.__remaining_time_by_new_table = 0
 
         self.__is_bill_waiting: bool = False
         self.__is_billing: bool = False
 
-    def get_elapsed_waiting_time(self) -> int:
+    def get_total_time(self, until_being_allocated):
+        return until_being_allocated + self.__info.cooking_time + self.__info.eating_time
+
+    @property
+    def elapsed_waiting_time(self) -> int:
         return self.__elapsed_waiting_time
 
-    def get_food_cooking_time(self):
-        return self.__food_cooking_time
-
-    def get_food_eating_time(self):
-        return self.__food_eating_time
-
-    def get_elapsed_eating_time(self):
+    @property
+    def elapsed_eating_time(self):
         return self.__elapsed_eating_time
 
-    def get_customer_number(self) -> int:
+    @property
+    def info(self):
+        return self.__info
+
+    @info.setter
+    def info(self, customer_info):
+        self.__info = customer_info
+
+    @property
+    def number(self) -> int:
         return self.__customer_number
-
-    def set_attribute(self, customer_info: tuple):
-        self.__food_num, self.__food_eating_time, \
-             self.__food_cooking_time = customer_info
-
-    def get_request(self) -> tuple:
-        return self.__customer_number, self.__food_num
 
     def get_maximum_waiting_time(self) -> int:
         return self.__maximum_waiting_time
@@ -58,8 +58,8 @@ class Customer:
         return self.__is_eating
 
     @property
-    def check_eating_status(self)-> bool:
-        return self.__elapsed_eating_time == self.__food_eating_time
+    def check_eating_status(self) -> bool:
+        return self.__elapsed_eating_time == self.__info.eating_time
 
     def update(self):
         if self.__is_eating:
@@ -73,21 +73,16 @@ class Customer:
     def change_status_is_eating(self):
         self.__is_eating = not self.__is_eating
 
-    def set_remaining_time_by_new_table(self, value):
-        self.__remaining_time_by_new_table = value
-
-    def get_remaining_time_by_new_table(self):
+    @property
+    def remaining_time_by_new_table(self):
         return self.__remaining_time_by_new_table
 
+    @remaining_time_by_new_table.setter
+    def remaining_time_by_new_table(self, value):
+        self.__remaining_time_by_new_table = value
+
     @property
-    def total_time(self):
-        return self.__total_time
-
-    @total_time.setter
-    def total_time(self, value: int):
-        self.__total_time = value
-
-    def get_elapsed_waited_time_for_food(self):
+    def elapsed_waited_time_for_food(self):
         return self.__waited_time_for_food
 
     def is_billing(self) -> bool:

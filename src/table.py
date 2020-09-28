@@ -1,5 +1,4 @@
 from customer import Customer
-from dataclasses import dataclass
 
 
 class TableManager:
@@ -48,7 +47,7 @@ class TableManager:
                 customer.update()
 
                 if customer.check_eating_status:
-                    print(f"{num}번 테이블에 앉아있는 {customer.get_customer_number()}번"
+                    print(f"{num}번 테이블에 앉아있는 {customer.number}번"
                           f" 손님이 식사를 마쳤습니다.")
 
                     customer.change_status_is_eating()

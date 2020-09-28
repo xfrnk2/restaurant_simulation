@@ -3,6 +3,16 @@ from customer import Customer
 from table import TableManager
 from kitchen import Kitchen
 from bill import BillManager
+from dataclasses import dataclass
+
+
+@dataclass()
+class CustomerInfo:
+    table_num: int = 0
+    customer_num: int = 0
+    food_num: int = 0
+    cooking_time: int = 0
+    eating_time: int = 0
 
 
 class Restaurant:
@@ -54,7 +64,7 @@ class Restaurant:
 
             for customer in self.__waiting_customers:
 
-                waitable = customer.get_elapsed_waiting_time() < customer.get_remaining_time_by_new_table()
+                waitable = customer.elapsed_waiting_time < customer.remaining_time_by_new_table
                 acceptable = waitable and self.__table_manager.is_acceptable()
 
                 if not acceptable:
@@ -69,7 +79,7 @@ class Restaurant:
         result = 0
         queue = self.__kitchen.order_queue
         if queue:
-            queue = [self.__food_cooking_time[order[0]] for order in queue]
+            queue = [self.__food_cooking_time[customer.food_num] for customer in queue]
             remaining_cooking_times = self.__kitchen.get_cooks_current_cooking_time()
             queue.append(0)
 
@@ -85,33 +95,28 @@ class Restaurant:
     def customer_entrance(self, customer: Customer):
 
         food_num = randrange(1, 5)
-        food_eating_time = self.__food_eating_time[food_num]
-        food_cooking_time = self.__food_cooking_time[food_num]
-        customer.set_attribute((food_num, food_eating_time, food_cooking_time))
-
         table_num = self.__table_manager.set_customer(customer)
-        customer_number = customer.get_customer_number()
-        until_being_allocated = self.get_time_until_being_allocated_to_cook()
-
-        total_time = until_being_allocated + customer.get_food_cooking_time() + customer.get_food_eating_time()
-        customer.total_time = total_time
+        customer_number = customer.number
+        customer.info = CustomerInfo(table_num=table_num, customer_num=customer_number, food_num=food_num,
+                                     cooking_time=self.__food_cooking_time[food_num], eating_time=self.__food_eating_time[food_num])
 
         print(f"{customer_number}번 손님이 {table_num}번 테이블에 앉습니다.")
         print(f"{customer_number}번 손님이 {food_num}번 요리"
               f" ({self.__food_name[food_num]})를 주문합니다.")
 
-        self.__kitchen.get_order_from_new_customer(customer, table_num)
+        self.__kitchen.get_new_customer_info(customer.info)
 
     def is_possible_to_wait(self, new_customer: Customer) -> bool:
 
         n = 0
         lower_time_group = []
         higher_time_group = []
+        time_until_being_allocated_to_cook = self.get_time_until_being_allocated_to_cook()
 
-        for table in self.__table_manager.get_table_queue():
-            remaining_time = table.total_time - \
-                            (table.get_elapsed_waited_time_for_food() +
-                             table.get_elapsed_eating_time())
+        for customer in self.__table_manager.get_table_queue():
+            remaining_time = customer.get_total_time(time_until_being_allocated_to_cook) - \
+                            (customer.elapsed_waited_time_for_food +
+                             customer.elapsed_eating_time)
 
             if remaining_time < new_customer.get_maximum_waiting_time():
                 n += 1
@@ -121,18 +126,17 @@ class Restaurant:
 
         if self.__waiting_customers:
             if len(self.__waiting_customers) < n:
-                new_customer.set_remaining_time_by_new_table(sorted(lower_time_group)[len(self.__waiting_customers)])
+                new_customer.remaining_time_by_new_table = sorted(lower_time_group)[len(self.__waiting_customers)]
                 return True
 
         else:
             if 1 <= n:
-                new_customer.set_remaining_time_by_new_table(
-                    min(lower_time_group))
+                new_customer.remaining_time_by_new_table = min(lower_time_group)
                 return True
 
         applicable_index = sorted(
             higher_time_group)[len(self.__waiting_customers) - n]
-        new_customer.set_remaining_time_by_new_table(applicable_index)
+        new_customer.remaining_time_by_new_table = applicable_index
         return False
 
     def run(self):
@@ -169,8 +173,8 @@ class Restaurant:
                         self.receive_customer(customer)
                     else:
                         print(f"손님이 기다릴 수 없어 돌아갑니다.\n현재 대기 시간"
-                              f"{customer.get_elapsed_waiting_time()}분"
+                              f"{customer.elapsed_waiting_time}분"
                               f" / 대기 가능 시간 "
-                              f"{customer.get_remaining_time_by_new_table()}분")
+                              f"{customer.remaining_time_by_new_table}분")
 
             self.__kitchen.start_cooking_update()

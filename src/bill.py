@@ -10,7 +10,7 @@ class CashDesk:
         self.__is_working = False
 
     def receive_customer(self, customer: Customer):
-        self.__customer_number = customer.get_request()[0]
+        self.__customer_number = customer.number
 
     def update(self):
 
@@ -44,7 +44,7 @@ class BillManager:
 
     def receive_customer(self, customer: Customer):
 
-        print(f"{customer.get_customer_number()}번 손님이 계산대 앞에 줄을 섭니다.")
+        print(f"{customer.number}번 손님이 계산대 앞에 줄을 섭니다.")
         customer.change_is_bill_waiting_status()
         self.__bill_waiting_queue.append(customer)
 

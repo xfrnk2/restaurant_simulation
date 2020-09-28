@@ -1,14 +1,5 @@
 from dataclasses import dataclass
-from customer import Customer
 from cook import Cook
-
-
-@dataclass()
-class CookingRequest:
-    table_num: int = 0
-    customer_num: int = 0
-    food_num: int = 0
-    cooking_time: int = 0
 
 
 class Kitchen:
@@ -18,6 +9,7 @@ class Kitchen:
         self.__cook_number = cook_num
         self.__cooks = []
         self.__food_cooking_time = {1: 30, 2: 20, 3: 10, 4: 15}
+        self.__food_eating_time = {1: 30, 2: 20, 3: 15, 4: 10}
         self.__food_name = {1: "스테이크", 2: "스파게티", 3: "마카로니", 4: "그라탱"}
         self.__order_queue = []
         self.__finished_table_numbers = []
@@ -33,18 +25,13 @@ class Kitchen:
     def get_cooks_current_cooking_time(self) -> list:
         return [cook.get_left_cooking_time() for cook in self.__cooks]
 
-    def get_order_from_new_customer(
-         self, customer: Customer, table_number: int):
-
-        customer_num, customer_food_num = customer.get_request()
-        info = customer_food_num, customer_num, table_number
-        self.__order_queue.append(info)
+    def get_new_customer_info(
+         self, customer_info: dataclass):
+        self.__order_queue.append(customer_info)
 
     def start_cooking_update(self):
         while self.__order_queue and len(self.__cooks) < self.__cook_number:
-            customer_food_num, customer_num, table_number = self.__order_queue.pop(0)
-            self.__cooks.append(Cook(CookingRequest(table_num=table_number, customer_num=customer_num, food_num=customer_food_num,
-                                cooking_time=self.__food_cooking_time[customer_food_num])))
+            self.__cooks.append(Cook(self.__order_queue.pop(0)))
 
     def update(self):
 
