@@ -20,10 +20,15 @@ class Kitchen:
         self.__food_cooking_time = {1: 30, 2: 20, 3: 10, 4: 15}
         self.__food_name = {1: "스테이크", 2: "스파게티", 3: "마카로니", 4: "그라탱"}
         self.__order_queue = []
+        self.__finished_table_numbers = []
 
     @property
     def order_queue(self):
         return self.__order_queue
+
+    @property
+    def finished_table_numbers(self):
+        return self.__finished_table_numbers
 
     def get_cooks_current_cooking_time(self) -> list:
         return [cook.get_left_cooking_time() for cook in self.__cooks]
@@ -41,14 +46,17 @@ class Kitchen:
             self.__cooks.append(Cook(CookingRequest(table_num=table_number, customer_num=customer_num, food_num=customer_food_num,
                                 cooking_time=self.__food_cooking_time[customer_food_num])))
 
-    def update(self) -> list:
-        finished = []
-        cooks = [cook if not cook.update() else finished.append(cook.order_info) for cook in self.__cooks]
+    def update(self):
+
+        finished_table_numbers = []
+        finished_order = []
+        cooks = [cook if not cook.update() else finished_order.append(cook.order_info) for cook in self.__cooks]
         self.__cooks = list(filter(None, cooks))
 
-        if finished:
-            for info in finished:
+        if finished_order:
+            for info in finished_order:
                 print(f"{info.customer_num}번 손님의 {info.food_num}번"
                       f"요리({self.__food_name[info.food_num]}) 조리가 끝났습니다.")
+                finished_table_numbers.append(info.table_num)
 
-        return finished
+        self.__finished_table_numbers = finished_table_numbers

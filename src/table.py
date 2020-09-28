@@ -6,6 +6,11 @@ class TableManager:
 
     def __init__(self, table_amount: int):
         self.__table_queue = [0] * table_amount
+        self.__finished_eating_queue = []
+
+    @property
+    def finished_eating_queue(self):
+        return self.__finished_eating_queue
 
     def get_table_queue(self):
         return self.__table_queue
@@ -20,14 +25,10 @@ class TableManager:
                 self.__table_queue[table_number] = customer
                 return table_number
 
-    def getting_food(self, order: dataclass):
+    def getting_food(self, table_num: int):
 
-        if isinstance(self.__table_queue[order.table_num], Customer) and \
-                self.__table_queue[order.table_num]. \
-                get_request() == (order.customer_num, order.food_num):
-
-            print(f"{order.customer_num}번 손님이 식사를 시작합니다.")
-            self.__table_queue[order.table_num].change_status_is_eating()
+        print(f"{self.__table_queue[table_num].customer_number}번 손님이 식사를 시작합니다.")
+        self.__table_queue[table_num].change_status_is_eating()
 
     def is_acceptable(self) -> bool:
         return not all(self.__table_queue)
@@ -35,7 +36,7 @@ class TableManager:
     def get_table_left(self) -> int:
         return len(list(filter(lambda x: x == 0, self.__table_queue)))
 
-    def update(self) -> list:
+    def update(self):
 
         target_customer_queue = []
 
@@ -43,14 +44,15 @@ class TableManager:
 
             if isinstance(self.__table_queue[num], Customer):
 
-                if self.__table_queue[num].update():
+                customer = self.__table_queue[num]
+                customer.update()
 
-                    target_customer = self.__table_queue[num]
+                if customer.check_eating_status:
+                    print(f"{num}번 테이블에 앉아있는 {customer.get_customer_number()}번"
+                          f" 손님이 식사를 마쳤습니다.")
+
+                    customer.change_status_is_eating()
+                    target_customer_queue.append(customer)
                     self.__table_queue[num] = 0
 
-                    print(f"{num}번 테이블에 앉아있는 {target_customer.get_customer_number()}번"
-                          f" 손님이 식사를 마쳤습니다.")
-                    target_customer.change_status_is_eating()
-                    target_customer_queue.append(target_customer)
-
-        return target_customer_queue
+        self.__finished_eating_queue = target_customer_queue

@@ -142,19 +142,19 @@ class Restaurant:
         while elapsed_time < 720:
 
             elapsed_time += 1
-            table_target_customer_queue = self.__table_manager.update()
+            self.__table_manager.update()
 
-            for customer in table_target_customer_queue:
+            for customer in self.__table_manager.finished_eating_queue:
                 self.__bill_manager.receive_customer(customer)
 
             self.__bill_manager.update()
 
             if self.__table_manager.is_exist():
-                finished_order_queue = self.__kitchen.update()
+                self.__kitchen.update()
 
-                if finished_order_queue:
-                    for order in finished_order_queue:
-                        self.__table_manager.getting_food(order)
+                if self.__kitchen.finished_table_numbers:
+                    for table_num in self.__kitchen.finished_table_numbers:
+                        self.__table_manager.getting_food(table_num)
 
             self.waiting_update()
 
