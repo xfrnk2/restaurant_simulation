@@ -12,6 +12,10 @@ class CashDesk:
     def receive_customer(self, customer: Customer):
         self.__customer_number = customer.number
 
+    @property
+    def customer_info(self):
+        return self.__customer_number
+
     def update(self):
 
         if self.__is_working:
@@ -19,9 +23,8 @@ class CashDesk:
 
             if self.__billing_time <= self.__elapsed_billing_time:
                 self.change_cash_desk_status()
-                return False
-
-        return True
+                print(f"{self.customer_info}번 손님이 "
+                      f"계산을 마치고 레스토랑을 떠났습니다.")
 
     def is_working(self):
         return self.__is_working
@@ -29,9 +32,6 @@ class CashDesk:
     def change_cash_desk_status(self):
         self.__elapsed_billing_time = 0
         self.__is_working = not self.__is_working
-
-    def get_customer_info(self):
-        return self.__customer_number
 
 
 class BillManager:
@@ -58,9 +58,7 @@ class BillManager:
 
     def update(self):
 
-        if not self.__cash_desk.update():
-            print(f"{self.__cash_desk.get_customer_info()}번 손님이 "
-                  f"계산을 마치고 레스토랑을 떠났습니다.")
+        self.__cash_desk.update()
 
         if self.__bill_waiting_queue and not self.__cash_desk.is_working():
             self.process_billing()

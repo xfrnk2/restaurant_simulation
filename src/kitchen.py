@@ -15,15 +15,16 @@ class Kitchen:
         self.__finished_table_numbers = []
 
     @property
+    def cooks(self):
+        return self.__cooks
+
+    @property
     def order_queue(self):
         return self.__order_queue
 
     @property
     def finished_table_numbers(self):
         return self.__finished_table_numbers
-
-    def get_cooks_current_cooking_time(self) -> list:
-        return [cook.get_left_cooking_time() for cook in self.__cooks]
 
     def get_new_customer_info(
          self, customer_info: dataclass):

@@ -80,7 +80,7 @@ class Restaurant:
         queue = self.__kitchen.order_queue
         if queue:
             queue = [self.__food_cooking_time[customer.food_num] for customer in queue]
-            remaining_cooking_times = self.__kitchen.get_cooks_current_cooking_time()
+            remaining_cooking_times = [cook.get_left_cooking_time() for cook in self.__kitchen.cooks]
             queue.append(0)
 
             while queue and remaining_cooking_times:

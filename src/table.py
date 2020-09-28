@@ -32,9 +32,6 @@ class TableManager:
     def is_acceptable(self) -> bool:
         return not all(self.__table_queue)
 
-    def get_table_left(self) -> int:
-        return len(list(filter(lambda x: x == 0, self.__table_queue)))
-
     def update(self):
 
         target_customer_queue = []
