@@ -1,11 +1,15 @@
-from restaurant_object import RestaurantObject
 from customer import Customer
 
 
-class TableManager(RestaurantObject):
+class TableManager:
 
     def __init__(self, table_amount: int):
-        self.__table_queue = [0] * (table_amount)
+        self.__table_queue = [0] * table_amount
+        self.__finished_eating_queue = []
+
+    @property
+    def finished_eating_queue(self):
+        return self.__finished_eating_queue
 
     def get_table_queue(self):
         return self.__table_queue
@@ -20,24 +24,15 @@ class TableManager(RestaurantObject):
                 self.__table_queue[table_number] = customer
                 return table_number
 
-    def getting_food(self, info: tuple):
+    def getting_food(self, table_num: int):
 
-        table_number, customer_number, food_number = info
+        print(f"{self.__table_queue[table_num].customer_number}번 손님이 식사를 시작합니다.")
+        self.__table_queue[table_num].change_status_is_eating()
 
-        if isinstance(self.__table_queue[table_number], Customer) and \
-                self.__table_queue[table_number]. \
-                get_request() == (customer_number, food_number):
+    def is_acceptable(self) -> bool:
+        return not all(self.__table_queue)
 
-            print(f"{customer_number}번 손님이 식사를 시작합니다.")
-            self.__table_queue[table_number].change_status_is_eating()
-
-    def is_table_full(self) -> bool:
-        return all(self.__table_queue)
-
-    def get_table_left(self) -> int:
-        return len(list(filter(lambda x: x == 0, self.__table_queue)))
-
-    def update(self) -> list:
+    def update(self):
 
         target_customer_queue = []
 
@@ -45,24 +40,15 @@ class TableManager(RestaurantObject):
 
             if isinstance(self.__table_queue[num], Customer):
 
-                if self.__table_queue[num].get_is_eating():
+                customer = self.__table_queue[num]
+                customer.update()
 
-                    if self.__table_queue[num].update():
-                        c_num = self.__table_queue[num].get_customer_number()
-                        print(f"{num}번 테이블에 앉아있는 "
-                              f"{c_num}번 손님")
-                        target_customer = self.__table_queue[num]
-                        self.__table_queue[num] = 0
+                if customer.check_eating_status:
+                    print(f"{num}번 테이블에 앉아있는 {customer.number}번"
+                          f" 손님이 식사를 마쳤습니다.")
 
-                        print(f"{target_customer.get_customer_number()}번"
-                              f" 손님이 식사를 마쳤습니다.")
-                        target_customer.change_status_is_eating()
-                        target_customer_queue.append(target_customer)
+                    customer.change_status_is_eating()
+                    target_customer_queue.append(customer)
+                    self.__table_queue[num] = 0
 
-                else:
-
-                    if not self.__table_queue[num].is_billing() and \
-                         not self.__table_queue[num].is_bill_waiting():
-                        self.__table_queue[num].food_waiting_update()
-
-        return target_customer_queue
+        self.__finished_eating_queue = target_customer_queue

@@ -3,6 +3,16 @@ from customer import Customer
 from table import TableManager
 from kitchen import Kitchen
 from bill import BillManager
+from dataclasses import dataclass
+
+
+@dataclass()
+class CustomerInfo:
+    table_num: int = 0
+    customer_num: int = 0
+    food_num: int = 0
+    cooking_time: int = 0
+    eating_time: int = 0
 
 
 class Restaurant:
@@ -54,67 +64,61 @@ class Restaurant:
 
             for customer in self.__waiting_customers:
 
-                can_entrance = customer.get_remaining_time_by_new_table() <= customer.get_elapsed_waiting_time()
+                waitable = customer.elapsed_waiting_time < customer.remaining_time_by_new_table
+                acceptable = waitable and self.__table_manager.is_acceptable()
 
-                if not can_entrance:
+                if not acceptable:
                     break
-
-                if can_entrance and not self.__table_manager.is_table_full():
-                    self.customer_entrance(customer)
-                    customer_count += 1
+                self.customer_entrance(customer)
+                customer_count += 1
 
             self.pop_waiting_queue(customer_count)
 
     def get_time_until_being_allocated_to_cook(self) -> int:
 
         result = 0
-        q = self.__kitchen.get_order_queue()
-        if q:
-            q = [self.__food_cooking_time[order[0]] for order in q]
-            group = self.__kitchen.get_cooks_current_cooking_time()
-            q.append(0)
+        queue = self.__kitchen.order_queue
+        if queue:
+            queue = [self.__food_cooking_time[customer.food_num] for customer in queue]
+            remaining_cooking_times = [cook.get_left_cooking_time() for cook in self.__kitchen.cooks]
+            queue.append(0)
 
-            while q:
-                group.sort()
-                target = group.pop(0)
+            while queue and remaining_cooking_times:
+                remaining_cooking_times.sort()
+                target = remaining_cooking_times.pop(0)
                 result += target
-                group = [i - target for i in group]
+                remaining_cooking_times = [i - target for i in remaining_cooking_times]
 
-                group.append(q.pop(0))
+                remaining_cooking_times.append(queue.pop(0))
         return result
 
     def customer_entrance(self, customer: Customer):
 
         food_num = randrange(1, 5)
-        food_eating_time = self.__food_eating_time[food_num]
-        food_cooking_time = self.__food_cooking_time[food_num]
-        customer.set_attribute((food_num, food_eating_time, food_cooking_time))
-
         table_num = self.__table_manager.set_customer(customer)
-        customer_number = customer.get_customer_number()
-        until_being_allocated = self.get_time_until_being_allocated_to_cook()
-
-        total_time = until_being_allocated + customer.get_food_cooking_time() + customer.get_food_eating_time()
-        customer.set_total_time(total_time)
+        customer_number = customer.number
+        customer.info = CustomerInfo(table_num=table_num, customer_num=customer_number, food_num=food_num,
+                                     cooking_time=self.__food_cooking_time[food_num], eating_time=self.__food_eating_time[food_num])
 
         print(f"{customer_number}번 손님이 {table_num}번 테이블에 앉습니다.")
         print(f"{customer_number}번 손님이 {food_num}번 요리"
               f" ({self.__food_name[food_num]})를 주문합니다.")
 
-        self.__kitchen.get_order_from_new_customer(customer, table_num)
+        self.__kitchen.get_new_customer_info(customer.info)
 
     def is_possible_to_wait(self, new_customer: Customer) -> bool:
 
         n = 0
         lower_time_group = []
         higher_time_group = []
+        time_until_being_allocated_to_cook = self.get_time_until_being_allocated_to_cook()
 
-        for table in self.__table_manager.get_table_queue():
-            remaining_time = table.get_total_time() - \
-                            (table.get_elapsed_waited_time_for_food() +
-                             table.get_elapsed_eating_time())
+        for customer in self.__table_manager.get_table_queue():
+            remaining_time = customer.get_total_time(time_until_being_allocated_to_cook) - \
+                            (customer.elapsed_waited_time_for_food +
+                             customer.elapsed_eating_time)
 
-            if remaining_time < new_customer.get_maximum_waiting_time():
+            if remaining_time < randrange(15, 41):
                 n += 1
                 lower_time_group.append(remaining_time)
             else:
@@ -122,18 +126,17 @@ class Restaurant:
 
         if self.__waiting_customers:
             if len(self.__waiting_customers) < n:
-                new_customer.set_remaining_time_by_new_table(sorted(lower_time_group)[len(self.__waiting_customers)])
+                new_customer.remaining_time_by_new_table = sorted(lower_time_group)[len(self.__waiting_customers)]
                 return True
 
         else:
             if 1 <= n:
-                new_customer.set_remaining_time_by_new_table(
-                    min(lower_time_group))
+                new_customer.remaining_time_by_new_table = min(lower_time_group)
                 return True
 
         applicable_index = sorted(
             higher_time_group)[len(self.__waiting_customers) - n]
-        new_customer.set_remaining_time_by_new_table(applicable_index)
+        new_customer.remaining_time_by_new_table = applicable_index
         return False
 
     def run(self):
@@ -143,35 +146,35 @@ class Restaurant:
         while elapsed_time < 720:
 
             elapsed_time += 1
-            table_target_customer_queue = self.__table_manager.update()
+            self.__table_manager.update()
 
-            for customer in table_target_customer_queue:
+            for customer in self.__table_manager.finished_eating_queue:
                 self.__bill_manager.receive_customer(customer)
 
             self.__bill_manager.update()
 
             if self.__table_manager.is_exist():
-                finished_order_queue = self.__kitchen.update()
+                self.__kitchen.update()
 
-                if finished_order_queue:
-                    for order in finished_order_queue:
-                        self.__table_manager.getting_food(order)
+                if self.__kitchen.finished_table_numbers:
+                    for table_num in self.__kitchen.finished_table_numbers:
+                        self.__table_manager.getting_food(table_num)
 
             self.waiting_update()
 
             if elapsed_time % self.__visiting_period == 0:
                 customer = self.customer_visiting(elapsed_time)
 
-                if self.__table_manager.is_table_full():
+                if self.__table_manager.is_acceptable():
+                    self.customer_entrance(customer)
+
+                else:
                     if self.is_possible_to_wait(customer):
                         self.receive_customer(customer)
                     else:
                         print(f"손님이 기다릴 수 없어 돌아갑니다.\n현재 대기 시간"
-                              f"{customer.get_elapsed_waiting_time()}분"
+                              f"{customer.elapsed_waiting_time}분"
                               f" / 대기 가능 시간 "
-                              f"{customer.get_remaining_time_by_new_table()}분")
-
-                else:
-                    self.customer_entrance(customer)
+                              f"{customer.remaining_time_by_new_table}분")
 
             self.__kitchen.start_cooking_update()
