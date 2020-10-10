@@ -20,14 +20,13 @@ class Restaurant:
     def __init__(self, customer_visiting_period: int):
 
         billing_period = 5
-        cash_desk_num = 1
         cooks_num = 3
         table_quantity = 20
 
         self.__visiting_period = customer_visiting_period
         self.__table_manager = TableManager(table_quantity)
         self.__kitchen = Kitchen(cooks_num)
-        self.__bill_manager = BillManager(billing_period, cash_desk_num)
+        self.__bill_manager = BillManager(billing_period)
 
         self.__number_of_customers = 0
         self.__waiting_customers = []
@@ -154,12 +153,10 @@ class Restaurant:
 
             self.__bill_manager.update()
 
-            if self.__table_manager.is_exist():
-                self.__kitchen.update()
+            self.__kitchen.update()
 
-                if self.__kitchen.finished_table_numbers:
-                    for table_num in self.__kitchen.finished_table_numbers:
-                        self.__table_manager.getting_food(table_num)
+            for table_num in self.__kitchen.finished_table_numbers:
+                self.__table_manager.getting_food(table_num)
 
             self.waiting_update()
 
