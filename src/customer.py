@@ -84,9 +84,3 @@ class Customer:
 
     def is_bill_waiting(self) -> bool:
         return self.__is_bill_waiting
-
-    def change_is_bill_waiting_status(self):
-        self.__is_bill_waiting = not self.__is_bill_waiting
-
-    def change_is_billing_status(self):
-        self.__is_billing = not self.__is_billing
