@@ -142,8 +142,9 @@ class Restaurant:
     def run(self):
 
         elapsed_time = 0
+        is_true = elapsed_time < 720
 
-        while elapsed_time < 720:
+        while is_true:
 
             elapsed_time += 1
             self.__table_manager.update()
