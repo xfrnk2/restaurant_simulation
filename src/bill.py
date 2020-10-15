@@ -5,37 +5,32 @@ class BillManager:
 
     def __init__(self, waiting_time):
 
-        self.__bill_waiting_queue = []
+        self.__waiting_queue = []
         self.__billing_time = waiting_time
-        self.__elapsed_billing_time = 0
-        self.__is_working = False
-        self.__current_customer: Customer = None
 
-    def change_working_status(self):
-        self.__is_working = not self.__is_working
+        self.__finished_queue = []
+        self.__desks = {}
 
     def receive_customer(self, customer: Customer):
 
-        print(f"{customer.number}번 손님이 계산대 앞에 줄을 섭니다.")
-        self.__bill_waiting_queue.append(customer)
-
-    def process_billing(self, count: int = 1):
-        for _ in range(count):
-            target = self.__bill_waiting_queue.pop(0)
-            self.__current_customer = target
-            self.change_working_status()
+        customer_number = customer.number
+        print(f"{customer_number}번 손님이 계산대 앞에 줄을 섭니다.")
+        self.__waiting_queue.append(customer_number)
 
     def update(self):
 
-        if self.__is_working and self.__current_customer:
-            self.__elapsed_billing_time += 1
+        for customer_number in self.__desks.keys():  # 업데이트
+            self.__desks[customer_number] -= 1
+            if self.__desks[customer_number] == 0:
+                self.__finished_queue.append(customer_number)
 
-            if self.__billing_time <= self.__elapsed_billing_time:
-                print(f"{self.__current_customer.number}번 손님이 "
-                      f"계산을 마치고 레스토랑을 떠났습니다.")
+        for customer_number in self.__finished_queue:  # 업데이트 연장선으로 끝난 손님 퇴장처리
+            self.__desks.pop(customer_number)
+            print(f"{customer_number}번 손님이 "
+                  f"계산을 마치고 레스토랑을 떠났습니다.")
 
-                self.change_working_status()
-                self.__current_customer = None
+        self.__finished_queue = []
 
-        if self.__bill_waiting_queue and not self.__is_working:
-            self.process_billing()
+        while self.__waiting_queue and len(self.__desks) < 3:
+            k = self.__waiting_queue.pop(0)
+            self.__desks[k] = self.__billing_time
