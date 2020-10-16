@@ -41,10 +41,6 @@ class Customer:
         return self.__customer_number
 
     @property
-    def customer_number(self) -> int:
-        return self.__customer_number
-
-    @property
     def is_eating(self) -> bool:
         return self.__is_eating
 
