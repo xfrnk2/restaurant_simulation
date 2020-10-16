@@ -25,12 +25,8 @@ class Customer:
                (self.__waited_time_for_food + self.__elapsed_eating_time)
 
     @property
-    def elapsed_waiting_time(self) -> int:
-        return self.__elapsed_waiting_time
-
-    @property
     def is_waitable(self):
-        return self.elapsed_waiting_time < self.remaining_time_by_new_table
+        return self.__elapsed_waiting_time < self.remaining_time_by_new_table
 
     @property
     def info(self):

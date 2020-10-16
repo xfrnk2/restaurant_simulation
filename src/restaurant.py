@@ -167,7 +167,7 @@ class Restaurant:
                         self.receive_customer(customer)
                     else:
                         print(f"손님이 기다릴 수 없어 돌아갑니다.\n현재 대기 시간"
-                              f"{customer.elapsed_waiting_time}분"
+                              f"0분"
                               f" / 대기 가능 시간 "
                               f"{customer.remaining_time_by_new_table}분")
 
