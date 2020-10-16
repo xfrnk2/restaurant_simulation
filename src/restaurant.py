@@ -176,3 +176,5 @@ class Restaurant:
                               f"{customer.remaining_time_by_new_table}분")
 
             self.__kitchen.start_cooking_update()
+            elapsed_time += 1
+            simulation_execution = elapsed_time < 720
