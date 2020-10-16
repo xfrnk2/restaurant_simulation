@@ -21,15 +21,12 @@ class Customer:
         self.__is_billing: bool = False
 
     def get_total_time(self, until_being_allocated):
-        return until_being_allocated + self.__info.cooking_time + self.__info.eating_time
+        return (until_being_allocated + self.__info.cooking_time + self.__info.eating_time) -\
+               (self.__waited_time_for_food + self.__elapsed_eating_time)
 
     @property
     def elapsed_waiting_time(self) -> int:
         return self.__elapsed_waiting_time
-
-    @property
-    def elapsed_eating_time(self):
-        return self.__elapsed_eating_time
 
     @property
     def info(self):
@@ -74,10 +71,6 @@ class Customer:
     @remaining_time_by_new_table.setter
     def remaining_time_by_new_table(self, value):
         self.__remaining_time_by_new_table = value
-
-    @property
-    def elapsed_waited_time_for_food(self):
-        return self.__waited_time_for_food
 
     def is_billing(self) -> bool:
         return self.__is_billing

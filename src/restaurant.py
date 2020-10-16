@@ -113,9 +113,7 @@ class Restaurant:
         time_until_being_allocated_to_cook = self.get_time_until_being_allocated_to_cook()
 
         for customer in self.__table_manager.get_table_queue():
-            remaining_time = customer.get_total_time(time_until_being_allocated_to_cook) - \
-                            (customer.elapsed_waited_time_for_food +
-                             customer.elapsed_eating_time)
+            remaining_time = customer.get_total_time(time_until_being_allocated_to_cook)
 
             if remaining_time < randrange(15, 41):
                 n += 1
