@@ -176,4 +176,3 @@ class Restaurant:
                               f"{customer.remaining_time_by_new_table}분")
 
             self.__kitchen.start_cooking_update()
-            is_true = elapsed_time < 720
