@@ -29,6 +29,10 @@ class Customer:
         return self.__elapsed_waiting_time
 
     @property
+    def is_waitable(self):
+        return self.elapsed_waiting_time < self.remaining_time_by_new_table
+
+    @property
     def info(self):
         return self.__info
 

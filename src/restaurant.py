@@ -62,9 +62,7 @@ class Restaurant:
                 customer.waiting_update()
 
             for customer in self.__waiting_customers:
-
-                waitable = customer.elapsed_waiting_time < customer.remaining_time_by_new_table
-                acceptable = waitable and self.__table_manager.is_acceptable()
+                acceptable = customer.is_waitable and self.__table_manager.is_acceptable()
 
                 if not acceptable:
                     break
