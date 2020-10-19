@@ -20,14 +20,13 @@ class Restaurant:
     def __init__(self, customer_visiting_period: int):
 
         billing_period = 5
-        cash_desk_num = 1
         cooks_num = 3
         table_quantity = 20
 
         self.__visiting_period = customer_visiting_period
         self.__table_manager = TableManager(table_quantity)
         self.__kitchen = Kitchen(cooks_num)
-        self.__bill_manager = BillManager(billing_period, cash_desk_num)
+        self.__bill_manager = BillManager(billing_period)
 
         self.__number_of_customers = 0
         self.__waiting_customers = []
@@ -63,9 +62,7 @@ class Restaurant:
                 customer.waiting_update()
 
             for customer in self.__waiting_customers:
-
-                waitable = customer.elapsed_waiting_time < customer.remaining_time_by_new_table
-                acceptable = waitable and self.__table_manager.is_acceptable()
+                acceptable = customer.is_waitable and self.__table_manager.is_acceptable()
 
                 if not acceptable:
                     break
@@ -114,9 +111,7 @@ class Restaurant:
         time_until_being_allocated_to_cook = self.get_time_until_being_allocated_to_cook()
 
         for customer in self.__table_manager.get_table_queue():
-            remaining_time = customer.get_total_time(time_until_being_allocated_to_cook) - \
-                            (customer.elapsed_waited_time_for_food +
-                             customer.elapsed_eating_time)
+            remaining_time = customer.get_total_time(time_until_being_allocated_to_cook)
 
             if remaining_time < randrange(15, 41):
                 n += 1
@@ -142,8 +137,9 @@ class Restaurant:
     def run(self):
 
         elapsed_time = 0
+        simulation_execution = elapsed_time < 720
 
-        while elapsed_time < 720:
+        while simulation_execution:
 
             elapsed_time += 1
             self.__table_manager.update()
@@ -153,12 +149,10 @@ class Restaurant:
 
             self.__bill_manager.update()
 
-            if self.__table_manager.is_exist():
-                self.__kitchen.update()
+            self.__kitchen.update()
 
-                if self.__kitchen.finished_table_numbers:
-                    for table_num in self.__kitchen.finished_table_numbers:
-                        self.__table_manager.getting_food(table_num)
+            for table_num in self.__kitchen.finished_table_numbers:
+                self.__table_manager.getting_food(table_num)
 
             self.waiting_update()
 
@@ -173,8 +167,10 @@ class Restaurant:
                         self.receive_customer(customer)
                     else:
                         print(f"손님이 기다릴 수 없어 돌아갑니다.\n현재 대기 시간"
-                              f"{customer.elapsed_waiting_time}분"
+                              f"0분"
                               f" / 대기 가능 시간 "
                               f"{customer.remaining_time_by_new_table}분")
 
             self.__kitchen.start_cooking_update()
+            elapsed_time += 1
+            simulation_execution = elapsed_time < 720

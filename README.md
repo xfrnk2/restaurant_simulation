@@ -17,4 +17,5 @@ python src/main.py
 #### Project status
 ```
 max line length: 140
+max-complexity = 8
 ```

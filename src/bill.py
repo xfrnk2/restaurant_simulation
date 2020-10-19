@@ -1,64 +1,36 @@
 from customer import Customer
 
 
-class CashDesk:
-
-    def __init__(self, billing_time: int):
-        self.__customer_number = None
-        self.__billing_time = billing_time
-        self.__elapsed_billing_time = 0
-        self.__is_working = False
-
-    def receive_customer(self, customer: Customer):
-        self.__customer_number = customer.number
-
-    @property
-    def customer_info(self):
-        return self.__customer_number
-
-    def update(self):
-
-        if self.__is_working:
-            self.__elapsed_billing_time += 1
-
-            if self.__billing_time <= self.__elapsed_billing_time:
-                self.change_cash_desk_status()
-                print(f"{self.customer_info}번 손님이 "
-                      f"계산을 마치고 레스토랑을 떠났습니다.")
-
-    def is_working(self):
-        return self.__is_working
-
-    def change_cash_desk_status(self):
-        self.__elapsed_billing_time = 0
-        self.__is_working = not self.__is_working
-
-
 class BillManager:
 
-    def __init__(self, waiting_time, cash_desk_num):
+    def __init__(self, waiting_time):
 
-        self.__bill_waiting_queue = []
-        self.__cash_desk_num = cash_desk_num
-        self.__cash_desk = CashDesk(waiting_time)
+        self.__waiting_queue = []
+        self.__billing_time = waiting_time
+
+        self.__finished_queue = []
+        self.__desks = {}
 
     def receive_customer(self, customer: Customer):
 
-        print(f"{customer.number}번 손님이 계산대 앞에 줄을 섭니다.")
-        customer.change_is_bill_waiting_status()
-        self.__bill_waiting_queue.append(customer)
-
-    def process_billing(self, count: int = 1):
-        for _ in range(count):
-            target = self.__bill_waiting_queue.pop(0)
-            target.change_is_billing_status()
-            target.change_is_bill_waiting_status()
-            self.__cash_desk.receive_customer(target)
-            self.__cash_desk.change_cash_desk_status()
+        customer_number = customer.number
+        print(f"{customer_number}번 손님이 계산대 앞에 줄을 섭니다.")
+        self.__waiting_queue.append(customer_number)
 
     def update(self):
 
-        self.__cash_desk.update()
+        for customer_number in self.__desks.keys():  # 업데이트
+            self.__desks[customer_number] -= 1
+            if self.__desks[customer_number] == 0:
+                self.__finished_queue.append(customer_number)
 
-        if self.__bill_waiting_queue and not self.__cash_desk.is_working():
-            self.process_billing()
+        for customer_number in self.__finished_queue:  # 업데이트 연장선으로 끝난 손님 퇴장처리
+            self.__desks.pop(customer_number)
+            print(f"{customer_number}번 손님이 "
+                  f"계산을 마치고 레스토랑을 떠났습니다.")
+
+        self.__finished_queue = []
+
+        while self.__waiting_queue and len(self.__desks) < 3:
+            k = self.__waiting_queue.pop(0)
+            self.__desks[k] = self.__billing_time

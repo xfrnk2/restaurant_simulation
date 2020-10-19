@@ -26,7 +26,7 @@ class TableManager:
 
     def getting_food(self, table_num: int):
 
-        print(f"{self.__table_queue[table_num].customer_number}번 손님이 식사를 시작합니다.")
+        print(f"{self.__table_queue[table_num].number}번 손님이 식사를 시작합니다.")
         self.__table_queue[table_num].change_status_is_eating()
 
     def is_acceptable(self) -> bool:
