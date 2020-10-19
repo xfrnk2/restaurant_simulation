@@ -22,11 +22,12 @@ class Restaurant:
         billing_period = 5
         cooks_num = 3
         table_quantity = 20
+        desk_num = 1
 
         self.__visiting_period = customer_visiting_period
         self.__table_manager = TableManager(table_quantity)
         self.__kitchen = Kitchen(cooks_num)
-        self.__bill_manager = BillManager(billing_period)
+        self.__bill_manager = BillManager(billing_period, desk_num)
 
         self.__number_of_customers = 0
         self.__waiting_customers = []
