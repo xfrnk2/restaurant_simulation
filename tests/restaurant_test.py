@@ -1,5 +1,5 @@
-from src.restaurant import Restaurant
-from src.customer import Customer
+from ..src.restaurant import Restaurant
+from ..src.customer import Customer
 
 visiting_period = 5
 restaurant = Restaurant(visiting_period)
