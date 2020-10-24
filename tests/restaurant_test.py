@@ -6,7 +6,7 @@ CustomerInfo = namedtuple("CustomerInfo", "customer_num food_num eating_time coo
 
 def test_customer_initialize():
     cases = (
-        Case(customer_num=3,
+        Case(customer_num=5,
              food_num=1,
              expected=(3, 1, 30, 30, "스테이크")
              ),
