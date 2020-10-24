@@ -1,5 +1,5 @@
-from restaurant_simulation.src.restaurant import CustomerInfo, Restaurant
-from restaurant_simulation.src.customer import Customer
+from src.restaurant import CustomerInfo, Restaurant
+from src.customer import Customer
 
 visiting_period = 5
 restaurant = Restaurant(visiting_period)
