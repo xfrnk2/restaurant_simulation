@@ -177,4 +177,8 @@ class Restaurant:
             simulation_execution = elapsed_time < 720
 
 def customer_initialize(customer_num, num):
-    return 0
+    eating_time = {1: 30, 2: 20, 3: 15, 4: 10}
+    cooking_time = {1: 30, 2: 20, 3: 10, 4: 15}
+    name = {1: "스테이크", 2: "스파게티", 3: "마카로니", 4: "그라탱"}
+
+    return (customer_num, num, eating_time[num], cooking_time[num], name[num])
