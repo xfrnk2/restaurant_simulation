@@ -1,4 +1,4 @@
-from restaurant_simulation.src.restaurant import *
+from restaurant_simulation.src.restaurant import CustomerInfo, Restaurant
 from restaurant_simulation.src.customer import Customer
 
 visiting_period = 5
