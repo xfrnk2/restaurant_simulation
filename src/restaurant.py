@@ -1,8 +1,8 @@
 from random import randrange
-from . customer import Customer
-from . table import TableManager
-from . kitchen import Kitchen
-from . bill import BillManager
+from customer import Customer
+from table import TableManager
+from kitchen import Kitchen
+from bill import BillManager
 from dataclasses import dataclass
 
 
