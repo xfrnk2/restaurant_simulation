@@ -175,3 +175,6 @@ class Restaurant:
             self.__kitchen.start_cooking_update()
             elapsed_time += 1
             simulation_execution = elapsed_time < 720
+
+def customer_initialize(customer_num, num):
+    return 0
