@@ -1,8 +1,8 @@
 from random import randrange
-from customer import Customer
-from table import TableManager
-from kitchen import Kitchen
-from bill import BillManager
+from src.customer import Customer
+from src.table import TableManager
+from src.kitchen import Kitchen
+from src.bill import BillManager
 from dataclasses import dataclass
 
 
@@ -175,6 +175,7 @@ class Restaurant:
             self.__kitchen.start_cooking_update()
             elapsed_time += 1
             simulation_execution = elapsed_time < 720
+
 
 def customer_initialize(customer_num, num):
     eating_time = {1: 30, 2: 20, 3: 15, 4: 10}

@@ -1,4 +1,4 @@
-from customer import Customer
+from src.customer import Customer
 
 
 class BillManager:
