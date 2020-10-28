@@ -1,12 +1,13 @@
-from customer import Customer
+from src.customer import Customer
 
 
 class BillManager:
 
-    def __init__(self, waiting_time):
+    def __init__(self, waiting_time, desk_num):
 
         self.__waiting_queue = []
         self.__billing_time = waiting_time
+        self.__desk_number = desk_num
 
         self.__finished_queue = []
         self.__desks = {}
@@ -31,6 +32,6 @@ class BillManager:
 
         self.__finished_queue = []
 
-        while self.__waiting_queue and len(self.__desks) < 3:
+        while self.__waiting_queue and len(self.__desks) < self.__desk_number:
             k = self.__waiting_queue.pop(0)
             self.__desks[k] = self.__billing_time

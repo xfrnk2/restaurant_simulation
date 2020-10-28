@@ -26,6 +26,7 @@ bootstrap:
 	pip install --upgrade setuptools ;\
 	pip install --upgrade "pip>=19" ;\
 	pip install -r requirements.txt ;\
+	pip install -r requirements-test.txt ;\
 	
 
 clean: clean-build clean-pyc clean-test

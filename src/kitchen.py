@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from cook import Cook
+from src.cook import Cook
 
 
 class Kitchen:
