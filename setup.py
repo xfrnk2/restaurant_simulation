@@ -29,17 +29,6 @@ setup(
     keywords='1 day 1 coding',
     long_description=read_long_description(),
     install_requires=[
-            'expects',
-            'coveralls',
-            'coverage',
-            'pytest',
-            'pytest-bdd',
-            'pytest-runner',
-            'pytest-cov',
-            'py',                
-            'flake8',
-            'pyflakes',
-            'pep8',
     ],
     zip_safe=False,
     classifiers=[
@@ -51,6 +40,17 @@ setup(
     test_suite='tests',
     extras_require={
         'tests': [
+            'expects',
+            'coveralls',
+            'coverage',
+            'pytest',
+            'pytest-bdd',
+            'pytest-runner',
+            'pytest-cov',
+            'py',
+            'flake8',
+            'pyflakes',
+            'pep8',
         ],
     }
 )
