@@ -150,12 +150,10 @@ class Restaurant:
 
             self.__bill_manager.update()
 
-            if self.__table_manager.is_exist():
-                finished_order_queue = self.__kitchen.update()
+            self.__kitchen.update()
 
-                if finished_order_queue:
-                    for order in finished_order_queue:
-                        self.__table_manager.getting_food(order)
+            for table_num in self.__kitchen.finished_table_numbers:
+                self.__table_manager.getting_food(table_num)
 
             self.waiting_update()
 
