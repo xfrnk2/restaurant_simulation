@@ -30,7 +30,7 @@ def test_waitable():
                      taken_order=[5, 10, 10],
                      expected=10
                      )
-    )
+            )
 
     for case in cases:
         not_taken_order, taken_order, expected = case

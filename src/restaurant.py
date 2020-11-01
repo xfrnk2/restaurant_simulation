@@ -183,3 +183,17 @@ def customer_initialize(customer_num, num):
     name = {1: "스테이크", 2: "스파게티", 3: "마카로니", 4: "그라탱"}
 
     return (customer_num, num, eating_time[num], cooking_time[num], name[num])
+
+
+def waitable(taken_order, not_taken_order):
+    result = 0
+    not_taken_order.append(0)
+
+    while not_taken_order and taken_order:
+        taken_order.sort()
+        target = taken_order.pop(0)
+        result += target
+        taken_order = [i - target for i in taken_order]
+        taken_order.append(not_taken_order.pop(0))
+
+    return result
