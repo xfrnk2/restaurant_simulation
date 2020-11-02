@@ -185,15 +185,17 @@ def customer_initialize(customer_num, num):
     return (customer_num, num, eating_time[num], cooking_time[num], name[num])
 
 
-def waitable(taken_order, not_taken_order):
+def waitable(not_taken_order, taken_order):
     result = 0
-    not_taken_order.append(0)
 
-    while not_taken_order and taken_order:
-        taken_order.sort()
-        target = taken_order.pop(0)
-        result += target
-        taken_order = [i - target for i in taken_order]
-        taken_order.append(not_taken_order.pop(0))
+    if not_taken_order:
+        not_taken_order.append(0)
+
+        while not_taken_order:
+            taken_order.sort()
+            target = taken_order.pop(0)
+            result += target
+            taken_order = list(map(lambda x: x - target, taken_order))
+            taken_order.append(not_taken_order.pop(0))
 
     return result
