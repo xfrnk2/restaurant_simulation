@@ -185,7 +185,7 @@ def customer_initialize(customer_num, num):
     return (customer_num, num, eating_time[num], cooking_time[num], name[num])
 
 
-def waitable(not_taken_order, taken_order):
+def calculate_waitable_time(not_taken_order, taken_order):
     result = 0
 
     if not_taken_order:
