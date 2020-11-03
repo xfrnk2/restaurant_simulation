@@ -1,5 +1,5 @@
 from collections import namedtuple
-from src.restaurant import customer_initialize, calculate_waitable_time
+from src.restaurant import customer_initialize, calc_remaining_time_part1
 
 InitializeCase = namedtuple("InitializeTestCase", "customer_num food_num expected")
 WaitableTimeCase = namedtuple("WaitableTimeCase", "not_taken_order taken_order expected")
@@ -23,7 +23,7 @@ def test_customer_initialize():
         customer_num, food_num, expected = case
         assert customer_initialize(customer_num, food_num)  == expected
 
-def test_calculate_waitable_time():
+def test_calc_remaining_time_part1():
 
     cases = (
         WaitableTimeCase(not_taken_order=[5, 10],
@@ -41,4 +41,5 @@ def test_calculate_waitable_time():
     )
     for case in cases:
         taken_order, not_taken_order, expected = case
-        assert calculate_waitable_time(taken_order, not_taken_order) == expected
+        assert calc_remaining_time_part1(taken_order, not_taken_order) == expected
+
