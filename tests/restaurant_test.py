@@ -2,7 +2,7 @@ from collections import namedtuple
 from src.restaurant import customer_initialize, calc_remaining_time_part1
 
 InitializeCase = namedtuple("InitializeTestCase", "customer_num food_num expected")
-WaitableTimeCase = namedtuple("WaitableTimeCase", "not_taken_order taken_order expected")
+calcTimePart1Case = namedtuple("calcTimePart1Case", "not_taken_order taken_order expected")
 
 def test_customer_initialize():
     cases = (
@@ -26,20 +26,19 @@ def test_customer_initialize():
 def test_calc_remaining_time_part1():
 
     cases = (
-        WaitableTimeCase(not_taken_order=[5, 10],
-                    taken_order=[5, 10, 10],
-                     expected=10
-                     ),
-        WaitableTimeCase(not_taken_order=[7, 9],
-                    taken_order=[5, 10, 15],
-                    expected=12
-                    ),
-        WaitableTimeCase(not_taken_order=[],
-                     taken_order=[5, 10, 15],
-                     expected=0
-                     )
+        calcTimePart1Case(not_taken_order=[5, 10],
+                          taken_order=[5, 10, 10],
+                          expected=10
+                          ),
+        calcTimePart1Case(not_taken_order=[7, 9],
+                          taken_order=[5, 10, 15],
+                          expected=12
+                          ),
+        calcTimePart1Case(not_taken_order=[],
+                          taken_order=[5, 10, 15],
+                          expected=0
+                          )
     )
     for case in cases:
         taken_order, not_taken_order, expected = case
         assert calc_remaining_time_part1(taken_order, not_taken_order) == expected
-
