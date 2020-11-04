@@ -185,15 +185,8 @@ def customer_initialize(customer_num, num):
     return (customer_num, num, eating_time[num], cooking_time[num], name[num])
 
 
-def calc_remaining_time_part1(not_taken_order, taken_order):
-
-    result = 0
-    while not_taken_order:
-        taken_order = sorted(taken_order)
-        target = taken_order.pop(0)
-        taken_order = list(map(lambda x: x - target, taken_order))
-        result += target
-        taken_order.append(not_taken_order.pop(0))
-
-    result += min(taken_order)
-    return result
+def waiting_checker(tables, waiting_amount, waitable_time):
+    tables = list(filter(lambda x:x <= waitable_time, tables))
+    if waiting_amount < len(tables):
+        return True
+    return False
