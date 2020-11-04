@@ -186,16 +186,14 @@ def customer_initialize(customer_num, num):
 
 
 def calc_remaining_time_part1(not_taken_order, taken_order):
+
     result = 0
+    while not_taken_order:
+        taken_order = sorted(taken_order)
+        target = taken_order.pop(0)
+        taken_order = list(map(lambda x: x - target, taken_order))
+        result += target
+        taken_order.append(not_taken_order.pop(0))
 
-    if not_taken_order:
-        not_taken_order.append(0)
-
-        while not_taken_order:
-            taken_order.sort()
-            target = taken_order.pop(0)
-            result += target
-            taken_order = list(map(lambda x: x - target, taken_order))
-            taken_order.append(not_taken_order.pop(0))
-
+    result += min(taken_order)
     return result
