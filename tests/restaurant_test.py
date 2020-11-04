@@ -36,7 +36,7 @@ def test_calc_remaining_time_part1():
                           ),
         calcTimePart1Case(not_taken_order=[],
                           taken_order=[5, 10, 15],
-                          expected=0
+                          expected=5
                           )
     )
     for case in cases:
