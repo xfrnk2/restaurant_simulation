@@ -186,7 +186,8 @@ def customer_initialize(customer_num, num):
 
 
 def waiting_checker(tables, waiting_amount, waitable_time):
-    tables = list(filter(lambda x: x <= waitable_time, tables))
-    if waiting_amount < len(tables):
-        return True
-    return False
+
+    for time in tables:
+        if time <= waitable_time:
+            waiting_amount -= 1
+    return waiting_amount < 0
