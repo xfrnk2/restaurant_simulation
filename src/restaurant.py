@@ -208,9 +208,14 @@ def entrance(customer_info, table_idx):
 # TODO-테이블에 손님을 배정하고, 손님의 주문이 주문 대기목록에 들어가도록 구현하기
 
 
-def table_initialize(customer_info):
-    return {"is_eating": False, "eating_time": customer_info[3], "customer_num": customer_info[0]}
+def table_initialize(customer_num, num):
+    food_eating_time = {1: 30, 2: 20, 3: 15, 4: 10}
+    return {"is_eating": False, "eating_time": food_eating_time[num], "customer_num": customer_num}
 
 
 def order_initialize(customer_num, num, table_idx):
-    pass
+    food_name = {1: "스테이크", 2: "스파게티", 3: "마카로니", 4: "그라탱"}
+    food_cooking_time = {1: 30, 2: 20, 3: 10, 4: 15}
+
+    return [food_cooking_time[num], {"customer_num": customer_num, "num": num, "table_idx": table_idx,
+                                     "food_name": food_name[num]}]
