@@ -5,6 +5,7 @@ InitializeCase = namedtuple("InitializeTestCase", "customer_num food_num expecte
 WaitingCase = namedtuple("WaitingCase", "tables waiting_amount waitable_time expected desc")
 EstimatedTimeCase = namedtuple("EstimatedTimeCase", "tables waiting_amount expected")
 
+
 def test_customer_initialize():
     cases = (
         InitializeCase(customer_num=3,
@@ -69,6 +70,7 @@ def test_waiting_checker():
         tables, waiting_amount, waitable_time, expected, desc = case
         assert waiting_checker(tables, waiting_amount, waitable_time) == expected, desc
 
+
 def test_estimated_waiting_time():
     cases = (
         EstimatedTimeCase(
@@ -107,6 +109,7 @@ def test_estimated_waiting_time():
             expected="15분 이상"
         ),
     )
+
     for case in cases:
         tables, waiting_amount, expected = case
         assert estimated_waiting_time(tables, waiting_amount) == expected

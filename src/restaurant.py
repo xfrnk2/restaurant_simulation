@@ -192,6 +192,7 @@ def waiting_checker(tables, waiting_amount, waitable_time):
             waiting_amount -= 1
     return waiting_amount < 0
 
+
 def estimated_waiting_time(tables, waiting_amount):
     if waiting_amount < len(tables):
         return f"{sorted(tables)[waiting_amount]}분"
