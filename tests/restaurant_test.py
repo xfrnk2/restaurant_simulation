@@ -1,26 +1,29 @@
 from collections import namedtuple
-from src.restaurant import customer_initialize, waiting_checker, estimated_waiting_time, entrance
+from src.restaurant import customer_initialize, waiting_checker, estimated_waiting_time, entrance, table_initialize, \
+    available_table
 
-InitializeCase = namedtuple("InitializeTestCase", "customer_num food_num expected")
+CustomerInitCase = namedtuple("CustomerInitCase", "customer_num food_num expected")
 WaitingCase = namedtuple("WaitingCase", "tables waiting_amount waitable_time expected desc")
 EstimatedTimeCase = namedtuple("EstimatedTimeCase", "tables waiting_amount expected")
-EntranceCase = namedtuple("EntranceCase", "tables, customer_info expected")
+EntranceCase = namedtuple("EntranceCase", "customer_info table_idx expected")
+TableInitCase = namedtuple("TableInitCase", "customer_info expected")
+AvailableTableCase = namedtuple("AvailableTableCase", "tables expected")
 
 
 def test_customer_initialize():
     cases = (
-        InitializeCase(customer_num=3,
-                       food_num=1,
-                       expected=(3, 1, 30, 30, "스테이크")
-                       ),
-        InitializeCase(customer_num=1,
-                       food_num=2,
-                       expected=(1, 2, 20, 20, "스파게티")
-                       ),
-        InitializeCase(customer_num=3,
-                       food_num=4,
-                       expected=(3, 4, 10, 15, "그라탱")
-                       ),
+        CustomerInitCase(customer_num=3,
+                         food_num=1,
+                         expected=(3, 1, 30, 30, "스테이크")
+                         ),
+        CustomerInitCase(customer_num=1,
+                         food_num=2,
+                         expected=(1, 2, 20, 20, "스파게티")
+                         ),
+        CustomerInitCase(customer_num=3,
+                         food_num=4,
+                         expected=(3, 4, 10, 15, "그라탱")
+                         ),
     )
     for case in cases:
         customer_num, food_num, expected = case
@@ -119,19 +122,52 @@ def test_estimated_waiting_time():
 def test_entrance():
     cases = (
         EntranceCase(
-            tables=[1, 1, 1, 1, 1, 0, 1, 0, 1, 1,
-                    1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
             customer_info=(3, 1, 30, 30, "스테이크"),
-            expected="3번 손님이 6번 테이블에 앉습니다.\n3번 손님이 1번 요리(스테이크)를 주문합니다."
+            table_idx=6,
+            expected="3번 손님이 7번 테이블에 앉습니다.\n3번 손님이 1번 요리(스테이크)를 주문합니다."
         ),
         EntranceCase(
-            tables=[0, 1, 1, 1, 1, 1, 1, 0, 1, 1,
-                    1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
             customer_info=(12, 4, 10, 15, "그라탱"),
-            expected="12번 손님이 1번 테이블에 앉습니다.\n12번 손님이 4번 요리(그라탱)를 주문합니다."
+            table_idx=7,
+            expected="12번 손님이 8번 테이블에 앉습니다.\n12번 손님이 4번 요리(그라탱)를 주문합니다."
         )
     )
 
     for case in cases:
-        tables, customer_info, expected = case
-        assert entrance(tables, customer_info) == expected
+        customer_info, table_idx, expected = case
+        assert entrance(customer_info, table_idx) == expected
+
+
+def test_table_initialize():
+    cases = (TableInitCase(
+        customer_info=(12, 4, 10, 15, "그라탱"),
+        expected={"is_eating": False, "eating_time": 15, "customer_num": 12}
+            ),
+             TableInitCase(
+                 customer_info=(3, 1, 30, 30, "스테이크"),
+                 expected={"is_eating": False, "eating_time": 30, "customer_num": 3}
+             )
+    )
+
+    for case in cases:
+        customer_info, expected = case
+        assert table_initialize(customer_info) == expected
+
+
+def test_available_table():
+    cases = (
+        AvailableTableCase(
+                           tables=[0, 1, 1, 1, 1, 1, 1, 0, 1, 1,
+                                   1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+                           expected=0
+                          ),
+        AvailableTableCase(
+                           tables=[1, 1, 1, 1, 1, 1, 1, 0, 1, 1,
+                                   1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+                           expected=7
+                          )
+    )
+
+    for case in cases:
+        tables, expected = case
+        assert available_table(tables) == expected
