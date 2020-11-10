@@ -1,9 +1,9 @@
 from collections import namedtuple
-from src.restaurant import customer_initialize, waiting_checker
+from src.restaurant import customer_initialize, waiting_checker, estimated_waiting_time
 
 InitializeCase = namedtuple("InitializeTestCase", "customer_num food_num expected")
 WaitingCase = namedtuple("WaitingCase", "tables waiting_amount waitable_time expected desc")
-
+EstimatedTimeCase = namedtuple("EstimatedTimeCase", "tables waiting_amount expected")
 
 def test_customer_initialize():
     cases = (
@@ -58,7 +58,7 @@ def test_waiting_checker():
                     expected=False,
                     desc="조건을 만족하는 테이블의 수(0)가 대기인원 수(0)보다 작거나 같지 않아 실패"
                     ),
-        WaitingCase(tables=[15, 21, 23, 30, 37, 40, 45],
+        WaitingCase(tables=[0, 21, 23, 30, 37, 40, 45],
                     waiting_amount=3,
                     waitable_time=21,
                     expected=False,
@@ -68,3 +68,45 @@ def test_waiting_checker():
     for case in cases:
         tables, waiting_amount, waitable_time, expected, desc = case
         assert waiting_checker(tables, waiting_amount, waitable_time) == expected, desc
+
+def test_estimated_waiting_time():
+    cases = (
+        EstimatedTimeCase(
+            tables=[10, 20, 30],
+            waiting_amount=2,
+            expected="30분"
+        ),
+        EstimatedTimeCase(
+            tables=[15, 20, 25, 30, 35],
+            waiting_amount=1,
+            expected="20분"
+        ),
+        EstimatedTimeCase(
+            tables=[21, 23, 30, 37, 40, 45],
+            waiting_amount=0,
+            expected="21분"
+        ),
+        EstimatedTimeCase(
+            tables=[21, 23, 30, 40, 45],
+            waiting_amount=10,
+            expected="45분 이상"
+        ),
+        EstimatedTimeCase(
+            tables=[0, 3, 4],
+            waiting_amount=2,
+            expected="4분"
+        ),
+        EstimatedTimeCase(
+            tables=[0, 1, 3, 4, 5],
+            waiting_amount=5,
+            expected="5분 이상"
+        ),
+        EstimatedTimeCase(
+            tables=[0, 1, 3, 4, 5, 15],
+            waiting_amount=15,
+            expected="15분 이상"
+        ),
+    )
+    for case in cases:
+        tables, waiting_amount, expected = case
+        assert estimated_waiting_time(tables, waiting_amount) == expected
