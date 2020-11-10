@@ -218,3 +218,7 @@ def entrance(customer_info, table_idx):
 
 def table_initialize(customer_info):
     return {"is_eating": False, "eating_time": customer_info[3], "customer_num": customer_info[0]}
+
+
+def order_initialize(customer_num, num, table_idx):
+    pass

@@ -1,6 +1,6 @@
 from collections import namedtuple
 from src.restaurant import customer_initialize, waiting_checker, estimated_waiting_time, entrance, table_initialize, \
-    available_table
+    available_table, order_initialize
 
 CustomerInitCase = namedtuple("CustomerInitCase", "customer_num food_num expected")
 WaitingCase = namedtuple("WaitingCase", "tables waiting_amount waitable_time expected desc")
@@ -8,6 +8,7 @@ EstimatedTimeCase = namedtuple("EstimatedTimeCase", "tables waiting_amount expec
 EntranceCase = namedtuple("EntranceCase", "customer_info table_idx expected")
 TableInitCase = namedtuple("TableInitCase", "customer_info expected")
 AvailableTableCase = namedtuple("AvailableTableCase", "tables expected")
+OrderInitCase = namedtuple("OrderInitCase", "customer_num num table_idx expected")
 
 
 def test_customer_initialize():
@@ -171,3 +172,32 @@ def test_available_table():
     for case in cases:
         tables, expected = case
         assert available_table(tables) == expected
+
+
+def test_order_initialize():
+    cases = (
+        OrderInitCase(
+            customer_num=3,
+            num=1,
+            table_idx=1,
+            expected=[30, {"customer_num": 3, "num": 1, "table_idx": 1}]),
+        OrderInitCase(
+            customer_num=1,
+            num=2,
+            table_idx=1,
+            expected=[20, {"customer_num": 1, "num": 2, "table_idx": 1}]),
+        OrderInitCase(
+            customer_num=3,
+            num=4,
+            table_idx=1,
+            expected=[15, {"customer_num": 3, "num": 4, "table_idx": 1}]),
+        OrderInitCase(
+            customer_num=6,
+            num=3,
+            table_idx=1,
+            expected=[10, {"customer_num": 6, "num": 3, "table_idx": 1}]),
+        )
+
+    for case in cases:
+        customer_num, num, table_idx, expected = case
+        assert order_initialize(customer_num, num, table_idx) == expected
