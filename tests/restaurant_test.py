@@ -4,6 +4,7 @@ from src.restaurant import customer_initialize, waiting_checker
 InitializeCase = namedtuple("InitializeTestCase", "customer_num food_num expected")
 WaitingCase = namedtuple("WaitingCase", "tables waiting_amount waitable_time expected desc")
 
+
 def test_customer_initialize():
     cases = (
         InitializeCase(customer_num=3,
@@ -21,7 +22,8 @@ def test_customer_initialize():
     )
     for case in cases:
         customer_num, food_num, expected = case
-        assert customer_initialize(customer_num, food_num)  == expected
+        assert customer_initialize(customer_num, food_num) == expected
+
 
 def test_waiting_checker():
 
@@ -31,7 +33,7 @@ def test_waiting_checker():
                     waitable_time=15,
                     expected=False,
                     desc="조건을 만족하는 테이블의 수(1)가 대기인원 수(2)보다 작지 않아 실패"
-                     ),
+                    ),
         WaitingCase(tables=[15, 20, 25, 30, 35],
                     waiting_amount=1,
                     waitable_time=20,
