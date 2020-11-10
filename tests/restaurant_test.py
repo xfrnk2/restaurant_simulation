@@ -4,7 +4,7 @@ from src.restaurant import customer_initialize, waiting_checker, estimated_waiti
 InitializeCase = namedtuple("InitializeTestCase", "customer_num food_num expected")
 WaitingCase = namedtuple("WaitingCase", "tables waiting_amount waitable_time expected desc")
 EstimatedTimeCase = namedtuple("EstimatedTimeCase", "tables waiting_amount expected")
-
+EntranceCase = namedtuple("EntranceCase", "tables, customer_info expected")
 
 def test_customer_initialize():
     cases = (
@@ -113,3 +113,19 @@ def test_estimated_waiting_time():
     for case in cases:
         tables, waiting_amount, expected = case
         assert estimated_waiting_time(tables, waiting_amount) == expected
+
+def test_entrance():
+    cases = (
+        EntranceCase(
+            tables=[1, 1, 1, 1, 1, 0, 1, 0, 1, 1,
+                    1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+            customer_info=(3, 1, 30, 30, "스테이크"),
+            expected="3번 손님이 6번 테이블에 앉습니다.\n3번 손님이 1번 요리(스테이크)를 주문합니다."
+        ),
+        EntranceCase(
+            tables=[0, 1, 1, 1, 1, 1, 1, 0, 1, 1,
+                    1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+            customer_info=(12, 4, 10, 15, "그라탱"),
+            expected="12번 손님이 1번 테이블에 앉습니다.\n12번 손님이 4번 요리(그라탱)를 주문합니다."
+        )
+    )

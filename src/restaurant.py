@@ -197,3 +197,6 @@ def estimated_waiting_time(tables, waiting_amount):
     if waiting_amount < len(tables):
         return f"{sorted(tables)[waiting_amount]}분"
     return f"{max(tables)}분 이상"
+
+def entrance(tables, customer_info):
+    pass
