@@ -6,6 +6,7 @@ WaitingCase = namedtuple("WaitingCase", "tables waiting_amount waitable_time exp
 EstimatedTimeCase = namedtuple("EstimatedTimeCase", "tables waiting_amount expected")
 EntranceCase = namedtuple("EntranceCase", "tables, customer_info expected")
 
+
 def test_customer_initialize():
     cases = (
         InitializeCase(customer_num=3,
@@ -114,6 +115,7 @@ def test_estimated_waiting_time():
         tables, waiting_amount, expected = case
         assert estimated_waiting_time(tables, waiting_amount) == expected
 
+
 def test_entrance():
     cases = (
         EntranceCase(
@@ -129,3 +131,7 @@ def test_entrance():
             expected="12번 손님이 1번 테이블에 앉습니다.\n12번 손님이 4번 요리(그라탱)를 주문합니다."
         )
     )
+
+    for case in cases:
+        tables, customer_info, expected = case
+        assert estimated_waiting_time(tables, customer_info) == expected
