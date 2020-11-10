@@ -199,4 +199,12 @@ def estimated_waiting_time(tables, waiting_amount):
     return f"{max(tables)}분 이상"
 
 def entrance(tables, customer_info):
-    pass
+    customer_num, num, name = customer_info[0], customer_info[1], customer_info[4]
+    table_num = 1
+
+    for idx, table in enumerate(tables):
+        if not table:
+            table_num += idx
+            break
+    #TODO-테이블에 손님을 배정하고, 손님의 주문이 주문 대기목록에 들어가도록 구현하기
+    return f"{customer_num}번 손님이 {table_num}번 테이블에 앉습니다.\n{customer_num}번 손님이 {num}번 요리({name})를 주문합니다."
