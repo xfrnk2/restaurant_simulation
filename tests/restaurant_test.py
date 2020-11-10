@@ -11,26 +11,6 @@ AvailableTableCase = namedtuple("AvailableTableCase", "tables expected")
 OrderInitCase = namedtuple("OrderInitCase", "customer_num num table_idx expected")
 
 
-def test_customer_initialize():
-    cases = (
-        CustomerInitCase(customer_num=3,
-                         food_num=1,
-                         expected=(3, 1, 30, 30, "스테이크")
-                         ),
-        CustomerInitCase(customer_num=1,
-                         food_num=2,
-                         expected=(1, 2, 20, 20, "스파게티")
-                         ),
-        CustomerInitCase(customer_num=3,
-                         food_num=4,
-                         expected=(3, 4, 10, 15, "그라탱")
-                         ),
-    )
-    for case in cases:
-        customer_num, food_num, expected = case
-        assert customer_initialize(customer_num, food_num) == expected
-
-
 def test_waiting_checker():
 
     cases = (
