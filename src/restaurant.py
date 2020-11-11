@@ -5,6 +5,7 @@ from src.kitchen import Kitchen
 from src.bill import BillManager
 from dataclasses import dataclass
 
+
 @dataclass()
 class CustomerInfo:
     table_num: int = 0
@@ -204,6 +205,7 @@ def entrance_message(customer_num, num, table_idx):
     food_name = {1: "스테이크", 2: "스파게티", 3: "마카로니", 4: "그라탱"}
     return f"{customer_num}번 손님이 {table_idx+1}번 테이블에 앉습니다.\n{customer_num}번 손님이 {num}번 요리({food_name[num]})를 주문합니다."
 
+
 def table_initialize(customer_num, num):
     food_eating_time = {1: 30, 2: 20, 3: 15, 4: 10}
     return {"is_eating": False, "eating_time": food_eating_time[num], "customer_num": customer_num}
@@ -214,9 +216,11 @@ def order_initialize(customer_num, num, table_idx):
 
     return [food_cooking_time[num], {"customer_num": customer_num, "num": num, "table_idx": table_idx}]
 
+
 def cooked(customer_num, num):
     food_name = {1: "스테이크", 2: "스파게티", 3: "마카로니", 4: "그라탱"}
     return f"{customer_num}번 손님의 {num}번 요리({food_name[num]}) 조리가 끝났습니다.\n{customer_num}번 손님이 식사를 시작합니다."
+
 
 def cooks_update(cooks):
     finished_orders = []
@@ -233,6 +237,7 @@ def cooks_update(cooks):
             else:
                 idx += 1
     return cooks, finished_orders
+
 
 def available_new_order(max_cooks_num, cooks_num, new_orders):
     result = 0

@@ -13,6 +13,7 @@ CookedCase = namedtuple("CookedCase", "customer_num num expected")
 CooksUpdateCase = namedtuple("CooksUpdateCase", "cooks expected")
 AvailableNewOrderCase = namedtuple("AvailableNewOrderCase", "max_cooks_num cooks_num new_orders expected")
 
+
 def test_waiting_checker():
 
     cases = (
@@ -193,6 +194,7 @@ def test_order_initialize():
         customer_num, num, table_idx, expected = case
         assert order_initialize(customer_num, num, table_idx) == expected
 
+
 def test_cooked():
     cases = (
         CookedCase(customer_num=5,
@@ -207,38 +209,33 @@ def test_cooked():
         customer_num, num, expected = case
         assert cooked(customer_num, num) == expected
 
+
 def test_cooks_update():
     cases = (
         CooksUpdateCase(
             cooks=[[1, {"customer_num": 3, "num": 1, "table_idx": 3}],
                    [5, {"customer_num": 5, "num": 4, "table_idx": 0}],
-                   [10, {"customer_num": 2, "num": 3, "table_idx": 2}]
-                  ],
+                   [10, {"customer_num": 2, "num": 3, "table_idx": 2}]],
             expected=([[4, {"customer_num": 5, "num": 4, "table_idx": 0}],
                        [9, {"customer_num": 2, "num": 3, "table_idx": 2}]],
-                      [[0, {"customer_num": 3, "num": 1, "table_idx": 3}]]
-                     )
+                      [[0, {"customer_num": 3, "num": 1, "table_idx": 3}]])
                        ),
         CooksUpdateCase(
             cooks=[[1, {"customer_num": 3, "num": 1, "table_idx": 6}],
                    [1, {"customer_num": 5, "num": 4, "table_idx": 5}],
-                   [10, {"customer_num": 2, "num": 3, "table_idx": 4}]
-                   ],
+                   [10, {"customer_num": 2, "num": 3, "table_idx": 4}]],
             expected=([[9, {"customer_num": 2, "num": 3, "table_idx": 4}]],
                       [[0, {"customer_num": 3, "num": 1, "table_idx": 6}],
-                       [0, {"customer_num": 5, "num": 4, "table_idx": 5}]]
-                      )
+                       [0, {"customer_num": 5, "num": 4, "table_idx": 5}]])
                         ),
         CooksUpdateCase(
             cooks=[[5, {"customer_num": 3, "num": 1, "table_idx": 6}],
                    [6, {"customer_num": 5, "num": 4, "table_idx": 5}],
-                   [10, {"customer_num": 2, "num": 3, "table_idx": 4}]
-                   ],
+                   [10, {"customer_num": 2, "num": 3, "table_idx": 4}]],
             expected=([[4, {"customer_num": 3, "num": 1, "table_idx": 6}],
-                   [5, {"customer_num": 5, "num": 4, "table_idx": 5}],
-                   [9, {"customer_num": 2, "num": 3, "table_idx": 4}]],[])
-        )
-            )
+                      [5, {"customer_num": 5, "num": 4, "table_idx": 5}],
+                      [9, {"customer_num": 2, "num": 3, "table_idx": 4}]], []))
+                       )
 
     for case in cases:
         cooks, expected = case
@@ -282,4 +279,3 @@ def test_available_new_order():
     for case in cases:
         max_cooks_num, cooks_num, new_orders, expected = case
         assert available_new_order(max_cooks_num, cooks_num, new_orders) == expected
-
