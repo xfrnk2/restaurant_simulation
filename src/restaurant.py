@@ -203,9 +203,7 @@ def available_table(tables):
 
 def entrance(customer_info, table_idx):
     customer_num, num, name = customer_info[0], customer_info[1], customer_info[4]
-
     return f"{customer_num}번 손님이 {table_idx+1}번 테이블에 앉습니다.\n{customer_num}번 손님이 {num}번 요리({name})를 주문합니다."
-# TODO-테이블에 손님을 배정하고, 손님의 주문이 주문 대기목록에 들어가도록 구현하기
 
 
 def table_initialize(customer_num, num):
@@ -214,8 +212,9 @@ def table_initialize(customer_num, num):
 
 
 def order_initialize(customer_num, num, table_idx):
-    food_name = {1: "스테이크", 2: "스파게티", 3: "마카로니", 4: "그라탱"}
     food_cooking_time = {1: 30, 2: 20, 3: 10, 4: 15}
 
-    return [food_cooking_time[num], {"customer_num": customer_num, "num": num, "table_idx": table_idx,
-                                     "food_name": food_name[num]}]
+    return [food_cooking_time[num], {"customer_num": customer_num, "num": num, "table_idx": table_idx}]
+
+def cooked(customer_num, num):
+    pass

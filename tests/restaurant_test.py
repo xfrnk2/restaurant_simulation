@@ -9,7 +9,7 @@ EntranceCase = namedtuple("EntranceCase", "customer_info table_idx expected")
 TableInitCase = namedtuple("TableInitCase", "customer_num num expected")
 AvailableTableCase = namedtuple("AvailableTableCase", "tables expected")
 OrderInitCase = namedtuple("OrderInitCase", "customer_num num table_idx expected")
-
+CookedCase = namedtuple("CookedCase", "customer_num num expected")
 
 def test_waiting_checker():
 
@@ -167,24 +167,38 @@ def test_order_initialize():
             customer_num=3,
             num=1,
             table_idx=1,
-            expected=[30, {"customer_num": 3, "num": 1, "table_idx": 1, "food_name": "스테이크"}]),
+            expected=[30, {"customer_num": 3, "num": 1, "table_idx": 1}]),
         OrderInitCase(
             customer_num=1,
             num=2,
             table_idx=1,
-            expected=[20, {"customer_num": 1, "num": 2, "table_idx": 1, "food_name": "스파게티"}]),
+            expected=[20, {"customer_num": 1, "num": 2, "table_idx": 1}]),
         OrderInitCase(
             customer_num=3,
             num=4,
             table_idx=1,
-            expected=[15, {"customer_num": 3, "num": 4, "table_idx": 1, "food_name": "그라탱"}]),
+            expected=[15, {"customer_num": 3, "num": 4, "table_idx": 1}]),
         OrderInitCase(
             customer_num=6,
             num=3,
             table_idx=1,
-            expected=[10, {"customer_num": 6, "num": 3, "table_idx": 1, "food_name": "마카로니"}]),
+            expected=[10, {"customer_num": 6, "num": 3, "table_idx": 1}]),
         )
 
     for case in cases:
         customer_num, num, table_idx, expected = case
         assert order_initialize(customer_num, num, table_idx) == expected
+
+def test_cooked():
+    cases = (
+        CookedCase(customer_num=5,
+                   num=2,
+                   expected="5번 손님의 2번 요리(스파게티) 조리가 끝났습니다.\n5번 손님이 식사를 시작합니다."),
+        CookedCase(customer_num=3,
+                   num=4,
+                   expected="3번 손님의 4번 요리(그라탱) 조리가 끝났습니다.\n3번 손님이 식사를 시작합니다.")
+            )
+
+    for case in cases:
+        customer_num, num, expected = case
+        assert cooked(customer_num, num) == expected
