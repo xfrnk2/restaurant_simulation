@@ -217,4 +217,5 @@ def order_initialize(customer_num, num, table_idx):
     return [food_cooking_time[num], {"customer_num": customer_num, "num": num, "table_idx": table_idx}]
 
 def cooked(customer_num, num):
-    pass
+    food_name = {1: "스테이크", 2: "스파게티", 3: "마카로니", 4: "그라탱"}
+    return f"{customer_num}번 손님의 {num}번 요리({food_name[num]}) 조리가 끝났습니다.\n{customer_num}번 손님이 식사를 시작합니다."

@@ -1,6 +1,6 @@
 from collections import namedtuple
 from src.restaurant import waiting_checker, estimated_waiting_time, entrance, table_initialize, \
-    available_table, order_initialize
+    available_table, order_initialize, cooked
 
 CustomerInitCase = namedtuple("CustomerInitCase", "customer_num food_num expected")
 WaitingCase = namedtuple("WaitingCase", "tables waiting_amount waitable_time expected desc")
