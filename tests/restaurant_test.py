@@ -1,6 +1,6 @@
 from collections import namedtuple
 from src.restaurant import waiting_checker, estimated_waiting_time, entrance, table_initialize, \
-    available_table, order_initialize, cooked
+    available_table, order_initialize, cooked, cooks_update
 
 CustomerInitCase = namedtuple("CustomerInitCase", "customer_num food_num expected")
 WaitingCase = namedtuple("WaitingCase", "tables waiting_amount waitable_time expected desc")
@@ -10,6 +10,7 @@ TableInitCase = namedtuple("TableInitCase", "customer_num num expected")
 AvailableTableCase = namedtuple("AvailableTableCase", "tables expected")
 OrderInitCase = namedtuple("OrderInitCase", "customer_num num table_idx expected")
 CookedCase = namedtuple("CookedCase", "customer_num num expected")
+CooksUpdateCase = namedtuple("CooksUpdateCase", "cooks expected")
 
 def test_waiting_checker():
 
@@ -202,3 +203,47 @@ def test_cooked():
     for case in cases:
         customer_num, num, expected = case
         assert cooked(customer_num, num) == expected
+##
+
+def test_cooks_update():
+    cases = (
+        CooksUpdateCase(
+            cooks=[[1, {"customer_num": 3, "num": 1, "table_idx": 3}],
+                   [5, {"customer_num": 5, "num": 4, "table_idx": 0}],
+                   [10, {"customer_num": 2, "num": 3, "table_idx": 2}]
+                  ],
+            expected=([[4, {"customer_num": 5, "num": 4, "table_idx": 0}],
+                       [9, {"customer_num": 2, "num": 3, "table_idx": 2}]],
+                      [[0, {"customer_num": 3, "num": 1, "table_idx": 3}]]
+                     )
+                       ),
+        CooksUpdateCase(
+            cooks=[[1, {"customer_num": 3, "num": 1, "table_idx": 6}],
+                   [1, {"customer_num": 5, "num": 4, "table_idx": 5}],
+                   [10, {"customer_num": 2, "num": 3, "table_idx": 4}]
+                   ],
+            expected=([[9, {"customer_num": 2, "num": 3, "table_idx": 4}]],
+                      [[0, {"customer_num": 3, "num": 1, "table_idx": 6}],
+                       [0, {"customer_num": 5, "num": 4, "table_idx": 5}]]
+                      )
+                        ),
+        CooksUpdateCase(
+            cooks=[[5, {"customer_num": 3, "num": 1, "table_idx": 6}],
+                   [6, {"customer_num": 5, "num": 4, "table_idx": 5}],
+                   [10, {"customer_num": 2, "num": 3, "table_idx": 4}]
+                   ],
+            expected=([[4, {"customer_num": 3, "num": 1, "table_idx": 6}],
+                   [5, {"customer_num": 5, "num": 4, "table_idx": 5}],
+                   [9, {"customer_num": 2, "num": 3, "table_idx": 4}]],[])
+        )
+            )
+
+    for case in cases:
+        cooks, expected = case
+        assert cooks_update(cooks) == expected
+
+# def test_new_orders_update(cooks, new_orders):
+#     pass
+#
+# def test_tables_update(tables):
+#     pass
