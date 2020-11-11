@@ -1,16 +1,17 @@
 from collections import namedtuple
-from src.restaurant import waiting_checker, estimated_waiting_time, entrance, table_initialize, \
-    available_table, order_initialize, cooked, cooks_update
+from src.restaurant import waiting_checker, estimated_waiting_time, entrance_message, table_initialize, \
+    available_table, order_initialize, cooked, cooks_update, available_new_order
 
 CustomerInitCase = namedtuple("CustomerInitCase", "customer_num food_num expected")
 WaitingCase = namedtuple("WaitingCase", "tables waiting_amount waitable_time expected desc")
 EstimatedTimeCase = namedtuple("EstimatedTimeCase", "tables waiting_amount expected")
-EntranceCase = namedtuple("EntranceCase", "customer_info table_idx expected")
+EntranceCase = namedtuple("EntranceCase", "customer_num num table_idx expected")
 TableInitCase = namedtuple("TableInitCase", "customer_num num expected")
 AvailableTableCase = namedtuple("AvailableTableCase", "tables expected")
 OrderInitCase = namedtuple("OrderInitCase", "customer_num num table_idx expected")
 CookedCase = namedtuple("CookedCase", "customer_num num expected")
 CooksUpdateCase = namedtuple("CooksUpdateCase", "cooks expected")
+AvailableNewOrderCase = namedtuple("AvailableNewOrderCase", "max_cooks_num cooks_num new_orders expected")
 
 def test_waiting_checker():
 
@@ -101,23 +102,25 @@ def test_estimated_waiting_time():
         assert estimated_waiting_time(tables, waiting_amount) == expected
 
 
-def test_entrance():
+def test_entrance_message():
     cases = (
         EntranceCase(
-            customer_info=(3, 1, 30, 30, "스테이크"),
+            customer_num=3,
+            num=1,
             table_idx=6,
             expected="3번 손님이 7번 테이블에 앉습니다.\n3번 손님이 1번 요리(스테이크)를 주문합니다."
         ),
         EntranceCase(
-            customer_info=(12, 4, 10, 15, "그라탱"),
+            customer_num=12,
+            num=4,
             table_idx=7,
             expected="12번 손님이 8번 테이블에 앉습니다.\n12번 손님이 4번 요리(그라탱)를 주문합니다."
         )
     )
 
     for case in cases:
-        customer_info, table_idx, expected = case
-        assert entrance(customer_info, table_idx) == expected
+        customer_num, num, table_idx, expected = case
+        assert entrance_message(customer_num, num, table_idx) == expected
 
 
 def test_table_initialize():
@@ -203,7 +206,6 @@ def test_cooked():
     for case in cases:
         customer_num, num, expected = case
         assert cooked(customer_num, num) == expected
-##
 
 def test_cooks_update():
     cases = (
@@ -242,8 +244,42 @@ def test_cooks_update():
         cooks, expected = case
         assert cooks_update(cooks) == expected
 
-# def test_new_orders_update(cooks, new_orders):
-#     pass
-#
-# def test_tables_update(tables):
-#     pass
+
+def test_available_new_order():
+    cases = (
+        AvailableNewOrderCase(
+            max_cooks_num=3,
+            cooks_num=3,
+            new_orders=6,
+            expected=0
+        ),
+        AvailableNewOrderCase(
+            max_cooks_num=3,
+            cooks_num=1,
+            new_orders=2,
+            expected=2
+        ),
+        AvailableNewOrderCase(
+            max_cooks_num=3,
+            cooks_num=2,
+            new_orders=2,
+            expected=1
+        ),
+        AvailableNewOrderCase(
+            max_cooks_num=3,
+            cooks_num=0,
+            new_orders=3,
+            expected=3
+        ),
+        AvailableNewOrderCase(
+            max_cooks_num=3,
+            cooks_num=0,
+            new_orders=1,
+            expected=1
+        )
+    )
+
+    for case in cases:
+        max_cooks_num, cooks_num, new_orders, expected = case
+        assert available_new_order(max_cooks_num, cooks_num, new_orders) == expected
+

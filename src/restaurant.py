@@ -200,10 +200,9 @@ def available_table(tables):
     return table_idx
 
 
-def entrance(customer_info, table_idx):
-    customer_num, num, name = customer_info[0], customer_info[1], customer_info[4]
-    return f"{customer_num}번 손님이 {table_idx+1}번 테이블에 앉습니다.\n{customer_num}번 손님이 {num}번 요리({name})를 주문합니다."
-
+def entrance_message(customer_num, num, table_idx):
+    food_name = {1: "스테이크", 2: "스파게티", 3: "마카로니", 4: "그라탱"}
+    return f"{customer_num}번 손님이 {table_idx+1}번 테이블에 앉습니다.\n{customer_num}번 손님이 {num}번 요리({food_name[num]})를 주문합니다."
 
 def table_initialize(customer_num, num):
     food_eating_time = {1: 30, 2: 20, 3: 15, 4: 10}
@@ -234,9 +233,12 @@ def cooks_update(cooks):
             else:
                 idx += 1
     return cooks, finished_orders
-#
-# def new_orders_update(cooks, new_orders):
-#     pass
-#
-# def tables_update(tables):
-#     pass
+
+def available_new_order(max_cooks_num, cooks_num, new_orders):
+    result = 0
+    while cooks_num < max_cooks_num and 0 < new_orders:
+        result += 1
+        cooks_num += 1
+        new_orders -= 1
+
+    return result
