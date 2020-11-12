@@ -1,6 +1,6 @@
 from collections import namedtuple
 from src.restaurant import waiting_checker, estimated_waiting_time, entrance_message, table_initialize, \
-    available_table, order_initialize, cooked, cooks_update, available_new_order
+    available_table, order_initialize, cooked, cooks_update, available_new_order, tables_update
 
 CustomerInitCase = namedtuple("CustomerInitCase", "customer_num food_num expected")
 WaitingCase = namedtuple("WaitingCase", "tables waiting_amount waitable_time expected desc")
@@ -12,6 +12,7 @@ OrderInitCase = namedtuple("OrderInitCase", "customer_num num table_idx expected
 CookedCase = namedtuple("CookedCase", "customer_num num expected")
 CooksUpdateCase = namedtuple("CooksUpdateCase", "cooks expected")
 AvailableNewOrderCase = namedtuple("AvailableNewOrderCase", "max_cooks_num cooks_num new_orders expected")
+TableUpdateCase = namedtuple("TableUpdateCase", "tables expected")
 
 
 def test_waiting_checker():
@@ -279,3 +280,37 @@ def test_available_new_order():
     for case in cases:
         max_cooks_num, cooks_num, new_orders, expected = case
         assert available_new_order(max_cooks_num, cooks_num, new_orders) == expected
+
+
+def test_tables_update():
+    cases = (
+        TableUpdateCase(
+                        tables=[{"is_eating": True, "eating_time": 1, "customer_num": 5},
+                                {"is_eating": True, "eating_time": 0, "customer_num": 2},
+                                {"is_eating": True, "eating_time": 4, "customer_num": 4},
+                                {"is_eating": False, "eating_time": 20, "customer_num": 8},
+                                {"is_eating": False, "eating_time": 30, "customer_num": 7}
+                                ],
+                        expected=([{"is_eating": True, "eating_time": 3, "customer_num": 4},
+                                   {"is_eating": False, "eating_time": 20, "customer_num": 8},
+                                   {"is_eating": False, "eating_time": 30, "customer_num": 7}],
+                                  [{"is_eating": True, "eating_time": 0, "customer_num": 5},
+                                   {"is_eating": True, "eating_time": 0, "customer_num": 2}])
+                        ),
+        TableUpdateCase(
+                        tables=[{"is_eating": True, "eating_time": 15, "customer_num": 5},
+                                {"is_eating": True, "eating_time": 7, "customer_num": 2},
+                                {"is_eating": True, "eating_time": 6, "customer_num": 4},
+                                {"is_eating": True, "eating_time": 20, "customer_num": 8},
+                                {"is_eating": False, "eating_time": 30, "customer_num": 7}
+                                ],
+                        expected=([{"is_eating": True, "eating_time": 14, "customer_num": 5},
+                                   {"is_eating": True, "eating_time": 6, "customer_num": 2},
+                                   {"is_eating": True, "eating_time": 5, "customer_num": 4},
+                                   {"is_eating": True, "eating_time": 19, "customer_num": 8},
+                                   {"is_eating": False, "eating_time": 30, "customer_num": 7}], [])
+                       )
+             )
+    for case in cases:
+        tables, expected = case
+        assert tables_update(tables) == expected
