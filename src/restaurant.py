@@ -247,3 +247,20 @@ def available_new_order(max_cooks_num, cooks_num, new_orders):
         new_orders -= 1
 
     return result
+
+
+def tables_update(tables):
+    finished_tables = []
+
+    _tables = tables[:]
+    idx = 0
+
+    for table in _tables:
+        if table["is_eating"]:
+            if 0 < table["eating_time"]:
+                table["eating_time"] -= 1
+            if table["eating_time"] <= 0:
+                finished_tables.append(tables.pop(idx))
+                continue
+        idx += 1
+    return tables, finished_tables
