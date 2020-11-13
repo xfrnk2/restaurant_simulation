@@ -235,7 +235,10 @@ def test_cooks_update():
                    [10, {"customer_num": 2, "num": 3, "table_idx": 4}]],
             expected=([[4, {"customer_num": 3, "num": 1, "table_idx": 6}],
                       [5, {"customer_num": 5, "num": 4, "table_idx": 5}],
-                      [9, {"customer_num": 2, "num": 3, "table_idx": 4}]], []))
+                      [9, {"customer_num": 2, "num": 3, "table_idx": 4}]], [])),
+        CooksUpdateCase(
+            cooks=[],
+            expected=([], []))
                        )
 
     for case in cases:
@@ -294,8 +297,7 @@ def test_tables_update():
                         expected=([{"is_eating": True, "eating_time": 3, "customer_num": 4},
                                    {"is_eating": False, "eating_time": 20, "customer_num": 8},
                                    {"is_eating": False, "eating_time": 30, "customer_num": 7}],
-                                  [{"is_eating": True, "eating_time": 0, "customer_num": 5},
-                                   {"is_eating": True, "eating_time": 0, "customer_num": 2}])
+                                  [5, 2])
                         ),
         TableUpdateCase(
                         tables=[{"is_eating": True, "eating_time": 15, "customer_num": 5},
