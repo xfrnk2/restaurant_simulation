@@ -255,11 +255,12 @@ def tables_update(tables):
     idx = 0
 
     for table in _tables:
-        if table["is_eating"]:
-            if 0 < table["eating_time"]:
-                table["eating_time"] -= 1
-            if table["eating_time"] <= 0:
-                finished_tables.append(tables.pop(idx)["customer_num"])
-                continue
-        idx += 1
+        if not table["is_eating"]:
+            idx += 1
+            continue
+        if 0 < table["eating_time"]:
+            table["eating_time"] -= 1
+        if table["eating_time"] <= 0:
+            finished_tables.append(tables.pop(idx)["customer_num"])
+
     return tables, finished_tables
