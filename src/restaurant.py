@@ -221,19 +221,20 @@ def cooked(customer_num, num):
 
 
 def cooks_update(cooks):
+    if not cooks:
+        return [], []
+
     finished_orders = []
+    _cooks = cooks[:]
+    idx = 0
 
-    if cooks:
-        _cooks = cooks[:]
-        idx = 0
-
-        for cook in _cooks:
-            cook[0] -= 1
-            if cook[0] <= 0:
-                finished_orders.append(cooks.pop(idx))
-                continue
-            else:
-                idx += 1
+    for cook in _cooks:
+        cook[0] -= 1
+        if cook[0] <= 0:
+            finished_orders.append(cooks.pop(idx))
+            continue
+        else:
+            idx += 1
     return cooks, finished_orders
 
 

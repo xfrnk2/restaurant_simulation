@@ -162,7 +162,7 @@ def test_available_table():
                           ),
         AvailableTableCase(
                            tables=[1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-                                    1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                                   1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
                            expected=0
                           )
 
