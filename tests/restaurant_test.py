@@ -5,7 +5,7 @@ from src.restaurant import waiting_checker, estimated_waiting_time, entrance_mes
 CustomerInitCase = namedtuple("CustomerInitCase", "customer_num food_num expected")
 WaitingCase = namedtuple("WaitingCase", "tables waiting_amount waitable_time expected desc")
 EstimatedTimeCase = namedtuple("EstimatedTimeCase", "tables waiting_amount expected")
-EntranceCase = namedtuple("EntranceCase", "customer_num num table_idx expected")
+EntranceCase = namedtuple("EntranceCase", "customer_num num table_num expected")
 TableInitCase = namedtuple("TableInitCase", "customer_num num expected")
 AvailableTableCase = namedtuple("AvailableTableCase", "tables expected")
 OrderInitCase = namedtuple("OrderInitCase", "customer_num num table_idx expected")
@@ -109,14 +109,14 @@ def test_entrance_message():
         EntranceCase(
             customer_num=3,
             num=1,
-            table_idx=6,
-            expected="3번 손님이 7번 테이블에 앉습니다.\n3번 손님이 1번 요리(스테이크)를 주문합니다."
+            table_num=6,
+            expected="3번 손님이 6번 테이블에 앉습니다.\n3번 손님이 1번 요리(스테이크)를 주문합니다."
         ),
         EntranceCase(
             customer_num=12,
             num=4,
-            table_idx=7,
-            expected="12번 손님이 8번 테이블에 앉습니다.\n12번 손님이 4번 요리(그라탱)를 주문합니다."
+            table_num=7,
+            expected="12번 손님이 7번 테이블에 앉습니다.\n12번 손님이 4번 요리(그라탱)를 주문합니다."
         )
     )
 
@@ -153,13 +153,19 @@ def test_available_table():
         AvailableTableCase(
                            tables=[0, 1, 1, 1, 1, 1, 1, 0, 1, 1,
                                    1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-                           expected=0
+                           expected=1
                           ),
         AvailableTableCase(
                            tables=[1, 1, 1, 1, 1, 1, 1, 0, 1, 1,
                                    1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-                           expected=7
+                           expected=8
+                          ),
+        AvailableTableCase(
+                           tables=[1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                                    1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                           expected=0
                           )
+
     )
 
     for case in cases:

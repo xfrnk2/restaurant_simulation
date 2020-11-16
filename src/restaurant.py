@@ -192,18 +192,16 @@ def estimated_waiting_time(tables, waiting_amount):
 
 
 def available_table(tables):
-    table_idx = 0
 
     for idx, table in enumerate(tables):
         if not table:
-            table_idx += idx
-            break
-    return table_idx
+            return idx+1
+    return 0
 
 
-def entrance_message(customer_num, num, table_idx):
+def entrance_message(customer_num, num, table_num):
     food_name = {1: "스테이크", 2: "스파게티", 3: "마카로니", 4: "그라탱"}
-    return f"{customer_num}번 손님이 {table_idx+1}번 테이블에 앉습니다.\n{customer_num}번 손님이 {num}번 요리({food_name[num]})를 주문합니다."
+    return f"{customer_num}번 손님이 {table_num}번 테이블에 앉습니다.\n{customer_num}번 손님이 {num}번 요리({food_name[num]})를 주문합니다."
 
 
 def table_initialize(customer_num, num):
@@ -260,7 +258,7 @@ def tables_update(tables):
             if 0 < table["eating_time"]:
                 table["eating_time"] -= 1
             if table["eating_time"] <= 0:
-                finished_tables.append(tables.pop(idx))
+                finished_tables.append(tables.pop(idx)["customer_num"])
                 continue
         idx += 1
     return tables, finished_tables
