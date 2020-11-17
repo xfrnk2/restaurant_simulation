@@ -126,22 +126,20 @@ def test_entrance_message():
 
 
 def test_table_initialize():
-    cases = (TableInitCase(
-        customer_num=1,
-        num=2,
-        expected={"is_eating": False, "eating_time": 20, "customer_num": 1}
-            ),
+    cases = (
+        TableInitCase(
+            customer_num=1,
+            num=2,
+            expected=([False, 20], 1)),
         TableInitCase(
             customer_num=4,
             num=4,
-            expected={"is_eating": False, "eating_time": 10, "customer_num": 4}
-            ),
+            expected=([False, 10], 4)),
         TableInitCase(
              customer_num=7,
              num=1,
-             expected={"is_eating": False, "eating_time": 30, "customer_num": 7}
-           )
-    )
+             expected=([False, 30], 7))
+            )
 
     for case in cases:
         customer_num, num, expected = case

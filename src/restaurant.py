@@ -4,7 +4,8 @@ from src.table import TableManager
 from src.kitchen import Kitchen
 from src.bill import BillManager
 from dataclasses import dataclass
-
+from collections import namedtuple
+table = namedtuple("table", "eating_time customer_num is_eating", defaults=[False])
 
 @dataclass()
 class CustomerInfo:
@@ -206,7 +207,7 @@ def entrance_message(customer_num, num, table_num):
 
 def table_initialize(customer_num, num):
     food_eating_time = {1: 30, 2: 20, 3: 15, 4: 10}
-    return {"is_eating": False, "eating_time": food_eating_time[num], "customer_num": customer_num}
+    return [False, food_eating_time[num]], customer_num
 
 
 def order_initialize(customer_num, num, table_idx):
