@@ -212,8 +212,7 @@ def table_initialize(customer_num, num):
 
 def order_initialize(customer_num, num, table_idx):
     food_cooking_time = {1: 30, 2: 20, 3: 10, 4: 15}
-
-    return [food_cooking_time[num], {"customer_num": customer_num, "num": num, "table_idx": table_idx}]
+    return [food_cooking_time[num]], customer_num, num, table_idx
 
 
 def cooked(customer_num, num):
@@ -224,19 +223,12 @@ def cooked(customer_num, num):
 def cooks_update(cooks):
     if not cooks:
         return [], []
-
-    finished_orders = []
-    _cooks = cooks[:]
     idx = 0
-
-    for cook in _cooks:
-        cook[0] -= 1
-        if cook[0] <= 0:
-            finished_orders.append(cooks.pop(idx))
-            continue
-        else:
+    for i, cook in enumerate(cooks):
+        cooks[i][0][0] -= 1
+        if cook[0][0] <= 0:
             idx += 1
-    return cooks, finished_orders
+    return cooks[idx:], cooks[:idx]
 
 
 def available_new_order(max_cooks_num, cooks_num, new_orders):

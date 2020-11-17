@@ -177,22 +177,22 @@ def test_order_initialize():
             customer_num=3,
             num=1,
             table_idx=1,
-            expected=[30, {"customer_num": 3, "num": 1, "table_idx": 1}]),
+            expected=([30], 3, 1, 1)),
         OrderInitCase(
             customer_num=1,
             num=2,
             table_idx=1,
-            expected=[20, {"customer_num": 1, "num": 2, "table_idx": 1}]),
+            expected=([20], 1, 2, 1)),
         OrderInitCase(
             customer_num=3,
             num=4,
             table_idx=1,
-            expected=[15, {"customer_num": 3, "num": 4, "table_idx": 1}]),
+            expected=([15], 3, 4, 1)),
         OrderInitCase(
             customer_num=6,
             num=3,
             table_idx=1,
-            expected=[10, {"customer_num": 6, "num": 3, "table_idx": 1}]),
+            expected=([10], 6, 3, 1)),
         )
 
     for case in cases:
@@ -218,28 +218,29 @@ def test_cooked():
 def test_cooks_update():
     cases = (
         CooksUpdateCase(
-            cooks=[[1, {"customer_num": 3, "num": 1, "table_idx": 3}],
-                   [5, {"customer_num": 5, "num": 4, "table_idx": 0}],
-                   [10, {"customer_num": 2, "num": 3, "table_idx": 2}]],
-            expected=([[4, {"customer_num": 5, "num": 4, "table_idx": 0}],
-                       [9, {"customer_num": 2, "num": 3, "table_idx": 2}]],
-                      [[0, {"customer_num": 3, "num": 1, "table_idx": 3}]])
+            cooks=[([1], 3, 1, 3),
+                   ([5], 5, 4, 0),
+                   ([10], 2, 3, 2)],
+            expected=([([4], 5, 4, 0),
+                       ([9], 2, 3, 2)],
+                       [([0], 3, 1, 3)])
                        ),
         CooksUpdateCase(
-            cooks=[[1, {"customer_num": 3, "num": 1, "table_idx": 6}],
-                   [1, {"customer_num": 5, "num": 4, "table_idx": 5}],
-                   [10, {"customer_num": 2, "num": 3, "table_idx": 4}]],
-            expected=([[9, {"customer_num": 2, "num": 3, "table_idx": 4}]],
-                      [[0, {"customer_num": 3, "num": 1, "table_idx": 6}],
-                       [0, {"customer_num": 5, "num": 4, "table_idx": 5}]])
-                        ),
+            cooks=[([1], 3, 1, 6),
+                   ([1], 5, 4, 5),
+                   ([10], 2, 3, 4)],
+            expected=([([9], 2, 3, 4)],
+                      [([0], 3, 1, 6),
+                       ([0], 5, 4, 5)])
+        ),
         CooksUpdateCase(
-            cooks=[[5, {"customer_num": 3, "num": 1, "table_idx": 6}],
-                   [6, {"customer_num": 5, "num": 4, "table_idx": 5}],
-                   [10, {"customer_num": 2, "num": 3, "table_idx": 4}]],
-            expected=([[4, {"customer_num": 3, "num": 1, "table_idx": 6}],
-                      [5, {"customer_num": 5, "num": 4, "table_idx": 5}],
-                      [9, {"customer_num": 2, "num": 3, "table_idx": 4}]], [])),
+            cooks=[([5], 3, 1, 6),
+                   ([6], 5, 4, 5),
+                   ([10], 2, 3, 4)],
+            expected=([([4], 3, 1, 6),
+                       ([5], 5, 4, 5),
+                      ([9], 2, 3, 4)],[])
+        ),
         CooksUpdateCase(
             cooks=[],
             expected=([], []))
