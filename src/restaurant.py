@@ -4,8 +4,7 @@ from src.table import TableManager
 from src.kitchen import Kitchen
 from src.bill import BillManager
 from dataclasses import dataclass
-from collections import namedtuple
-table = namedtuple("table", "eating_time customer_num is_eating", defaults=[False])
+
 
 @dataclass()
 class CustomerInfo:
