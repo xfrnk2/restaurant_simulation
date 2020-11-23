@@ -4,7 +4,8 @@ from src.table import TableManager
 from src.kitchen import Kitchen
 from src.bill import BillManager
 from dataclasses import dataclass
-
+from collections import namedtuple
+table = namedtuple("table", "eating_time customer_num is_eating", defaults=[False])
 
 @dataclass()
 class CustomerInfo:
@@ -177,9 +178,82 @@ class Restaurant:
             simulation_execution = elapsed_time < 720
 
 
-def customer_initialize(customer_num, num):
-    eating_time = {1: 30, 2: 20, 3: 15, 4: 10}
-    cooking_time = {1: 30, 2: 20, 3: 10, 4: 15}
-    name = {1: "스테이크", 2: "스파게티", 3: "마카로니", 4: "그라탱"}
+def waiting_checker(tables, waiting_amount, waitable_time):
 
-    return (customer_num, num, eating_time[num], cooking_time[num], name[num])
+    for time in tables:
+        if time <= waitable_time:
+            waiting_amount -= 1
+    return waiting_amount < 0
+
+
+def estimated_waiting_time(tables, waiting_amount):
+    if waiting_amount < len(tables):
+        return f"{sorted(tables)[waiting_amount]}분"
+    return f"{max(tables)}분 이상"
+
+
+def available_table(tables):
+
+    for idx, table in enumerate(tables):
+        if not table:
+            return idx+1
+    return 0
+
+
+def entrance_message(customer_num, num, table_num):
+    food_name = {1: "스테이크", 2: "스파게티", 3: "마카로니", 4: "그라탱"}
+    return f"{customer_num}번 손님이 {table_num}번 테이블에 앉습니다.\n{customer_num}번 손님이 {num}번 요리({food_name[num]})를 주문합니다."
+
+
+def table_initialize(customer_num, num):
+    food_eating_time = {1: 30, 2: 20, 3: 15, 4: 10}
+    return [False, food_eating_time[num]], customer_num
+
+
+def order_initialize(customer_num, num, table_idx):
+    food_cooking_time = {1: 30, 2: 20, 3: 10, 4: 15}
+    return [food_cooking_time[num]], customer_num, num, table_idx
+
+
+def cooked(customer_num, num):
+    food_name = {1: "스테이크", 2: "스파게티", 3: "마카로니", 4: "그라탱"}
+    return f"{customer_num}번 손님의 {num}번 요리({food_name[num]}) 조리가 끝났습니다.\n{customer_num}번 손님이 식사를 시작합니다."
+
+
+def cooks_update(cooks):
+    if not cooks:
+        return [], []
+    idx = 0
+    for i, cook in enumerate(cooks):
+        cooks[i][0][0] -= 1
+        if cook[0][0] <= 0:
+            idx += 1
+    return cooks[idx:], cooks[:idx]
+
+
+def available_new_order(max_cooks_num, cooks_num, new_orders):
+    result = 0
+    while cooks_num < max_cooks_num and 0 < new_orders:
+        result += 1
+        cooks_num += 1
+        new_orders -= 1
+
+    return result
+
+
+def tables_update(tables):
+    finished_tables = []
+
+    _tables = tables[:]
+    idx = 0
+
+    for table in _tables:
+        if not table["is_eating"]:
+            idx += 1
+            continue
+        if 0 < table["eating_time"]:
+            table["eating_time"] -= 1
+        if table["eating_time"] <= 0:
+            finished_tables.append(tables.pop(idx)["customer_num"])
+
+    return tables, finished_tables
