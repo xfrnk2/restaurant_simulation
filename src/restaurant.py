@@ -227,6 +227,7 @@ def cooks_update(cooks):
         cooks[i][0][0] -= 1
         if cook[0][0] <= 0:
             idx += 1
+
     return cooks[idx:], cooks[:idx]
 
 
@@ -256,3 +257,20 @@ def tables_update(tables):
             finished_tables.append(tables.pop(idx)["customer_num"])
 
     return tables, finished_tables
+
+
+class PrintOut:
+
+    @staticmethod
+    def init():
+        __class__.__queue = []
+
+    @staticmethod
+    def add(msg):
+        __class__.__queue.append(msg)
+
+    @staticmethod
+    def printout():
+        for msg in __class__.__queue:
+            print(msg)
+    __queue = []
