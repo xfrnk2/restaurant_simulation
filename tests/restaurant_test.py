@@ -210,22 +210,22 @@ def test_order_initialize():
             customer_num=3,
             num=1,
             table_idx=1,
-            expected=([30], 3, 1, 1)),
+            expected=[30, (3, 1, 1)]),
         OrderInitCase(
             customer_num=1,
             num=2,
             table_idx=1,
-            expected=([20], 1, 2, 1)),
+            expected=[20, (1, 2, 1)]),
         OrderInitCase(
             customer_num=3,
             num=4,
             table_idx=1,
-            expected=([15], 3, 4, 1)),
+            expected=[15, (3, 4, 1)]),
         OrderInitCase(
             customer_num=6,
             num=3,
             table_idx=1,
-            expected=([10], 6, 3, 1)),
+            expected=[10, (6, 3, 1)]),
         )
     for case in cases:
         assert order_initialize(case.customer_num, case.num, case.table_idx) == case.expected
@@ -234,33 +234,30 @@ def test_order_initialize():
 def test_cooks_update():
     cases = (
         CooksUpdateCase(
-            cooks=[([1], 3, 1, 3),
-                   ([5], 5, 4, 0),
-                   ([10], 2, 3, 2)],
-            expected=([([4], 5, 4, 0),
-                      ([9], 2, 3, 2)],
-                      [([0], 3, 1, 3)])
-                      ),
+            cooks=[[1, (3, 1, 3)],
+                   [5, (5, 4, 0)],
+                   [10, (2, 3, 2)]],
+            expected=([[4, (5, 4, 0)],
+                      [9, (2, 3, 2)]],
+                      [[0, (3, 1, 3)]])),
         CooksUpdateCase(
-            cooks=[([1], 3, 1, 6),
-                   ([1], 5, 4, 5),
-                   ([10], 2, 3, 4)],
-            expected=([([9], 2, 3, 4)],
-                      [([0], 3, 1, 6),
-                       ([0], 5, 4, 5)])
-        ),
+            cooks=[[1, (3, 1, 6)],
+                   [1, (5, 4, 5)],
+                   [10, (2, 3, 4)]],
+            expected=([[9, (2, 3, 4)]],
+                      [[0, (3, 1, 6)],
+                       [0, (5, 4, 5)]])),
         CooksUpdateCase(
-            cooks=[([5], 3, 1, 6),
-                   ([6], 5, 4, 5),
-                   ([10], 2, 3, 4)],
-            expected=([([4], 3, 1, 6),
-                      ([5], 5, 4, 5),
-                      ([9], 2, 3, 4)], [])
-        ),
+            cooks=[[5, (3, 1, 6)],
+                   [6, (5, 4, 5)],
+                   [10, (2, 3, 4)]],
+            expected=([[4, (3, 1, 6)],
+                      [5, (5, 4, 5)],
+                      [9, (2, 3, 4)]], [])),
         CooksUpdateCase(
             cooks=[],
             expected=([], []))
-                       )
+             )
     for case in cases:
         assert cooks_update(case.cooks) == case.expected
 

@@ -205,18 +205,16 @@ def table_initialize(customer_num, num):
 
 def order_initialize(customer_num, num, table_idx):
     food_cooking_time = {1: 30, 2: 20, 3: 10, 4: 15}
-    return [food_cooking_time[num]], customer_num, num, table_idx
+    return [food_cooking_time[num], (customer_num, num, table_idx)]
 
 
 def cooks_update(cooks):
-    if not cooks:
-        return [], []
+    cooks = sorted(cooks, key=lambda x: x[0])
     idx = 0
     for i, cook in enumerate(cooks):
-        cooks[i][0][0] -= 1
-        if cook[0][0] <= 0:
+        cooks[i][0] -= 1
+        if cook[0] < 1:
             idx += 1
-
     return cooks[idx:], cooks[:idx]
 
 
