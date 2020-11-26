@@ -1,6 +1,6 @@
 from dataclasses import dataclass
-from src.restaurant import waiting_checker, estimated_waiting_time, entrance_message, table_initialize, \
-     available_table, order_initialize, cooked, cooks_update, available_new_order, tables_update
+from src.restaurant import waiting_checker, estimated_waiting_time, table_initialize, \
+     available_table, order_initialize, cooks_update, available_new_order, tables_update
 import typing
 
 
@@ -162,25 +162,6 @@ def test_estimated_waiting_time():
         assert estimated_waiting_time(case.tables, case.waiting_amount) == case.expected
 
 
-def test_entrance_message():
-    cases = (
-        EntranceCase(
-            customer_num=3,
-            num=1,
-            table_num=6,
-            expected="3번 손님이 6번 테이블에 앉습니다.\n3번 손님이 1번 요리(스테이크)를 주문합니다."
-        ),
-        EntranceCase(
-            customer_num=12,
-            num=4,
-            table_num=7,
-            expected="12번 손님이 7번 테이블에 앉습니다.\n12번 손님이 4번 요리(그라탱)를 주문합니다."
-        )
-    )
-    for case in cases:
-        assert entrance_message(case.customer_num, case.num, case.table_num) == case.expected
-
-
 def test_table_initialize():
     cases = (
         TableInitCase(
@@ -248,19 +229,6 @@ def test_order_initialize():
         )
     for case in cases:
         assert order_initialize(case.customer_num, case.num, case.table_idx) == case.expected
-
-
-def test_cooked():
-    cases = (
-        CookedCase(customer_num=5,
-                   num=2,
-                   expected="5번 손님의 2번 요리(스파게티) 조리가 끝났습니다.\n5번 손님이 식사를 시작합니다."),
-        CookedCase(customer_num=3,
-                   num=4,
-                   expected="3번 손님의 4번 요리(그라탱) 조리가 끝났습니다.\n3번 손님이 식사를 시작합니다.")
-            )
-    for case in cases:
-        assert cooked(case.customer_num, case.num) == case.expected
 
 
 def test_cooks_update():

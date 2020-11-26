@@ -3,11 +3,10 @@ from src.customer import Customer
 from src.table import TableManager
 from src.kitchen import Kitchen
 from src.bill import BillManager
-from dataclasses import dataclass
+from typing import NamedTuple
 
 
-@dataclass()
-class CustomerInfo:
+class CustomerInfo(NamedTuple):
     table_num: int = 0
     customer_num: int = 0
     food_num: int = 0
@@ -199,11 +198,6 @@ def available_table(tables):
     return 0
 
 
-def entrance_message(customer_num, num, table_num):
-    food_name = {1: "스테이크", 2: "스파게티", 3: "마카로니", 4: "그라탱"}
-    return f"{customer_num}번 손님이 {table_num}번 테이블에 앉습니다.\n{customer_num}번 손님이 {num}번 요리({food_name[num]})를 주문합니다."
-
-
 def table_initialize(customer_num, num):
     food_eating_time = {1: 30, 2: 20, 3: 15, 4: 10}
     return [False, food_eating_time[num]], customer_num
@@ -212,11 +206,6 @@ def table_initialize(customer_num, num):
 def order_initialize(customer_num, num, table_idx):
     food_cooking_time = {1: 30, 2: 20, 3: 10, 4: 15}
     return [food_cooking_time[num]], customer_num, num, table_idx
-
-
-def cooked(customer_num, num):
-    food_name = {1: "스테이크", 2: "스파게티", 3: "마카로니", 4: "그라탱"}
-    return f"{customer_num}번 손님의 {num}번 요리({food_name[num]}) 조리가 끝났습니다.\n{customer_num}번 손님이 식사를 시작합니다."
 
 
 def cooks_update(cooks):
@@ -266,11 +255,19 @@ class PrintOut:
         __class__.__queue = []
 
     @staticmethod
-    def add(msg):
-        __class__.__queue.append(msg)
+    def add(sign: str, info: tuple):
+        __class__.__queue.append((sign, info))
 
     @staticmethod
     def printout():
-        for msg in __class__.__queue:
-            print(msg)
+        messages = {'arrive': 'f"{info[0]}번째 손님이 시각 {info[1]}분에 레스토랑에 도착했습니다."',
+                    'back': 'f"손님이 기다릴 수 없어 돌아갑니다. 현재 대기 시간 {info[0]}분 / 대기 가능 시간 {info[1]}분"',
+                    'order_request': 'f"{info[0]}번 손님이 {info[1]}번 테이블에 앉습니다. {info[0]}번 손님이 {info[2]}번 요리({info[3]})를 주문합니다."',
+                    'start': 'f"{info[0]}번 손님의 {info[1]}번 요리({info[2]}) 조리가 끝났습니다. {info[0]}번 손님이 식사를 시작합니다."',
+                    'finish': 'f"{info}번 손님이 식사를 마쳤습니다. {info}번 손님이 계산대 앞에 줄을 섭니다."',
+                    'leave': 'f"{info}번 손님이 계산을 마치고 레스토랑을 떠났습니다."'
+                    }
+        for sign, info in __class__.__queue:
+            print(eval(messages[sign]))
+
     __queue = []
