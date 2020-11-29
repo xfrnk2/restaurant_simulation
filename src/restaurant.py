@@ -191,21 +191,21 @@ def estimated_waiting_time(tables, waiting_amount):
 
 
 def available_table(tables):
-
-    for idx, table in enumerate(tables):
-        if not table:
-            return idx+1
-    return 0
+    result = []
+    for key, value in tables.items():
+        if not value:
+            result.append(key)
+    return result
 
 
 def table_initialize(customer_num, num):
     food_eating_time = {1: 30, 2: 20, 3: 15, 4: 10}
-    return [False, food_eating_time[num]], customer_num
+    return [0, food_eating_time[num], customer_num]
 
 
 def order_initialize(customer_num, num, table_idx):
     food_cooking_time = {1: 30, 2: 20, 3: 10, 4: 15}
-    return [food_cooking_time[num], (customer_num, num, table_idx)]
+    return [food_cooking_time[num], customer_num, num, table_idx]
 
 
 def cooks_update(cooks):
@@ -229,21 +229,15 @@ def available_new_order(max_cooks_num, cooks_num, new_orders):
 
 
 def tables_update(tables):
-    finished_tables = []
+    finished = []
+    for i, table in enumerate(tables):
+        if table[0]:
+            tables[i][0] += 1
+            if table[1] < table[0]:
+                finished.append(table[2])
+                tables[i] = 0
 
-    _tables = tables[:]
-    idx = 0
-
-    for table in _tables:
-        if not table["is_eating"]:
-            idx += 1
-            continue
-        if 0 < table["eating_time"]:
-            table["eating_time"] -= 1
-        if table["eating_time"] <= 0:
-            finished_tables.append(tables.pop(idx)["customer_num"])
-
-    return tables, finished_tables
+    return tables, finished
 
 
 class PrintOut:
@@ -269,3 +263,6 @@ class PrintOut:
             print(eval(messages[sign]))
 
     __queue = []
+
+
+PrintOut.init()
