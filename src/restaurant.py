@@ -263,3 +263,24 @@ class PrintOut:
             print(eval(messages[sign]))
 
     __queue = []
+
+
+def simulate():
+    tick = 1
+    period = 10
+    number = 0
+    PrintOut.init()
+    waiting = []
+    tables = {i: 0 for i in range(1, 21)}
+
+    while tick <= 720:
+
+        tick += 1
+        if not tick % period:
+            number += 1
+            PrintOut.add('arrive', (number, tick))
+            if waiting_checker(tables=tables, waiting_amount=len(waiting), waitable_time=randrange(15, 41)):
+                waiting.append(number)
+            else:
+                PrintOut.add('back', (0, estimated_waiting_time(tables, len(waiting))))
+        PrintOut.printout()
