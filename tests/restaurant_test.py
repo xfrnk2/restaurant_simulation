@@ -126,37 +126,37 @@ def test_waiting_checker():
 def test_estimated_waiting_time():
     cases = (
         EstimatedTimeCase(
-            tables=[[10, 0, 0], [20, 0, 0], [30, 0, 0]],
+            tables={1: [10, 0, 0], 2: [20, 0, 0], 3: [30, 0, 0]},
             waiting_amount=2,
             expected="30분"
         ),
         EstimatedTimeCase(
-            tables=[[15, 0, 0], [20, 0, 0], [25, 0, 0], [30, 0, 0], [35, 0, 0]],
+            tables={1: [15, 0, 0], 2: [20, 0, 0], 3: [25, 0, 0], 4: [30, 0, 0], 5: [35, 0, 0]},
             waiting_amount=1,
             expected="20분"
         ),
         EstimatedTimeCase(
-            tables=[[21, 0, 0], [23, 0, 0], [30, 0, 0], [37, 0, 0], [40, 0, 0], [45, 0, 0]],
+            tables={1: [21, 0, 0], 2: [23, 0, 0], 3: [30, 0, 0], 4: [37, 0, 0], 5: [40, 0, 0], 6: [45, 0, 0]},
             waiting_amount=0,
             expected="21분"
         ),
         EstimatedTimeCase(
-            tables=[[21, 0, 0], [23, 0, 0], [30, 0, 0], [40, 0, 0], [45, 0, 0]],
+            tables={1: [21, 0, 0], 2: [23, 0, 0], 3: [30, 0, 0], 4: [40, 0, 0], 5: [45, 0, 0]},
             waiting_amount=10,
             expected="45분 이상"
         ),
         EstimatedTimeCase(
-            tables=[[0, 0, 0], [3, 0, 0], [4, 0, 0]],
+            tables={1: [0, 0, 0], 2: [3, 0, 0], 3: [4, 0, 0]},
             waiting_amount=2,
             expected="4분"
         ),
         EstimatedTimeCase(
-            tables=[[0, 0, 0], [1, 0, 0], [3, 0, 0], [4, 0, 0], [5, 0, 0]],
+            tables={1: [0, 0, 0], 2: [1, 0, 0], 3: [3, 0, 0], 4: [4, 0, 0], 5: [5, 0, 0]},
             waiting_amount=5,
             expected="5분 이상"
         ),
         EstimatedTimeCase(
-            tables=[[0, 0, 0], [1, 0, 0], [3, 0, 0], [4, 0, 0], [5, 0, 0], [15, 0, 0]],
+            tables={1: [0, 0, 0], 2: [1, 0, 0], 3: [3, 0, 0], 4: [4, 0, 0], 5: [5, 0, 0], 6: [15, 0, 0]},
             waiting_amount=15,
             expected="15분 이상"
         ),
@@ -187,11 +187,11 @@ def test_table_initialize():
 def test_available_table():
     cases = (
         AvailableTableCase(
-                           tables={1: 0, 2: 1, 3: 1, 4: 1, 5: 1},
+                           tables={1: [0, 0, 0], 2: 1, 3: 1, 4: 1, 5: 1},
                            expected=[1]
                           ),
         AvailableTableCase(
-                           tables={1: 1, 2: 0, 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: 0, 9: 1},
+                           tables={1: 1, 2: [0, 0, 0], 3: 1, 4: 1, 5: 1, 6: 1, 7: 1, 8: [0, 0, 0], 9: 1},
                            expected=[2, 8]
                           ),
         AvailableTableCase(
@@ -308,8 +308,8 @@ def test_tables_update():
                                 3: [21, 25, 4],
                                 4: [20, 20, 8],
                                 5: [30, 30, 7]},
-                        expected=({1: [],
-                                   2: [],
+                        expected=({1: [0, 0, 0],
+                                   2: [0, 0, 0],
                                    3: [20, 25, 4],
                                    4: [20, 20, 8],
                                    5: [30, 30, 7]},
