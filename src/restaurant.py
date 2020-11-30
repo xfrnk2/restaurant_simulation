@@ -186,7 +186,7 @@ def waiting_checker(tables, waiting_amount, waitable_time):
 
 def estimated_waiting_time(tables, waiting_amount):
     if waiting_amount < len(tables):
-        return f"{sorted(tables)[waiting_amount]}분"
+        return f"{sorted(tables, key=lambda x: x[0])[waiting_amount]}분"
     return f"{max(tables)}분 이상"
 
 
@@ -200,7 +200,7 @@ def available_table(tables):
 
 def table_initialize(customer_num, num):
     food_eating_time = {1: 30, 2: 20, 3: 15, 4: 10}
-    return [0, food_eating_time[num], customer_num]
+    return [food_eating_time[num], food_eating_time[num], customer_num]
 
 
 def order_initialize(customer_num, num, table_idx):
@@ -231,9 +231,9 @@ def available_new_order(max_cooks_num, cooks_num, new_orders):
 def tables_update(tables):
     finished = []
     for i, table in enumerate(tables):
-        if table[0]:
-            tables[i][0] += 1
-            if table[1] < table[0]:
+        if table[0] != table[1]:
+            tables[i][0] -= 1
+            if table[0] < 0:
                 finished.append(table[2])
                 tables[i] = 0
 
@@ -263,6 +263,3 @@ class PrintOut:
             print(eval(messages[sign]))
 
     __queue = []
-
-
-PrintOut.init()

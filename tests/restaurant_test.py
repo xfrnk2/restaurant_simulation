@@ -167,15 +167,15 @@ def test_table_initialize():
         TableInitCase(
             customer_num=1,
             num=2,
-            expected=[0, 20, 1]),
+            expected=[20, 20, 1]),
         TableInitCase(
             customer_num=4,
             num=4,
-            expected=[0, 10, 4]),
+            expected=[10, 10, 4]),
         TableInitCase(
              customer_num=7,
              num=1,
-             expected=[0, 30, 7])
+             expected=[30, 30, 7])
             )
     for case in cases:
         assert table_initialize(case.customer_num, case.num) == case.expected
@@ -300,16 +300,16 @@ def test_available_new_order():
 def test_tables_update():
     cases = (
         TableUpdateCase(
-                        tables=[[20, 20, 5],
-                                [26, 25, 2],
+                        tables=[[0, 20, 5],
+                                [-1, 25, 2],
                                 [21, 25, 4],
-                                [0, 20, 8],
-                                [0, 30, 7]],
+                                [20, 20, 8],
+                                [30, 30, 7]],
                         expected=([0,
                                    0,
-                                   [22, 25, 4],
-                                   [0, 20, 8],
-                                   [0, 30, 7]],
+                                   [20, 25, 4],
+                                   [20, 20, 8],
+                                   [30, 30, 7]],
                                   [5, 2])
                         ),
              )
