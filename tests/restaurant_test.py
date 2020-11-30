@@ -79,37 +79,40 @@ class TableUpdateCase:
 def test_waiting_checker():
 
     cases = (
-        WaitingCase(tables=[10, 20, 30],
+        WaitingCase(tables={1: [10, 0, 0], 2: [20, 0, 0], 3: [30, 0, 0]},
                     waiting_amount=2,
                     waitable_time=15,
                     expected=False,
                     desc="조건을 만족하는 테이블의 수(1)가 대기인원 수(2)보다 작지 않아 실패"
                     ),
-        WaitingCase(tables=[15, 20, 25, 30, 35],
+        WaitingCase(tables={1: [15, 0, 0], 2: [20, 0, 0], 3: [25, 0, 0], 4: [30, 0, 0], 5: [35, 0, 0]},
                     waiting_amount=1,
                     waitable_time=20,
                     expected=True,
                     desc="조건을 만족하는 테이블의 수(2)가 대기인원 수(1)보다 크지 않아 실패"
                     ),
-        WaitingCase(tables=[15, 21, 23, 30, 37, 40, 45],
+        WaitingCase(tables={1: [15, 0, 0], 2: [21, 0, 0], 3: [23, 0, 0], 4: [30, 0, 0], 5: [37, 0, 0], 6: [40, 0, 0],
+                            7: [45, 0, 0]},
                     waiting_amount=1,
                     waitable_time=41,
                     expected=True,
                     desc="조건을 만족하는 테이블의 수(6)가 대기인원 수(1)보다 크지 않아 실패"
                     ),
-        WaitingCase(tables=[15, 21, 23, 30, 37, 40, 45],
+        WaitingCase(tables={1: [15, 0, 0], 2: [21, 0, 0], 3: [23, 0, 0], 4: [30, 0, 0], 5: [37, 0, 0], 6: [40, 0, 0],
+                            7: [45, 0, 0]},
                     waiting_amount=0,
                     waitable_time=41,
                     expected=True,
                     desc="조건을 만족하는 테이블의 수(6)가 대기인원 수(0)보다 크지 않아 실패"
                     ),
-        WaitingCase(tables=[21, 23, 30, 37, 40, 45],
+        WaitingCase(tables={1: [21, 0, 0], 2: [23, 0, 0], 3: [30, 0, 0], 4: [37, 0, 0], 5: [40, 0, 0], 6: [45, 0, 0]},
                     waiting_amount=0,
                     waitable_time=15,
                     expected=False,
                     desc="조건을 만족하는 테이블의 수(0)가 대기인원 수(0)보다 작거나 같지 않아 실패"
                     ),
-        WaitingCase(tables=[0, 21, 23, 30, 37, 40, 45],
+        WaitingCase(tables={1: [0, 0, 0], 2: [21, 0, 0], 3: [23, 0, 0], 4: [30, 0, 0], 5: [37, 0, 0], 6: [40, 0, 0],
+                            7: [45, 0, 0]},
                     waiting_amount=3,
                     waitable_time=21,
                     expected=False,
@@ -123,37 +126,37 @@ def test_waiting_checker():
 def test_estimated_waiting_time():
     cases = (
         EstimatedTimeCase(
-            tables=[10, 20, 30],
+            tables=[[10, 0, 0], [20, 0, 0], [30, 0, 0]],
             waiting_amount=2,
             expected="30분"
         ),
         EstimatedTimeCase(
-            tables=[15, 20, 25, 30, 35],
+            tables=[[15, 0, 0], [20, 0, 0], [25, 0, 0], [30, 0, 0], [35, 0, 0]],
             waiting_amount=1,
             expected="20분"
         ),
         EstimatedTimeCase(
-            tables=[21, 23, 30, 37, 40, 45],
+            tables=[[21, 0, 0], [23, 0, 0], [30, 0, 0], [37, 0, 0], [40, 0, 0], [45, 0, 0]],
             waiting_amount=0,
             expected="21분"
         ),
         EstimatedTimeCase(
-            tables=[21, 23, 30, 40, 45],
+            tables=[[21, 0, 0], [23, 0, 0], [30, 0, 0], [40, 0, 0], [45, 0, 0]],
             waiting_amount=10,
             expected="45분 이상"
         ),
         EstimatedTimeCase(
-            tables=[0, 3, 4],
+            tables=[[0, 0, 0], [3, 0, 0], [4, 0, 0]],
             waiting_amount=2,
             expected="4분"
         ),
         EstimatedTimeCase(
-            tables=[0, 1, 3, 4, 5],
+            tables=[[0, 0, 0], [1, 0, 0], [3, 0, 0], [4, 0, 0], [5, 0, 0]],
             waiting_amount=5,
             expected="5분 이상"
         ),
         EstimatedTimeCase(
-            tables=[0, 1, 3, 4, 5, 15],
+            tables=[[0, 0, 0], [1, 0, 0], [3, 0, 0], [4, 0, 0], [5, 0, 0], [15, 0, 0]],
             waiting_amount=15,
             expected="15분 이상"
         ),
@@ -300,23 +303,18 @@ def test_available_new_order():
 def test_tables_update():
     cases = (
         TableUpdateCase(
-                        tables=[[0, 20, 5],
-                                [-1, 25, 2],
-                                [21, 25, 4],
-                                [20, 20, 8],
-                                [30, 30, 7]],
-                        expected=([0,
-                                   0,
-                                   [20, 25, 4],
-                                   [20, 20, 8],
-                                   [30, 30, 7]],
+                        tables={1: [0, 20, 5],
+                                2: [-1, 25, 2],
+                                3: [21, 25, 4],
+                                4: [20, 20, 8],
+                                5: [30, 30, 7]},
+                        expected=({1: [],
+                                   2: [],
+                                   3: [20, 25, 4],
+                                   4: [20, 20, 8],
+                                   5: [30, 30, 7]},
                                   [5, 2])
                         ),
              )
     for case in cases:
         assert tables_update(case.tables) == case.expected
-
-
-waiting = [1, 2, 3]
-b = {i: table for i, table in zip(range(1, 21), [0]*20)}
-print(b)
