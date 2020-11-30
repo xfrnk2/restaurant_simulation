@@ -178,22 +178,22 @@ class Restaurant:
 
 def waiting_checker(tables, waiting_amount, waitable_time):
 
-    for time in tables:
-        if time <= waitable_time:
+    for table in tables.values():
+        if table[0] <= waitable_time:
             waiting_amount -= 1
     return waiting_amount < 0
 
 
 def estimated_waiting_time(tables, waiting_amount):
     if waiting_amount < len(tables):
-        return f"{sorted(tables, key=lambda x: x[0])[waiting_amount]}분"
-    return f"{max(tables)}분 이상"
+        return f"{sorted(tables.values(), key=lambda x: x[0])[waiting_amount][0]}분"
+    return f"{max(tables.values(), key=lambda x: x[0])[0]}분 이상"
 
 
 def available_table(tables):
     result = []
     for key, value in tables.items():
-        if not value:
+        if value == [0, 0, 0]:
             result.append(key)
     return result
 
@@ -230,12 +230,12 @@ def available_new_order(max_cooks_num, cooks_num, new_orders):
 
 def tables_update(tables):
     finished = []
-    for i, table in enumerate(tables):
+    for i, table in tables.items():
         if table[0] != table[1]:
             tables[i][0] -= 1
             if table[0] < 0:
                 finished.append(table[2])
-                tables[i] = 0
+                tables[i] = [0, 0, 0]
 
     return tables, finished
 
@@ -247,20 +247,22 @@ class PrintOut:
         __class__.__queue = []
 
     @staticmethod
-    def add(sign: str, info: tuple):
+    def add(sign: str, info: tuple or int):
         __class__.__queue.append((sign, info))
 
     @staticmethod
     def printout():
         messages = {'arrive': 'f"{info[0]}번째 손님이 시각 {info[1]}분에 레스토랑에 도착했습니다."',
-                    'back': 'f"손님이 기다릴 수 없어 돌아갑니다. 현재 대기 시간 {info[0]}분 / 대기 가능 시간 {info[1]}분"',
+                    'back': 'f"손님이 기다릴 수 없어 돌아갑니다. 현재 대기 시간 {info[0]} / 대기 가능 시간 {info[1]}"',
                     'order_request': 'f"{info[0]}번 손님이 {info[1]}번 테이블에 앉습니다. {info[0]}번 손님이 {info[2]}번 요리({info[3]})를 주문합니다."',
                     'start': 'f"{info[0]}번 손님의 {info[1]}번 요리({info[2]}) 조리가 끝났습니다. {info[0]}번 손님이 식사를 시작합니다."',
                     'finish': 'f"{info}번 손님이 식사를 마쳤습니다. {info}번 손님이 계산대 앞에 줄을 섭니다."',
-                    'leave': 'f"{info}번 손님이 계산을 마치고 레스토랑을 떠났습니다."'
+                    'leave': 'f"{info}번 손님이 계산을 마치고 레스토랑을 떠났습니다."',
+                    'now': 'f"현재시각{info}분"'
                     }
         for sign, info in __class__.__queue:
             print(eval(messages[sign]))
+        __class__.__queue = []
 
     __queue = []
 
@@ -271,16 +273,69 @@ def simulate():
     number = 0
     PrintOut.init()
     waiting = []
-    tables = {i: 0 for i in range(1, 21)}
+    tables = {i: [0, 0, 0] for i in range(1, 21)}
+    bill = []
+    is_billing = False
+    bill_count = 5
+    max_cook_num = 3
+    cooks = []
+    orders = []
+    food_name = {1: "스테이크", 2: "스파게티", 3: "마카로니", 4: "그라탱"}
 
     while tick <= 720:
 
         tick += 1
+
+        tables, finished = tables_update(tables)
+        if finished:
+            for customer in finished:
+                bill.append(customer)
+                PrintOut.add('finish', customer)
+                PrintOut.add('now', tick)
+        if is_billing:
+            bill_count -= 1
+            if bill_count <= 0:
+                PrintOut.add('leave', bill.pop(0))
+                PrintOut.add('now', tick)
+                bill_count = 5
+                is_billing = not is_billing
+
+        if bill and is_billing is False:
+            bill_count = 5
+            is_billing = True
+
+        cooks, cooked = cooks_update(cooks)
+        for order in cooked:
+            tables[order[3]][0] -= 1
+            PrintOut.add('start', order[1:])
+            PrintOut.add('now', tick)
+
         if not tick % period:
             number += 1
             PrintOut.add('arrive', (number, tick))
+            PrintOut.add('now', tick)
             if waiting_checker(tables=tables, waiting_amount=len(waiting), waitable_time=randrange(15, 41)):
                 waiting.append(number)
             else:
-                PrintOut.add('back', (0, estimated_waiting_time(tables, len(waiting))))
+                PrintOut.add('back', ('0분', estimated_waiting_time(tables, len(waiting))))
+                PrintOut.add('now', tick)
+
+        if waiting:
+            sittable_table = available_table(tables)
+
+            while waiting and sittable_table:
+                customer = waiting.pop(0)
+                food = randrange(1, 5)
+                table_num = sittable_table.pop(0)
+                tables[table_num] = table_initialize(customer, food)
+                orders.append(order_initialize(customer, food, table_num))
+                PrintOut.add('order_request', (customer, table_num, food, food_name[food]))
+                PrintOut.add('now', tick)
+
+        for _ in range(available_new_order(max_cook_num, len(cooks), len(orders))):
+            cooks.append(orders.pop(0))
+
         PrintOut.printout()
+
+
+simulate()
