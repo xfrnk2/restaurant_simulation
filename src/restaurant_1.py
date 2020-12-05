@@ -46,8 +46,6 @@ class PrintOut:
     __queue = []
     __messages = {}
     food_name = {1: "스테이크", 2: "스파게티", 3: "마카로니", 4: "그라탱"}
-class Operation:
-    pass
 
 
 class Bill:

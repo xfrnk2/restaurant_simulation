@@ -1,15 +1,52 @@
 from collections import namedtuple
-
+from random import randrange
 CustomerInfo = namedtuple('CustomerInfo', 'number, table, food')
 
+class Default:
+    def __init__(self):
+        self.__time = 0
 
+    @property
+    def time(self):
+        return self.__time
+
+
+class PrintOut:
+    @staticmethod
+    def init():
+        __class__.__queue = []
+        __class__.__messages = {'arrive': 'f"{info[0]}번째 손님이 시각 {info[1]}분에 레스토랑에 도착했습니다."',
+                'back': 'f"손님이 기다릴 수 없어 돌아갑니다. 현재 대기 시간 {info[0]} / 대기 가능 시간 {info[1]}"',
+                'order_request': 'f"{info[0]}번 손님이 {info[1]}번 테이블에 앉습니다. {info[0]}번 손님이 {info[2]}번 요리({__class__.food_name[info[2]]})를 주문합니다."',
+                'start': 'f"{info[0]}번 손님의 {info[1]}번 요리({__class__.food_name[info[1]]}) 조리가 끝났습니다. {info[0]}번 손님이 식사를 시작합니다."',
+                'finish': 'f"{info}번 손님이 식사를 마쳤습니다. {info}번 손님이 계산대 앞에 줄을 섭니다."',
+                'leave': 'f"{info}번 손님이 계산을 마치고 레스토랑을 떠났습니다."',
+                'now': 'f"현재시각{info}분"'
+                }
+    @staticmethod
+    def add(sign: str, info: tuple or int):
+        __class__.__queue.append((sign, info))
+
+    @staticmethod
+    def printout():
+        if not __class__.__queue:
+            return
+
+        for sign, info in __class__.__queue:
+            print(eval(__class__.__messages[sign]))
+        __class__.__queue = []
+
+    __queue = []
+    __messages = {}
+    food_name = {1: "스테이크", 2: "스파게티", 3: "마카로니", 4: "그라탱"}
 
 
 class Customer:
 
-    def __init__(self, number, table, food, time):
-        self.__info = CustomerInfo(number = number, table = table, food = food)
-        self.__time = time
+    def __init__(self, info : CustomerInfo, eating_time, total_time):
+        self.__info = info
+        self.__time = total_time
+        self.__eating_time = eating_time
         self.__eating = False
 
     @property
@@ -26,22 +63,58 @@ class Customer:
 
     def __update(self):
         self.__time -= 1
-        return self.__time < 0
+        if self.__eating:
+            return self.__time < 0
 
-    def __change_status(self, time):
-        self.__time = time
+        if self.__time <= self.__eating_time:
+            self.__change_status()
+        return False
+
+    def __change_status(self):
         self.__eating = not self.__eating
 
+
+class Cook:
+    def __init__(self):
+
+        self.order = []
+        self.cooks = []
+
+    def waiting_time(self):
+#order 구조는 [cooking_time, table number]
+        result = 0
+        if self.order:
+            order, cooks = self.order, self.cooks
+            order.append(0)
+            while order and cooks:
+                cooks.sort()
+                target = cooks.pop(0)
+                result += target
+                cooks = [i - target for i in cooks] #map 가능?
+                cooks.append(order.pop(0))
+        return result
+
+    def available_new_order(self):
+        order_num, cook_num = len(self.order), 3 - len(self.cooks)
+        if order_num < cook_num:
+            return order_num
+        return cook_num
+
+    def update(self):
+        cooks = list(map(lambda x: x - 1, self.cooks))
+        self.cooks = list(filter(lambda x: 0 < x, cooks))
+        self.cooks += self.order[:self.available_new_order()] #error 발생 주의?
+
+    def new_order(self, order):
+        cooking_time = {1: 30, 2: 20, 3: 10, 4: 15}
+        self.order.append(cooking_time[order])
 
 class Table:
 
     def __init__(self, amount):
-        self.table = {i: j for i, j in zip(range(1, amount + 1), [None] * amount)}
-        self.__cooking_time = {1: 30, 2: 20, 3: 10, 4: 15}
-        self.__eating_time = {1: 30, 2: 20, 3: 15, 4: 10}
-        self.__cook = []
+        self.table = {i: j for i, j in zip(range(1, amount + 1), [Default] * amount)}
 
-    def __update(self):
+    def update(self):
         finish = []
 
         for i in self.table.keys():
@@ -49,12 +122,9 @@ class Table:
                 continue
 
             if self.table[i].__update():
-                if not self.table[i].dish:
-                    time = self.__eating_time[self.table[i].info.food]
-                    self.table[i].__change_status(time)
-                    continue
-
                 finish.append(self.table[i].info.number)
+                #출력 필요(식사완료)
+                self.table[i] = Default()
 
         return finish
 
@@ -70,8 +140,6 @@ class LogicTable:
     def __init__(self, amount):
         self.__table = Table(amount)
         self.__current_waitable_time = 0
-        self.__cooking_time = {1: 30, 2: 20, 3: 10, 4: 15}
-        self.__eating_time = {1: 30, 2: 20, 3: 15, 4: 10}
 
     @property
     def table(self):
@@ -88,30 +156,83 @@ class LogicTable:
             return True
 
         if waiting_amount - len(available) < len(self.__table.table):
-            self.__current_waitable_time = available[waiting_amount].time
+            if waiting_amount:
+                self.__current_waitable_time = available[waiting_amount].time
         else:
             self.__current_waitable_time = available[-1].time
         return False
 
 
-
-
-
-
-
-
-
 class Bill:
     def __init__(self):
-        self.__waiting = []
+        self.waiting = []
         self.__time = 5
 
     def new(self, customer: int):
-        self.__waiting.append(customer)
+        self.waiting.append(customer)
 
-    def __update(self):
+    def update(self):
+        if not self.waiting:
+            return
         self.__time -= 1
         if self.__time < 0:
             self.__time = 5
-            self.__waiting.pop(0)
+            self.waiting.pop(0)
             #문구
+
+
+class Management:
+    def __init__(self):
+        self.__customer_number = 0
+        self.table = LogicTable(20)
+        self.waiting = []
+        self.bill = Bill()
+        self.cook = Cook()
+        self.cooking_time = {1: 30, 2: 20, 3: 10, 4: 15}
+        self.eating_time = {1: 30, 2: 20, 3: 15, 4: 10}
+        self.time = 0
+
+    def new_customer(self):
+        time = randrange(15, 41)
+        if self.table.is_waitable(waitable_time=time, waiting_amount=len(self.waiting)):
+            self.__customer_number += 1
+            self.waiting.append(self.__customer_number)
+            #새 손님 도착
+            PrintOut.add('arrive', (self.__customer_number, self.time))
+            return
+        PrintOut.add('back', (self.table.waitable_time, time))
+        #손님 퇴장, 기다릴 시간 구하여 출력
+
+
+    def update(self): # waiting update
+        #table 업데이트
+        self.bill.waiting.extend(self.table.table.update())
+        self.bill.update()
+        self.cook.update()
+
+
+        sittable = self.table.table.empty()
+        while self.waiting and sittable:
+            table_num, food_num = sittable.pop(0), randrange(1, 5)
+            info = CustomerInfo(self.waiting.pop(0), table_num, food_num)
+            total_time = self.cook.waiting_time() + self.eating_time[food_num] + self.cooking_time[food_num]
+            self.table.table.table[table_num] = info, self.eating_time[food_num], total_time
+            self.cook.new_order(food_num)
+
+
+        #         PrintOut.add('order_request', (customer, table_num, food))
+
+    def run(self):
+        PrintOut.init()
+        period = 10
+        self.time = 0
+        while self.time < 720:
+            self.time += 1
+            if not self.time % period:
+                self.new_customer()
+            self.update()
+            PrintOut.printout()
+
+
+a = Management()
+a.run()
