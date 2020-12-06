@@ -1,8 +1,8 @@
 
 
 class PrintOut:
-    @staticmethod
-    def init():
+    @classmethod
+    def init(cls):
         __class__.__queue = []
         __class__.__messages = {
             'arrive': 'f"{info[0]}번째 손님이 시각 {info[1]}분에 레스토랑에 도착했습니다."',
@@ -14,12 +14,12 @@ class PrintOut:
             'now': 'f"[현재시각 : {info}분]"'
             }
 
-    @staticmethod
-    def add(sign: str, info: tuple or int):
+    @classmethod
+    def add(cls, sign: str, info: tuple or int):
         __class__.__queue.append((sign, info))
 
-    @staticmethod
-    def printout():
+    @classmethod
+    def printout(cls):
         if not __class__.__queue:
             return
 
