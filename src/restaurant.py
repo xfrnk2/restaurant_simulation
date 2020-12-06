@@ -40,7 +40,7 @@ class Restaurant:
             cooking_time = self.cooking_time[food_num]
 
             total_time = self.__cook.waiting_time() + self.eating_time[food_num] + cooking_time
-            self.__cook.order.append(cooking_time)
+            self.__cook.order_time.append(cooking_time)
             self.__table.table[table_num] = Customer(info, self.eating_time[food_num], total_time)
 
             PrintOut.add('order_request', info)

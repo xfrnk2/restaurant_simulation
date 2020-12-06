@@ -3,31 +3,31 @@
 class Cook:
     def __init__(self):
 
-        self.order = []
-        self.cooks = []
+        self.order_time = []
+        self.cooks_time = []
 
     def waiting_time(self):
         result = 0
-        if self.order:
-            order, cooks = self.order, self.cooks
-            order.append(0)
-            while order and cooks:
-                cooks.sort()
-                target = cooks.pop(0)
-                result += target
-                cooks = list(map(lambda x: x - target, cooks))
-                cooks.append(order.pop(0))
+        if self.order_time:
+            order_time, cooks_time = self.order_time, self.cooks_time
+            order_time.append(0)
+            while order_time and cooks_time:
+                cooks_time.sort()
+                target_time = cooks_time.pop(0)
+                result += target_time
+                cooks_time = list(map(lambda cook_time: cook_time - target_time, cooks_time))
+                cooks_time.append(order_time.pop(0))
         return result
 
     def available_new_order(self) -> int:
-        order_num, cook_num = len(self.order), 3 - len(self.cooks)
+        order_num, cook_num = len(self.order_time), 3 - len(self.cooks_time)
         if order_num < cook_num:
             return order_num
         return cook_num
 
     def update(self):
-        cooks = list(map(lambda x: x - 1, self.cooks))
-        self.cooks = list(filter(lambda x: 0 < x, cooks))
+        cooks = list(map(lambda cook_time: cook_time - 1, self.cooks_time))
+        self.cooks_time = list(filter(lambda cook_time: 0 < cook_time, cooks))
         pivot = self.available_new_order()
-        self.cooks += self.order[:pivot]
-        self.order = self.order[pivot:]
+        self.cooks_time += self.order_time[:pivot]
+        self.order_time = self.order_time[pivot:]

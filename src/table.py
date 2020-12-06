@@ -38,7 +38,7 @@ class Table:
         return False
 
     def empty(self):
-        return list(filter(lambda key: isinstance(self.table[key], Default), self.table.keys()))
+        return list(filter(lambda table_num: isinstance(self.table[table_num], Default), self.table.keys()))
 
     def update(self):
         finish = []
