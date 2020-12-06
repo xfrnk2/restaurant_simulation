@@ -1,37 +1,39 @@
 from src.customer import Customer, CustomerInfo
-import pytest
 import sys
+import pytest
 sys.path.append('C:/Users/rad87/Documents/programming/restaurant_simulation')
 
+first_cases = (
+    (CustomerInfo(2, 3, 4), 0, 10),
+    (CustomerInfo(4, 5, 1), 0, 30),
+              )
 
-@pytest.fixture
-def customer():
-    return Customer(CustomerInfo(2, 3, 4), 0, 40)
-
-
-@pytest.fixture
-def customer_update_cases():
-    cases = [Customer(CustomerInfo(2, 3, 4), 0, 40),
-             Customer(CustomerInfo(5, 6, 7), 50, 40)
-             ]
-
-    another_case = Customer(CustomerInfo(8, 9, 10), 1, 25)
-    another_case.update()
-
-    return *cases, another_case
+second_cases = (
+    (CustomerInfo(4, 5, 1), 29, 30),
+    (CustomerInfo(5, 6, 7), 50, 40),
+    (CustomerInfo(1, 2, 3), 25, 9),
+    (CustomerInfo(1, 2, 3), 25, 0),
+                )
 
 
-def test_customer_init(customer):
+@pytest.mark.parametrize("info,eating_time,total_time", (*first_cases, *second_cases))
+def test_customer_init(info, eating_time, total_time):
+    assert Customer(info, eating_time, total_time).time == total_time
+    assert Customer(info, eating_time, total_time).info == info
+    assert not Customer(info, eating_time, total_time).dish
 
-    assert customer.time == 40
-    assert customer.info == (2, 3, 4)
+
+@pytest.mark.parametrize("info,eating_time,total_time", first_cases)
+def test_customer_update(info, eating_time, total_time):
+    customer = Customer(info, eating_time, total_time)
+    customer.update()
+    customer.update()
     assert not customer.dish
 
 
-def test_customer_update(customer_update_cases):
-    for case in customer_update_cases:
-        case.update()
-        if case.time <= case.eating_time:
-            assert case.dish
-        else:
-            assert not case.dish
+@pytest.mark.parametrize("info,eating_time,total_time", second_cases)
+def test_customer_update2(info, eating_time, total_time):
+    customer = Customer(info, eating_time, total_time)
+    customer.update()
+    customer.update()
+    assert customer.dish
