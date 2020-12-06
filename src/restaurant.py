@@ -10,7 +10,7 @@ class Restaurant:
     def __init__(self):
         self.__customer_number = 0
         self.__table = Table(20)
-        self.__waiting = []
+        self.waiting = []
         self.__bill = Bill()
         self.__cook = Cook()
 
@@ -20,12 +20,12 @@ class Restaurant:
 
     def new_customer(self):
         time = randrange(15, 41)
-        if not self.__table.is_waitable(waitable_time=time, waiting_amount=len(self.__waiting)):
+        if not self.__table.is_waitable(waitable_time=time, waiting_amount=len(self.waiting)):
             PrintOut.add('back', (self.__table.waitable_time, time))
             return
 
         self.__customer_number += 1
-        self.__waiting.append(self.__customer_number)
+        self.waiting.append(self.__customer_number)
         PrintOut.add('arrive', (self.__customer_number, self.time))
 
     def update(self):
@@ -34,9 +34,9 @@ class Restaurant:
         self.__cook.update()
 
         sittable = self.__table.empty()
-        while self.__waiting and sittable:
+        while self.waiting and sittable:
             table_num, food_num = sittable.pop(0), randrange(1, 5)
-            info = CustomerInfo(self.__waiting.pop(0), table_num, food_num)
+            info = CustomerInfo(self.waiting.pop(0), table_num, food_num)
             cooking_time = self.cooking_time[food_num]
 
             total_time = self.__cook.waiting_time() + self.eating_time[food_num] + cooking_time
