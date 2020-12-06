@@ -2,16 +2,16 @@ from src.printout import PrintOut
 from collections import namedtuple
 
 
-CustomerInfo = namedtuple('CustomerInfo', 'number, table, food')
+CustomerInfo = namedtuple('CustomerInfo', 'number, table, food', defaults=[0, 0, 0])
 
 
 class Customer:
 
-    def __init__(self, info: CustomerInfo, eating_time, total_time):
+    def __init__(self, info: CustomerInfo, eating_time=0, total_time=0):
         self.__info = info
         self.__time = total_time
-        self.__eating_time = eating_time
-        self.__eating = False
+        self.eating_time = eating_time
+        self.eating = False
 
     @property
     def info(self):
@@ -19,7 +19,7 @@ class Customer:
 
     @property
     def dish(self):
-        return self.__eating
+        return self.eating
 
     @property
     def time(self):
@@ -27,13 +27,13 @@ class Customer:
 
     def update(self):
         self.__time -= 1
-        if self.__eating:
+        if self.eating:
             return self.__time <= 0
 
-        if self.__time <= self.__eating_time:
+        if self.__time <= self.eating_time:
             self.__change_status()
         return False
 
     def __change_status(self):
-        self.__eating = not self.__eating
+        self.eating = not self.eating
         PrintOut.add('start', self.info)
