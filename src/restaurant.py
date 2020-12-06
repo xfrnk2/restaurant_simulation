@@ -97,7 +97,7 @@ class Cook:
                 cooks.sort()
                 target = cooks.pop(0)
                 result += target
-                cooks = list(map(lambda x: x - target, cooks))#[i - target for i in cooks]
+                cooks = list(map(lambda x: x - target, cooks))
                 cooks.append(order.pop(0))
         return result
 
@@ -111,12 +111,13 @@ class Cook:
         cooks = list(map(lambda x: x - 1, self.cooks))
         self.cooks = list(filter(lambda x: 0 < x, cooks))
         pivot = self.available_new_order()
-        self.cooks += self.order[:pivot] #error 발생 주의?
+        self.cooks += self.order[:pivot]
         self.order = self.order[pivot:]
 
     def new_order(self, order):
         cooking_time = {1: 30, 2: 20, 3: 10, 4: 15}
         self.order.append(cooking_time[order])
+
 
 class Table:
 
@@ -135,9 +136,6 @@ class Table:
                 self.table[i] = Default()
                 finish.append(customer_num)
                 PrintOut.add('finish', customer_num)
-
-
-
         return finish
 
     def empty(self):
@@ -162,7 +160,8 @@ class LogicTable:
         return self.__current_waitable_time
 
     def is_waitable(self, waitable_time, waiting_amount):
-        available = [customer.time for customer in self.__table.table.values() if isinstance(customer, Default) or customer.time <= waitable_time]
+        available = [customer.time for customer in self.__table.table.values()
+                     if isinstance(customer, Default) or customer.time <= waitable_time]
 
         if waiting_amount - len(available) < 0:
             return True
@@ -191,7 +190,6 @@ class Bill:
         if self.__time < 0:
             self.__time = 5
             PrintOut.add('leave', self.waiting.pop(0))
-            #문구
 
 
 class Management:
@@ -210,19 +208,14 @@ class Management:
         if self.table.is_waitable(waitable_time=time, waiting_amount=len(self.waiting)):
             self.__customer_number += 1
             self.waiting.append(self.__customer_number)
-            #새 손님 도착
             PrintOut.add('arrive', (self.__customer_number, self.time))
             return
         PrintOut.add('back', (self.table.waitable_time, time))
-        #손님 퇴장, 기다릴 시간 구하여 출력
 
-
-    def update(self): # waiting update
-        #table 업데이트
+    def update(self):
         self.bill.waiting.extend(self.table.table.update())
         self.bill.update()
         self.cook.update()
-
 
         sittable = self.table.table.empty()
         while self.waiting and sittable:
@@ -237,7 +230,7 @@ class Management:
         PrintOut.init()
         period = 2
         self.time = 1
-        while self.time < 720:
+        while self.time <= 720:
 
             PrintOut.add('now', self.time)
             if not self.time % period:
