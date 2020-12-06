@@ -8,9 +8,6 @@ class Default:
     def __init__(self):
         self.__time = sys.maxsize
 
-    def __update(self):
-        return False
-
     @property
     def time(self):
         return self.__time
@@ -101,7 +98,7 @@ class Cook:
                 cooks.append(order.pop(0))
         return result
 
-    def available_new_order(self):
+    def available_new_order(self) -> int:
         order_num, cook_num = len(self.order), 3 - len(self.cooks)
         if order_num < cook_num:
             return order_num
@@ -113,10 +110,6 @@ class Cook:
         pivot = self.available_new_order()
         self.cooks += self.order[:pivot]
         self.order = self.order[pivot:]
-
-    def new_order(self, order):
-        cooking_time = {1: 30, 2: 20, 3: 10, 4: 15}
-        self.order.append(cooking_time[order])
 
 
 class Table:
@@ -138,13 +131,6 @@ class Table:
                 PrintOut.add('finish', customer_num)
         return finish
 
-    def empty(self):
-        empty = []
-        for key in self.table.keys():
-            if isinstance(self.table[key], Default):
-                empty.append(key)
-        return empty
-
 
 class LogicTable:
     def __init__(self, amount):
@@ -160,28 +146,29 @@ class LogicTable:
         return self.__current_waitable_time
 
     def is_waitable(self, waitable_time, waiting_amount):
-        available = [customer.time for customer in self.__table.table.values()
-                     if isinstance(customer, Default) or customer.time <= waitable_time]
+        entire_table = self.__table.table.values()
+        valid_table = tuple(filter(lambda customer: isinstance(customer, Default) or customer.time <= waitable_time,
+                                  entire_table))
+        condition = waiting_amount - len(valid_table)
 
-        if waiting_amount - len(available) < 0:
+        if condition < 0:
             return True
 
-        entire_table = sorted([customer.time for customer in self.__table.table.values()])
-        if waiting_amount - len(available) < len(self.__table.table):
-            if waiting_amount:
-                self.__current_waitable_time = entire_table[waiting_amount]
+        entire_table = sorted([customer.time for customer in entire_table])
+        if condition < len(self.__table.table):
+            self.__current_waitable_time = entire_table[waiting_amount]
         else:
             self.__current_waitable_time = entire_table[-1]
         return False
+
+    def empty(self):
+        return list(filter(lambda key: isinstance(self.__table.table[key], Default), self.__table.table.keys()))
 
 
 class Bill:
     def __init__(self):
         self.waiting = []
         self.__time = 5
-
-    def new(self, customer: int):
-        self.waiting.append(customer)
 
     def update(self):
         if not self.waiting:
@@ -205,32 +192,37 @@ class Management:
 
     def new_customer(self):
         time = randrange(15, 41)
-        if self.table.is_waitable(waitable_time=time, waiting_amount=len(self.waiting)):
-            self.__customer_number += 1
-            self.waiting.append(self.__customer_number)
-            PrintOut.add('arrive', (self.__customer_number, self.time))
+        if not self.table.is_waitable(waitable_time=time, waiting_amount=len(self.waiting)):
+            PrintOut.add('back', (self.table.waitable_time, time))
             return
-        PrintOut.add('back', (self.table.waitable_time, time))
+
+        self.__customer_number += 1
+        self.waiting.append(self.__customer_number)
+        PrintOut.add('arrive', (self.__customer_number, self.time))
+
 
     def update(self):
         self.bill.waiting.extend(self.table.table.update())
         self.bill.update()
         self.cook.update()
 
-        sittable = self.table.table.empty()
+        sittable = self.table.empty()
         while self.waiting and sittable:
             table_num, food_num = sittable.pop(0), randrange(1, 5)
             info = CustomerInfo(self.waiting.pop(0), table_num, food_num)
-            total_time = self.cook.waiting_time() + self.eating_time[food_num] + self.cooking_time[food_num]
+            cooking_time = self.cooking_time[food_num]
+
+            total_time = self.cook.waiting_time() + self.eating_time[food_num] + cooking_time
+            self.cook.order.append(cooking_time)
             self.table.table.table[table_num] = Customer(info, self.eating_time[food_num], total_time)
-            self.cook.new_order(food_num)
+
             PrintOut.add('order_request', info)
 
     def run(self):
         PrintOut.init()
         period = 2
         self.time = 1
-        while self.time <= 720:
+        while self.time < 721:
 
             PrintOut.add('now', self.time)
             if not self.time % period:
