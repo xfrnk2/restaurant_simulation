@@ -1,54 +1,55 @@
+from src.printout import PrintOut
 from src.customer import Customer
+import sys
 
 
-class TableManager:
-
-    def __init__(self, table_amount: int):
-        self.__table_queue = [0] * table_amount
-        self.__finished_eating_queue = []
+class Default:
+    def __init__(self):
+        self.__time = sys.maxsize
 
     @property
-    def finished_eating_queue(self):
-        return self.__finished_eating_queue
+    def time(self):
+        return self.__time
 
-    def get_table_queue(self):
-        return self.__table_queue
 
-    def is_exist(self) -> bool:
-        return any(self.__table_queue)
+class Table:
+    def __init__(self, amount):
+        self.table = {i: j for i, j in zip(range(1, amount + 1), [Default()] * amount)}
+        self.__current_waitable_time = 0
 
-    def set_customer(self, customer: Customer):
+    @property
+    def waitable_time(self):
+        return self.__current_waitable_time
 
-        for table_number, table in enumerate(self.__table_queue):
-            if not table:
-                self.__table_queue[table_number] = customer
-                return table_number
+    def is_waitable(self, waitable_time, waiting_amount):
+        entire_table = self.table.values()
+        valid_table = tuple(filter(lambda customer: isinstance(customer, Default) or customer.time <= waitable_time,
+                                   entire_table))
+        condition = waiting_amount - len(valid_table)
 
-    def getting_food(self, table_num: int):
+        if condition < 0:
+            return True
 
-        print(f"{self.__table_queue[table_num].number}번 손님이 식사를 시작합니다.")
-        self.__table_queue[table_num].change_status_is_eating()
+        entire_table = sorted([customer.time for customer in entire_table])
+        if condition < len(self.table):
+            self.__current_waitable_time = entire_table[waiting_amount]
+        else:
+            self.__current_waitable_time = entire_table[-1]
+        return False
 
-    def is_acceptable(self) -> bool:
-        return not all(self.__table_queue)
+    def empty(self):
+        return list(filter(lambda key: isinstance(self.table[key], Default), self.table.keys()))
 
     def update(self):
+        finish = []
 
-        target_customer_queue = []
+        for i in self.table.keys():
+            if not isinstance(self.table[i], Customer):
+                continue
 
-        for num in range(len(self.__table_queue)):
-
-            if isinstance(self.__table_queue[num], Customer):
-
-                customer = self.__table_queue[num]
-                customer.update()
-
-                if customer.check_eating_status:
-                    print(f"{num}번 테이블에 앉아있는 {customer.number}번"
-                          f" 손님이 식사를 마쳤습니다.")
-
-                    customer.change_status_is_eating()
-                    target_customer_queue.append(customer)
-                    self.__table_queue[num] = 0
-
-        self.__finished_eating_queue = target_customer_queue
+            if self.table[i].update():
+                customer_num = self.table[i].info.number
+                self.table[i] = Default()
+                finish.append(customer_num)
+                PrintOut.add('finish', customer_num)
+        return finish
