@@ -1,75 +1,39 @@
-from dataclasses import dataclass
+from src.printout import PrintOut
+from collections import namedtuple
+
+
+CustomerInfo = namedtuple('CustomerInfo', 'number, table, food', defaults=[0, 0, 0])
 
 
 class Customer:
 
-    def __init__(self, number: int, arrival_time: int):
-
-        self.__arrival_time = arrival_time
-        self.__customer_number = number
-        self.__food_num = 0
-        self.__info: dataclass = None
-
-        self.__is_eating: bool = False
-        self.__elapsed_waiting_time = 0
-        self.__waited_time_for_food = 0
-        self.__elapsed_eating_time = 0
-
-        self.__remaining_time_by_new_table = 0
-
-        self.__is_bill_waiting: bool = False
-        self.__is_billing: bool = False
-
-    def get_total_time(self, until_being_allocated):
-        return (until_being_allocated + self.__info.cooking_time + self.__info.eating_time) -\
-               (self.__waited_time_for_food + self.__elapsed_eating_time)
-
-    @property
-    def is_waitable(self):
-        return self.__elapsed_waiting_time < self.remaining_time_by_new_table
+    def __init__(self, info: CustomerInfo, eating_time=0, total_time=0):
+        self.__info = info
+        self.__time = total_time
+        self.eating_time = eating_time
+        self.eating = False
 
     @property
     def info(self):
         return self.__info
 
-    @info.setter
-    def info(self, customer_info):
-        self.__info = customer_info
+    @property
+    def dish(self):
+        return self.eating
 
     @property
-    def number(self) -> int:
-        return self.__customer_number
-
-    @property
-    def is_eating(self) -> bool:
-        return self.__is_eating
-
-    @property
-    def check_eating_status(self) -> bool:
-        return self.__elapsed_eating_time == self.__info.eating_time
+    def time(self):
+        return self.__time
 
     def update(self):
-        if self.__is_eating:
-            self.__elapsed_eating_time += 1
-        else:
-            self.__waited_time_for_food += 1
+        self.__time -= 1
+        if self.eating:
+            return self.__time <= 0
 
-    def waiting_update(self):
-        self.__elapsed_waiting_time += 1
+        if self.__time <= self.eating_time:
+            self.__change_status()
+        return False
 
-    def change_status_is_eating(self):
-        self.__is_eating = not self.__is_eating
-
-    @property
-    def remaining_time_by_new_table(self):
-        return self.__remaining_time_by_new_table
-
-    @remaining_time_by_new_table.setter
-    def remaining_time_by_new_table(self, value):
-        self.__remaining_time_by_new_table = value
-
-    def is_billing(self) -> bool:
-        return self.__is_billing
-
-    def is_bill_waiting(self) -> bool:
-        return self.__is_bill_waiting
+    def __change_status(self):
+        self.eating = not self.eating
+        PrintOut.add('start', self.info)
