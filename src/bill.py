@@ -1,6 +1,7 @@
 from src.printout import PrintOut
 BILLING_CYCLE = 5
 
+
 class Bill:
     def __init__(self):
         self.waiting = []
