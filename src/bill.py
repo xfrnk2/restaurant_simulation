@@ -1,10 +1,10 @@
 from src.printout import PrintOut
-
+BILLING_CYCLE = 5
 
 class Bill:
     def __init__(self):
         self.waiting = []
-        self.__time = 5
+        self.__time = BILLING_CYCLE
 
     def update(self):
         if not self.waiting:
