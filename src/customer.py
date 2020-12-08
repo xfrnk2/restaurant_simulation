@@ -36,5 +36,5 @@ class Customer:
 
     def __change_status(self):
         self.eating = not self.eating
-        Printout.add(f'{self.info[0]}번 손님의 {self.info[2]}번 요리({FOOD_NAME[self.info[2]]}) 조리가 끝났습니다.'
-                     f' {self.info[0]}번 손님이 식사를 시작합니다.')
+        Printout.add(f'{self.info.number}번 손님의 {self.info.food}번 요리({FOOD_NAME[self.info.food]}) 조리가 끝났습니다.'
+                     f' {self.info.number}번 손님이 식사를 시작합니다.')

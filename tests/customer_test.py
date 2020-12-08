@@ -1,7 +1,8 @@
-from src.customer import Customer, CustomerInfo
 import sys
-import pytest
 sys.path.append('C:/Users/rad87/Documents/programming/restaurant_simulation')
+from src.customer import Customer, CustomerInfo
+import pytest
+
 
 first_cases = (
     (CustomerInfo(2, 3, 4), 0, 10),
@@ -10,7 +11,7 @@ first_cases = (
 
 second_cases = (
     (CustomerInfo(4, 5, 1), 29, 30),
-    (CustomerInfo(5, 6, 7), 50, 40),
+    (CustomerInfo(5, 6, 1), 50, 40),
     (CustomerInfo(1, 2, 3), 25, 9),
     (CustomerInfo(1, 2, 3), 25, 0),
                 )
