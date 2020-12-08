@@ -1,4 +1,4 @@
-from src.printout import PrintOut
+from src.printout import Printout
 BILLING_CYCLE = 5
 
 
@@ -13,4 +13,4 @@ class Bill:
         self.__time -= 1
         if self.__time < 0:
             self.__time = 5
-            PrintOut.add('leave', self.waiting.pop(0))
+            Printout.add(f'{self.waiting.pop(0)}번 손님이 계산을 마치고 레스토랑을 떠났습니다.')

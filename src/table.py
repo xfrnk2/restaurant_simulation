@@ -1,4 +1,4 @@
-from src.printout import PrintOut
+from src.printout import Printout
 from src.customer import Customer
 import sys
 
@@ -51,5 +51,5 @@ class Table:
                 customer_num = self.table[i].info.number
                 self.table[i] = Default()
                 finish.append(customer_num)
-                PrintOut.add('finish', customer_num)
+                Printout.add(f'{customer_num}번 손님이 식사를 마쳤습니다. {customer_num}번 손님이 계산대 앞에 줄을 섭니다.')
         return finish
