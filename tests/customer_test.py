@@ -1,7 +1,7 @@
-import sys
-sys.path.append('C:/Users/rad87/Documents/programming/restaurant_simulation')
 from src.customer import Customer, CustomerInfo
+import sys
 import pytest
+sys.path.append('C:/Users/rad87/Documents/programming/restaurant_simulation')
 
 
 first_cases = (
