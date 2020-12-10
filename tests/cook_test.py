@@ -36,9 +36,9 @@ def test_cook_waiting_time():
                  ),
             )
     for case in cases:
-        cook, expected = case.cook, case.expected
+        cook = case.cook
         cook.order_time, cook.cooks_time = case.order_time, case.cooks_time
-        assert cook.waiting_time() == expected
+        assert cook.waiting_time() == case.expected
 
 
 def test_available_new_order():
@@ -70,6 +70,6 @@ def test_available_new_order():
              )
 
     for case in cases:
-        cook, expected = case.cook, case.expected
+        cook = case.cook
         cook.order_time, cook.cooks_time = case.order_time, case.cooks_time
-        assert cook.available_new_order() == expected
+        assert cook.available_new_order() == case.expected
