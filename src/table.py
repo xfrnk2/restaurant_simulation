@@ -5,11 +5,7 @@ import sys
 
 class Default:
     def __init__(self):
-        self.__time = sys.maxsize
-
-    @property
-    def time(self):
-        return self.__time
+        self.time = sys.maxsize
 
 
 class Table:
