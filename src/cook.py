@@ -7,13 +7,13 @@ class Cook:
         self.cooks_time = []
 
     def waiting_time(self):
-        result = 0
         '''
         요리사가 지정된 테이블에 앉은 손님의 주문을 배정받아 조리를 시작하기 전까지의 소요시간을 반환합니다.
         대기주문이 있는지 확인하여 없으면 0을 반환합니다.
         order_time : 대기 주문별 조리에 소요되는 시간을 담고 있는 리스트
         cooks_time : 요리중인 요리사의 남은 조리시간을 담고 있는 리스트
         '''
+        result = 0
 
         if self.order_time:
             order_time, cooks_time = self.order_time, self.cooks_time
