@@ -7,7 +7,7 @@ sys.path.append('C:/Users/rad87/Documents/programming/restaurant_simulation')
 
 
 @dataclass
-class TableInstance:
+class TableCase:
     time_data: List[int]
     table = Table
 
@@ -37,28 +37,28 @@ class UpdateCase:
 def test_is_waitable():
     cases = (
         IsWaitableCase(
-            table=TableInstance(time_data=range(20, 40)).init(),
+            table=TableCase(time_data=range(20, 40)).init(),
             waitable_time=25,
             waiting_amount=3,
             expected_table_waitable_time=0,
             expected=True
         ),
         IsWaitableCase(
-            table=TableInstance(time_data=range(20, 40)).init(),
+            table=TableCase(time_data=range(20, 40)).init(),
             waitable_time=25,
             waiting_amount=3,
             expected_table_waitable_time=0,
             expected=True
         ),
         IsWaitableCase(
-            table=TableInstance(time_data=range(20, 40)).init(),
+            table=TableCase(time_data=range(20, 40)).init(),
             waitable_time=22,
             waiting_amount=5,
             expected_table_waitable_time=25,
             expected=False
         ),
         IsWaitableCase(
-            table=TableInstance(time_data=range(20, 40)).init(),
+            table=TableCase(time_data=range(20, 40)).init(),
             waitable_time=25,
             waiting_amount=30,
             expected_table_waitable_time=39,
@@ -77,15 +77,15 @@ def test_is_waitable():
 def test_update():
     cases = (
         UpdateCase(
-            table=TableInstance(time_data=[2, 2, 2, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]).init(),
+            table=TableCase(time_data=[2, 2, 2, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]).init(),
             expected=[1, 2, 3]
         ),
         UpdateCase(
-            table=TableInstance(time_data=[2] * 20).init(),
+            table=TableCase(time_data=[2] * 20).init(),
             expected=[n for n in range(1, 21)]
         ),
         UpdateCase(
-            table=TableInstance(time_data=[1] * 20).init(),
+            table=TableCase(time_data=[1] * 20).init(),
             expected=[]
         ),
     )
