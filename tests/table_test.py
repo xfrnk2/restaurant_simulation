@@ -14,7 +14,7 @@ class TableCase:
     def init(self):
         self.table = Table(20)
         for i, time in zip(range(1, 21), self.time_data):
-            self.table.table[i] = Customer(CustomerInfo(number=i, table=i, food=0), 0, time)
+            self.table.table[i] = Customer(CustomerInfo(number=i, table=i, food=0), eating_time=0, total_time=time)
             self.table.table[i].eating = True
         return self.table
 
