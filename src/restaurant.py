@@ -53,7 +53,9 @@ class Restaurant:
         while self.time < 721:
 
             Printout.add(f'[현재시각 : {self.time}분]')
-            if not self.time % period:
+            is_remained = self.time % period
+
+            if not is_remained:
                 self.new_customer()
             self.update()
             Printout.out()
