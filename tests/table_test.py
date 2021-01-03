@@ -20,7 +20,7 @@ class TableCase:
 
 
 @dataclass
-class IsWaitableCase:
+class WaitableCase:
     table: Table
     waitable_time: int
     waiting_amount: int
@@ -36,28 +36,28 @@ class UpdateCase:
 
 def test_is_waitable():
     cases = (
-        IsWaitableCase(
+        WaitableCase(
             table=TableCase(time_data=range(20, 40)).init(),
             waitable_time=25,
             waiting_amount=3,
             expected_table_waitable_time=0,
             expected=True
         ),
-        IsWaitableCase(
+        WaitableCase(
             table=TableCase(time_data=range(20, 40)).init(),
             waitable_time=25,
             waiting_amount=3,
             expected_table_waitable_time=0,
             expected=True
         ),
-        IsWaitableCase(
+        WaitableCase(
             table=TableCase(time_data=range(20, 40)).init(),
             waitable_time=22,
             waiting_amount=5,
             expected_table_waitable_time=25,
             expected=False
         ),
-        IsWaitableCase(
+        WaitableCase(
             table=TableCase(time_data=range(20, 40)).init(),
             waitable_time=25,
             waiting_amount=30,
