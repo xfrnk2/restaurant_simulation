@@ -30,7 +30,8 @@ class Restaurant:
         Printout.add(f'{self.__customer_number}번째 손님이 시각 {self.time}분에 레스토랑에 도착했습니다.')
 
     def update(self):
-        self.__bill.waiting.extend(self.__table.update())
+        finished_customer_num = self.__table.update()
+        self.__bill.add(finished_customer_num)
         self.__bill.update()
         self.__cook.update()
 
