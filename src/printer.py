@@ -1,4 +1,4 @@
-class Printout(object):
+class Printer(object):
     __msgs = []
 
     @classmethod
