@@ -1,8 +1,8 @@
-from src.printout import PrintOut
+from src.printer import Printer
 from collections import namedtuple
 
-
 CustomerInfo = namedtuple('CustomerInfo', 'number, table, food', defaults=[0, 0, 0])
+FOOD_NAME = {1: "스테이크", 2: "스파게티", 3: "마카로니", 4: "그라탱"}
 
 
 class Customer:
@@ -36,4 +36,5 @@ class Customer:
 
     def __change_status(self):
         self.eating = not self.eating
-        PrintOut.add('start', self.info)
+        Printer.add(f'{self.info.number}번 손님의 {self.info.food}번 요리({FOOD_NAME[self.info.food]}) 조리가 끝났습니다.'
+                     f' {self.info.number}번 손님이 식사를 시작합니다.')
