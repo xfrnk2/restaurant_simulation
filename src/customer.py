@@ -37,4 +37,4 @@ class Customer:
     def __change_status(self):
         self.eating = not self.eating
         Printer.add(f'{self.info.number}번 손님의 {self.info.food}번 요리({FOOD_NAME[self.info.food]}) 조리가 끝났습니다.'
-                     f' {self.info.number}번 손님이 식사를 시작합니다.')
+                    f'{self.info.number}번 손님이 식사를 시작합니다.')

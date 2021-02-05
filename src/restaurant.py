@@ -1,5 +1,4 @@
 from src.table import Table
-from src.bill import Bill
 from src.cook import Cook
 from src.printer import Printer
 from src.customer import CustomerInfo, Customer
@@ -10,9 +9,8 @@ class Restaurant:
     def __init__(self):
         self.__customer_number = 0
         self.__table = Table(20)
-        self.waiting = []
-        self.__bill = Bill()
         self.__cook = Cook()
+        self.waiting = []
 
         self.food_name = {1: "스테이크", 2: "스파게티", 3: "마카로니", 4: "그라탱"}
         self.cooking_time = {1: 30, 2: 20, 3: 10, 4: 15}
@@ -30,9 +28,7 @@ class Restaurant:
         Printer.add(f'{self.__customer_number}번째 손님이 시각 {self.time}분에 레스토랑에 도착했습니다.')
 
     def update(self):
-        finished_customer_num = self.__table.update()
-        self.__bill.add(finished_customer_num)
-        self.__bill.update()
+        self.__table.update()
         self.__cook.update()
 
         sittable = self.__table.empty()

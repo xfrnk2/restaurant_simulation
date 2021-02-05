@@ -1,11 +1,13 @@
 from src.printer import Printer
 from src.customer import Customer
+from src.bill import Bill
 
 
 class Table:
     def __init__(self, amount):
         self.table = {i: [] for i in range(1, amount + 1)}
         self.__current_waitable_time = 0
+        self.__bill = Bill()
 
     @property
     def waitable_time(self):
@@ -32,8 +34,7 @@ class Table:
         return list(filter(lambda table_num: not self.table[table_num], self.table.keys()))
 
     def update(self):
-        finish = []
-
+        finished_table = []
         for i in self.table.keys():
             if not isinstance(self.table[i], Customer):
                 continue
@@ -41,6 +42,8 @@ class Table:
             if self.table[i].update():
                 customer_num = self.table[i].info.number
                 self.table[i] = []
-                finish.append(customer_num)
+                finished_table.append(customer_num)
                 Printer.add(f'{customer_num}번 손님이 식사를 마쳤습니다. {customer_num}번 손님이 계산대 앞에 줄을 섭니다.')
-        return finish
+
+        self.__bill.add(finished_table)
+        self.__bill.update()
