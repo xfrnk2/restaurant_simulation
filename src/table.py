@@ -47,3 +47,4 @@ class Table:
 
         self.__bill.add(finished_table)
         self.__bill.update()
+        return finished_table
