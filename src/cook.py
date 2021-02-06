@@ -1,5 +1,3 @@
-
-
 class Cook:
     def __init__(self):
 

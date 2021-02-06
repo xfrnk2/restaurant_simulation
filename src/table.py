@@ -1,5 +1,4 @@
 from src.printer import Printer
-from src.customer import Customer
 from src.bill import Bill
 
 
