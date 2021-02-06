@@ -55,5 +55,5 @@ class Restaurant:
             if not is_remained:
                 self.new_customer()
             self.update()
-            Printer.out()
+            Printer.output()
             self.time += 1
