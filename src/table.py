@@ -36,7 +36,7 @@ class Table:
     def update(self):
         finished_table = []
         for i in self.table.keys():
-            if not isinstance(self.table[i], Customer):
+            if not self.table[i]:
                 continue
 
             if self.table[i].update():
