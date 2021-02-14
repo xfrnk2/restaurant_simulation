@@ -12,7 +12,7 @@ class TableCase:
     def init(self):
         self.table = Table(20)
         for i, time in zip(range(1, 21), self.time_data):
-            self.table.table[i] = Customer(CustomerInfo(number=i, table=i, food=0), eating_time=0, total_time=time)
+            self.table.table[i] = Customer(CustomerInfo(number=i, table=i, food=1), eating_time=0, total_time=time)
             self.table.table[i].eating = True
         return self.table
 
@@ -75,15 +75,15 @@ def test_is_waitable():
 def test_update():
     cases = (
         UpdateCase(
-            table=TableCase(time_data=[2, 2, 2, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]).init(),
+            table=TableCase(time_data=[1, 1, 1, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5]).init(),
             expected=[1, 2, 3]
         ),
         UpdateCase(
-            table=TableCase(time_data=[2] * 20).init(),
+            table=TableCase(time_data=[1] * 20).init(),
             expected=[n for n in range(1, 21)]
         ),
         UpdateCase(
-            table=TableCase(time_data=[1] * 20).init(),
+            table=TableCase(time_data=[5] * 20).init(),
             expected=[]
         ),
     )
