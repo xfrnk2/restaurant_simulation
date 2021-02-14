@@ -1,7 +1,5 @@
-from restaurant import Restaurant
+from src.restaurant import Restaurant
 
 if __name__ == "__main__":
-    visiting_period = 5
-
-    restaurant = Restaurant(visiting_period)
+    restaurant = Restaurant()
     restaurant.run()
