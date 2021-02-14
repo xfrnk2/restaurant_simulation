@@ -41,7 +41,7 @@ class Restaurant:
             self.__cook.order_time.append(cooking_time)
             self.__table.table[table_num] = Customer(info, self.eating_time[food_num], total_time)
 
-            Printer.add(f'{info[0]}번 손님이 {info[1]}번 테이블에 앉습니다. {info[0]}번 요리({self.food_name[info[2]]})를 주문합니다.')
+            Printer.add(f'{info[0]}번 손님이 {info[1]}번 테이블에 앉습니다. {info[2]}번 요리({self.food_name[info[2]]})를 주문합니다.')
 
     def run(self):
         Printer.init()
