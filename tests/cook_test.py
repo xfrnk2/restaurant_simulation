@@ -1,7 +1,5 @@
 from src.cook import Cook
 from dataclasses import dataclass
-import sys
-sys.path.append('C:/Users/rad87/Documents/programming/restaurant_simulation')
 
 
 @dataclass

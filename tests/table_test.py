@@ -2,8 +2,6 @@ from dataclasses import dataclass
 from typing import List
 from src.table import Table
 from src.customer import Customer, CustomerInfo
-import sys
-sys.path.append('C:/Users/rad87/Documents/programming/restaurant_simulation')
 
 
 @dataclass
