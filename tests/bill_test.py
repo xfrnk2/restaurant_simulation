@@ -1,9 +1,5 @@
-import sys
-sys.path.append('C:/Users/rad87/Documents/programming/restaurant_simulation')
 from src.bill import Bill
 import pytest
-
-
 
 
 @pytest.fixture

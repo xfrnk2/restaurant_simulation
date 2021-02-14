@@ -10,6 +10,6 @@ class Printer(object):
         __class__.__msgs.append(msg)
 
     @classmethod
-    def out(cls):
+    def output(cls):
         while __class__.__msgs:
             print(__class__.__msgs.pop(0))

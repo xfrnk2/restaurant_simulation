@@ -10,8 +10,8 @@ class Customer:
     def __init__(self, info: CustomerInfo, eating_time=0, total_time=0):
         self.__info = info
         self.__time = total_time
-        self.eating_time = eating_time
-        self.eating = False
+        self.__eating_time = eating_time
+        self.__eating = False
 
     @property
     def info(self):
@@ -19,7 +19,7 @@ class Customer:
 
     @property
     def dish(self):
-        return self.eating
+        return self.__eating
 
     @property
     def time(self):
@@ -27,14 +27,14 @@ class Customer:
 
     def update(self):
         self.__time -= 1
-        if self.eating:
+        if self.__eating:
             return self.__time <= 0
 
-        if self.__time <= self.eating_time:
+        if self.__time <= self.__eating_time:
             self.__change_status()
         return False
 
     def __change_status(self):
-        self.eating = not self.eating
+        self.__eating = not self.__eating
         Printer.add(f'{self.info.number}번 손님의 {self.info.food}번 요리({FOOD_NAME[self.info.food]}) 조리가 끝났습니다.'
-                     f' {self.info.number}번 손님이 식사를 시작합니다.')
+                    f'{self.info.number}번 손님이 식사를 시작합니다.')
